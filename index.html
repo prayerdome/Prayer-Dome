@@ -5559,7 +5559,7 @@ window.resetPassword = async function() {
   showSpinner();
   try {
     await sendPasswordResetEmail(auth, email, {
-      url: window.location.origin,
+    url: 'https://prayerdome1.netlify.app',
       handleCodeInApp: true
     });
     
@@ -7704,7 +7704,7 @@ window.registerUser = async function() {
     
     // Send email verification
     await sendEmailVerification(user, {
-      url: window.location.origin,
+      url: 'https://prayerdome1.netlify.app',
       handleCodeInApp: true
     });
     
@@ -8214,7 +8214,7 @@ window.resendVerificationEmail = async function() {
   showSpinner();
   try {
     await sendEmailVerification(currentUser, {
-      url: window.location.origin,
+    url: 'https://prayerdome1.netlify.app',
       handleCodeInApp: true
     });
     showToast('Verification email sent! Check your inbox.', 'success');
