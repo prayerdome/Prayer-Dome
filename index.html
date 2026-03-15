@@ -3378,7 +3378,6 @@
 <!-- Toast Container -->
 <div class="toast-container" id="toastContainer"></div>
 
-<!-- Header -->
 <header>
   <div class="logo-area">
     <div class="logo">
@@ -3396,9 +3395,6 @@
     </button>
     <button class="theme-toggle" onclick="toggleTheme()">
       <i class="fas fa-moon"></i>
-    </button>
-    <button class="user-btn" onclick="showUserMenu()">
-      <i class="fas fa-user"></i>
     </button>
   </div>
 </header>
@@ -3431,6 +3427,7 @@
   <button class="nav-item" onclick="showSection('testimonies')"><i class="fas fa-star"></i><span>STORIES</span></button>
   <button class="nav-item" onclick="showSection('give')"><i class="fas fa-heart"></i><span>GIVE</span></button>
   <button class="nav-item" onclick="showSection('membership')"><i class="fas fa-user-plus"></i><span>MEMBERSHIP</span></button>
+  <button class="nav-item" onclick="showUserMenu()" id="bottomUserBtn"><i class="fas fa-user-circle"></i><span>ACCOUNT</span></button>
 </nav>
 
 <!-- Verse Ticker - This must be BEFORE your main content -->
@@ -6142,7 +6139,7 @@ window.registerUser = async function() {
     
     // Send email verification
     await sendEmailVerification(user, {
-      url: 'https://prayerdome1.netlify.app',
+      url: 'https://prayerdome.net',
       handleCodeInApp: true
     });
     
@@ -8335,7 +8332,7 @@ window.resetPassword = async function() {
   showSpinner();
   try {
     await sendPasswordResetEmail(auth, email, {
-    url: 'https://prayerdome1.netlify.app',
+    url: 'https://prayerdome.net',
       handleCodeInApp: true
     });
     
@@ -11222,7 +11219,7 @@ window.registerUser = async function() {
     
     // Send email verification
     await sendEmailVerification(user, {
-      url: 'https://prayerdome1.netlify.app',
+      url: 'https://prayerdome.net',
       handleCodeInApp: true
     });
     
@@ -11816,7 +11813,7 @@ window.resendVerificationEmail = async function() {
   showSpinner();
   try {
     await sendEmailVerification(currentUser, {
-    url: 'https://prayerdome1.netlify.app',
+    url: 'https://prayerdome.net',
       handleCodeInApp: true
     });
     showToast('Verification email sent! Check your inbox.', 'success');
