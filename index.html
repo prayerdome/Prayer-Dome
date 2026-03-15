@@ -2,8 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-  <title>Prayer Dome - App</title>
+  <!-- PWA Support -->
+<link rel="manifest" href="/manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Prayer Dome">
+<link rel="apple-touch-icon" href="https://i.ibb.co/TB5Fx4tb/logo-0.png">
+<meta name="theme-color" content="#22c55e">
+  <title>Prayer Dome</title>
   
   <!-- Font Awesome 6 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -77,7 +83,714 @@
       min-height: 100vh;
       transition: background-color 0.3s, color 0.3s;
     }
+ 
+   /* ==================== RESPONSIVE SIZING FIX - ADD THIS AFTER :root ==================== */
+/* Set base font size for consistent scaling */
+html {
+  font-size: 62.5%; /* 1rem = 10px */
+  -webkit-text-size-adjust: 100%;
+}
 
+body {
+  font-size: 1.6rem; /* 16px base */
+  line-height: 1.5;
+}
+
+/* Convert all existing px values to rem - this will override your existing styles */
+header {
+  padding: 0.8rem 1.5rem; /* 8px 15px */
+  min-height: 6rem;
+}
+
+.logo {
+  width: 4rem; /* 40px */
+  height: 4rem; /* 40px */
+  font-size: 1.5rem;
+}
+
+.header-title h1 {
+  font-size: 2rem; /* 20px */
+}
+
+.header-title p {
+  font-size: 1.2rem; /* 12px */
+}
+
+.theme-toggle, .notification-btn, .user-btn {
+  width: 4rem; /* 40px */
+  height: 4rem; /* 40px */
+  font-size: 1.6rem;
+}
+
+.notification-badge {
+  width: 1.8rem;
+  height: 1.8rem;
+  font-size: 1rem;
+  top: -0.3rem;
+  right: -0.3rem;
+}
+
+/* Bottom Navigation */
+.bottom-nav {
+  bottom: 4rem; /* 40px */
+  padding: 0.8rem 1.2rem;
+  padding-bottom: calc(0.8rem + env(safe-area-inset-bottom, 0px));
+  min-height: 7rem;
+}
+
+.nav-item {
+  font-size: 1.2rem;
+  padding: 0.8rem 0;
+  border-radius: 1.6rem;
+  max-width: 7rem;
+  min-width: 5.6rem;
+}
+
+.nav-item i {
+  font-size: 2.2rem;
+  margin-bottom: 0.4rem;
+  padding: 0.8rem;
+}
+
+.nav-item span {
+  font-size: 1rem;
+  letter-spacing: 0.03rem;
+}
+
+.nav-item.active::after {
+  width: 2.4rem;
+  height: 0.3rem;
+  bottom: -0.4rem;
+}
+
+/* Verse Ticker */
+.verse-ticker-container {
+  padding: 1.4rem 0;
+  box-shadow: 0 -0.4rem 1.5rem rgba(0,0,0,0.3);
+  border-top: 0.3rem solid var(--accent-gold);
+  min-height: 6rem;
+}
+
+.verse-ticker {
+  gap: 2rem;
+}
+
+.verse-ticker-item {
+  padding: 0 2.5rem;
+  font-size: 1.6rem;
+  border-right: 0.2rem solid rgba(255,255,255,0.2);
+  gap: 1rem;
+}
+
+.verse-ticker-item i {
+  margin-right: 1rem;
+  font-size: 1.8rem;
+}
+
+.verse-reference {
+  padding: 0.4rem 1.4rem;
+  border-radius: 3rem;
+  margin-left: 1.5rem;
+  font-size: 1.4rem;
+  border: 0.1rem solid rgba(255,255,255,0.1);
+}
+
+.verse-ticker-item .verse-text {
+  max-width: 30rem;
+}
+
+/* Main Content */
+main {
+  padding: 2rem;
+  max-width: 120rem;
+}
+
+/* Cards */
+.card {
+  border-radius: 2.4rem;
+  padding: 2.5rem;
+  margin-bottom: 2rem;
+}
+
+.card-header {
+  margin-bottom: 2rem;
+}
+
+.card-header h2 {
+  font-size: 2.2rem;
+  gap: 1rem;
+}
+
+/* Buttons */
+.btn {
+  padding: 1.4rem 2.8rem;
+  border-radius: 1.4rem;
+  gap: 1rem;
+  font-size: 1.5rem;
+}
+
+.btn-small {
+  padding: 1rem 2rem;
+  font-size: 1.3rem;
+  border-radius: 1rem;
+}
+
+.btn-circle {
+  width: 5.5rem;
+  height: 5.5rem;
+  font-size: 2.2rem;
+  box-shadow: 0 0.4rem 1.5rem rgba(34, 197, 94, 0.3);
+}
+
+/* Founder Card */
+.founder-card {
+  padding: 4rem;
+  border: 0.2rem solid var(--accent-gold);
+}
+
+.founder-image {
+  width: 22rem;
+  height: 22rem;
+  margin: 0 auto 2.5rem;
+  border: 0.5rem solid var(--accent-gold);
+  box-shadow: 0 1rem 3rem rgba(34, 197, 94, 0.3);
+}
+
+.founder-name {
+  font-size: 3.6rem;
+  margin: 1.5rem 0 0.5rem;
+}
+
+.founder-title {
+  font-size: 2rem;
+  margin-bottom: 2.5rem;
+}
+
+.founder-quote {
+  padding: 2.5rem;
+  border-radius: 1.6rem;
+  margin: 2.5rem 0;
+  border-left: 0.5rem solid var(--accent-green);
+  font-size: 1.8rem;
+}
+
+/* Team Grid */
+.team-grid {
+  gap: 3rem;
+  margin: 3rem 0;
+}
+
+.team-member-card {
+  border-radius: 2.4rem;
+}
+
+.team-member-image {
+  height: 30rem;
+}
+
+.team-member-info {
+  padding: 2.5rem;
+}
+
+.team-member-name {
+  font-size: 2.2rem;
+  margin-bottom: 0.8rem;
+}
+
+.team-member-title {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.team-member-desc {
+  font-size: 1.4rem;
+  margin: 1.5rem 0;
+}
+
+.team-badge {
+  padding: 0.5rem 1.5rem;
+  border-radius: 2.5rem;
+  font-size: 1.2rem;
+  margin: 0.3rem;
+}
+
+.team-social a {
+  width: 4rem;
+  height: 4rem;
+  font-size: 1.6rem;
+}
+
+/* Team Stats */
+.team-stats {
+  gap: 2.5rem;
+  margin: 3rem 0;
+}
+
+.team-stat-card {
+  padding: 3rem;
+  border-radius: 2rem;
+  box-shadow: 0 1rem 2.5rem rgba(34, 197, 94, 0.3);
+}
+
+.team-stat-number {
+  font-size: 4.2rem;
+  margin-bottom: 0.8rem;
+}
+
+.team-stat-label {
+  font-size: 1.5rem;
+}
+
+/* Devotional Card */
+.devotional-card {
+  padding: 4rem 3.5rem;
+  border-radius: 3.2rem;
+  margin: 3rem 0;
+  box-shadow: 0 2.5rem 5rem -1.2rem rgba(0, 0, 0, 0.4), 0 0 0 0.1rem rgba(255, 215, 0, 0.2) inset;
+}
+
+.devotional-date {
+  font-size: 1.6rem;
+  letter-spacing: 0.2rem;
+  margin-bottom: 2rem;
+  gap: 1.2rem;
+}
+
+.devotional-date i {
+  font-size: 2rem;
+}
+
+.devotional-title {
+  font-size: 4.2rem;
+  margin-bottom: 2.5rem;
+  text-shadow: 0 0.2rem 1rem rgba(0,0,0,0.2);
+}
+
+.devotional-verse {
+  font-size: 2.2rem;
+  margin: 3rem 0;
+  padding: 2.5rem 3rem;
+  border-radius: 2.4rem;
+  border-left: 0.5rem solid var(--accent-gold);
+  box-shadow: 0 1rem 3rem -1rem rgba(0, 0, 0, 0.3);
+}
+
+.devotional-verse::before {
+  font-size: 6rem;
+  top: -1rem;
+  left: 1rem;
+}
+
+.devotional-verse::after {
+  font-size: 6rem;
+  bottom: -3rem;
+  right: 1rem;
+}
+
+.devotional-reflection {
+  margin: 3rem 0 2.5rem;
+  font-size: 1.8rem;
+  letter-spacing: 0.03rem;
+  padding: 0 0.5rem;
+}
+
+.devotional-prayer {
+  padding: 3rem 3.5rem;
+  border-radius: 2.4rem;
+  margin-top: 3rem;
+  border: 0.1rem solid rgba(255, 215, 0, 0.3);
+  box-shadow: 0 1.5rem 3.5rem -1.5rem rgba(0, 0, 0, 0.5);
+}
+
+.devotional-prayer strong {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.1rem;
+  padding-left: 2rem;
+}
+
+.devotional-prayer strong::before {
+  left: -1.5rem;
+  top: -0.2rem;
+  font-size: 2.2rem;
+}
+
+#devotionalPrayerText {
+  font-size: 1.8rem;
+  padding-left: 1rem;
+  border-left: 0.3rem solid rgba(255, 215, 0, 0.3);
+}
+
+/* Downloads Grid */
+.downloads-grid {
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+.download-card {
+  border-radius: 1.6rem;
+  padding: 2rem;
+  border: 0.2rem solid var(--border-color);
+}
+
+.download-icon {
+  width: 6rem;
+  height: 6rem;
+  font-size: 2.4rem;
+  margin-bottom: 1.5rem;
+}
+
+.download-title {
+  font-size: 1.8rem;
+  margin-bottom: 0.8rem;
+}
+
+.download-description {
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+}
+
+.download-meta {
+  margin-top: 1.5rem;
+  font-size: 1.2rem;
+}
+
+.download-size {
+  padding: 0.4rem 0.8rem;
+  border-radius: 1.2rem;
+}
+
+.download-btn {
+  border: 0.2rem solid var(--accent-green);
+  padding: 0.8rem 1.6rem;
+  border-radius: 3rem;
+  margin-top: 1rem;
+  font-size: 1.4rem;
+}
+
+/* Prayer Wall */
+.prayer-wall {
+  border-radius: 2.4rem;
+  padding: 2.5rem;
+  margin: 2.5rem 0;
+  border: 0.3rem solid var(--accent-green);
+  box-shadow: 0 1rem 3rem rgba(34, 197, 94, 0.15);
+}
+
+.prayer-wall-header {
+  margin-bottom: 2rem;
+}
+
+.prayer-badge {
+  padding: 0.8rem 1.8rem;
+  border-radius: 3rem;
+  font-size: 1.4rem;
+}
+
+.prayer-feed {
+  max-height: 45rem;
+  padding: 1.5rem;
+}
+
+.prayer-feed-item {
+  padding: 2rem;
+  margin: 1.5rem 0;
+  border-radius: 1.8rem;
+  border-left: 0.5rem solid var(--accent-gold);
+}
+
+.prayer-feed-name {
+  font-size: 1.6rem;
+}
+
+.prayer-feed-time {
+  font-size: 1.2rem;
+}
+
+.prayer-feed-text {
+  font-size: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.prayer-feed-actions {
+  gap: 2rem;
+  margin-top: 1.5rem;
+}
+
+.prayer-feed-btn {
+  font-size: 1.4rem;
+  gap: 0.8rem;
+  padding: 0.8rem 1.5rem;
+  border-radius: 2.5rem;
+}
+
+/* Live Stream */
+.live-stream-card {
+  padding: 3rem;
+  border-radius: 2.5rem;
+  margin: 2.5rem 0;
+  box-shadow: 0 1.5rem 3.5rem rgba(34, 197, 94, 0.3);
+}
+
+.live-indicator {
+  gap: 1rem;
+  padding: 0.8rem 2rem;
+  border-radius: 4rem;
+  margin-bottom: 2rem;
+  font-size: 1.4rem;
+}
+
+.live-dot {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.video-container {
+  border-radius: 2rem;
+  margin: 2rem 0;
+  box-shadow: 0 1rem 3rem rgba(0,0,0,0.3);
+}
+
+/* Quiz Section */
+.quiz-level-indicator {
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 50%;
+  border: 0.2rem solid var(--border-color);
+  font-size: 1.6rem;
+}
+
+.quiz-option {
+  padding: 1.8rem 2.5rem;
+  border: 0.2rem solid var(--border-color);
+  border-radius: 1.6rem;
+  font-size: 1.7rem;
+}
+
+.quiz-timer {
+  font-size: 2.8rem;
+  text-shadow: 0 0 1rem rgba(34, 197, 94, 0.5);
+}
+
+.level-badge {
+  padding: 0.8rem 2rem;
+  border-radius: 3rem;
+  font-size: 1.5rem;
+}
+
+.quiz-score {
+  font-size: 2rem;
+  margin-left: 2rem;
+}
+
+/* Bible Section */
+.bible-content {
+  font-size: 1.8rem;
+  padding: 3rem;
+}
+
+.bible-content .verse-number {
+  font-size: 1.4rem;
+  margin-right: 0.5rem;
+}
+
+.bible-content .verse-text {
+  margin-bottom: 1.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.8rem;
+  font-size: 1.8rem;
+}
+
+.bible-content .chapter-title {
+  font-size: 2.4rem;
+  margin-bottom: 2rem;
+}
+
+.favorite-verse-item {
+  border-radius: 1.2rem;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.favorite-verse-reference {
+  margin-bottom: 0.8rem;
+  font-size: 1.6rem;
+}
+
+.favorite-verse-text {
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+}
+
+.favorite-verse-actions button {
+  padding: 0.5rem 1rem;
+  border-radius: 2rem;
+  font-size: 1.2rem;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 1024px) {
+  html {
+    font-size: 58%;
+  }
+}
+
+@media (max-width: 768px) {
+  html {
+    font-size: 56%;
+  }
+  
+  .team-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .verse-ticker-item {
+    font-size: 1.4rem;
+    padding: 0 1.5rem;
+  }
+  
+  .verse-ticker-item i {
+    font-size: 1.6rem;
+    margin-right: 0.8rem;
+  }
+  
+  .verse-reference {
+    font-size: 1.2rem;
+    padding: 0.3rem 1rem;
+    margin-left: 1rem;
+  }
+  
+  .verse-ticker-item .verse-text {
+    max-width: 20rem;
+  }
+  
+  .devotional-card {
+    padding: 3rem 2.5rem;
+  }
+  
+  .devotional-title {
+    font-size: 3.2rem;
+  }
+  
+  .devotional-verse {
+    font-size: 1.8rem;
+    padding: 2rem;
+  }
+  
+  .devotional-reflection {
+    font-size: 1.6rem;
+  }
+  
+  #devotionalPrayerText {
+    font-size: 1.6rem;
+  }
+}
+
+@media (max-width: 640px) {
+  html {
+    font-size: 54%;
+  }
+  
+  .header-title h1 {
+    font-size: 1.8rem;
+  }
+  
+  .header-title p {
+    display: none;
+  }
+  
+  .founder-image {
+    width: 18rem;
+    height: 18rem;
+  }
+  
+  .founder-name {
+    font-size: 2.8rem;
+  }
+  
+  .bottom-nav {
+    min-height: 6rem;
+  }
+  
+  .nav-item {
+    min-width: 5.5rem;
+    padding: 0.6rem 0;
+  }
+  
+  .nav-item i {
+    font-size: 2rem;
+    padding: 0.6rem;
+  }
+  
+  .nav-item span {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  html {
+    font-size: 52%;
+  }
+  
+  .team-stats {
+    grid-template-columns: 1fr;
+  }
+  
+  .devotional-title {
+    font-size: 2.8rem;
+  }
+  
+  .devotional-card > div:first-child {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .verse-ticker-item {
+    padding: 0 1rem;
+  }
+  
+  .verse-ticker-item .verse-text {
+    max-width: 15rem;
+  }
+  
+  .whatsapp-float {
+    width: 4.5rem;
+    height: 4.5rem;
+    font-size: 1.8rem;
+    bottom: 18rem !important;
+    right: 3.5rem !important;
+  }
+  
+  .scroll-top-btn {
+    width: 4.5rem;
+    height: 4.5rem;
+    font-size: 1.8rem;
+    bottom: 10rem;
+  }
+}
+
+@media (max-width: 360px) {
+  html {
+    font-size: 50%;
+  }
+  
+  .whatsapp-float {
+    width: 4rem;
+    height: 4rem;
+    font-size: 1.6rem;
+    bottom: 16rem !important;
+    right: 3rem !important;
+  }
+  
+  .nav-item i {
+    font-size: 1.8rem;
+  }
+  
+  .nav-item span {
+    font-size: 0.8rem;
+  }
+}
     /* Header */
     header {
       background: var(--accent-green);
@@ -98,15 +811,15 @@
     }
 
     .logo {
-      width: 40px;
-      height: 40px;
+      width: 30px;
+      height: 30px;
       background: linear-gradient(135deg, var(--accent-green), var(--accent-gold));
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       color: white;
-      font-size: 18px;
+      font-size: 15px;
       overflow: hidden;
     }
 
@@ -3285,9 +3998,9 @@
       }
       
       .logo {
-        width: 55px;
-        height: 55px;
-        font-size: 24px;
+        width: 40px;
+        height: 40px;
+        font-size: 10px;
       }
       
       .founder-image {
@@ -3366,6 +4079,303 @@
 .founder-card .stats-row {
   display: none !important;
 }
+
+   /* ==================== NEW FEATURES CSS ==================== */
+
+/* Offline Indicator */
+.offline-indicator {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: var(--accent-red);
+  color: white;
+  text-align: center;
+  padding: 0.8rem;
+  font-size: 1.4rem;
+  z-index: 10000;
+  transform: translateY(-100%);
+  transition: transform 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.offline-indicator.show {
+  transform: translateY(0);
+}
+
+.offline-indicator i {
+  font-size: 1.8rem;
+}
+
+.offline-indicator button {
+  background: white;
+  color: var(--accent-red);
+  border: none;
+  padding: 0.4rem 1.2rem;
+  border-radius: 2rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: 1rem;
+}
+
+/* Global Search */
+.search-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.95);
+  z-index: 10000;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 10rem;
+}
+
+.search-container {
+  width: 90%;
+  max-width: 60rem;
+  background: var(--bg-card);
+  border-radius: 3rem;
+  overflow: hidden;
+  box-shadow: 0 2rem 5rem rgba(0,0,0,0.5);
+}
+
+.search-header {
+  display: flex;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.search-header i {
+  font-size: 2rem;
+  color: var(--text-secondary);
+  margin-right: 1.5rem;
+}
+
+.search-header input {
+  flex: 1;
+  border: none;
+  background: none;
+  font-size: 1.8rem;
+  color: var(--text-primary);
+  outline: none;
+}
+
+.search-header button {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 2rem;
+  cursor: pointer;
+  padding: 0.5rem;
+}
+
+.search-results {
+  max-height: 60vh;
+  overflow-y: auto;
+  padding: 2rem;
+}
+
+.search-result-item {
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.search-result-item:hover {
+  background: var(--bg-primary);
+  transform: translateX(5px);
+}
+
+.search-result-title {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--accent-green);
+  margin-bottom: 0.5rem;
+}
+
+.search-result-preview {
+  font-size: 1.4rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.search-result-category {
+  display: inline-block;
+  padding: 0.3rem 1rem;
+  background: rgba(34, 197, 94, 0.1);
+  color: var(--accent-green);
+  border-radius: 2rem;
+  font-size: 1.1rem;
+  margin-top: 0.8rem;
+}
+
+.no-results {
+  text-align: center;
+  padding: 4rem;
+  color: var(--text-secondary);
+}
+
+.no-results i {
+  font-size: 5rem;
+  margin-bottom: 1.5rem;
+  opacity: 0.3;
+}
+
+/* Prayer Widget */
+.prayer-widget {
+  margin: 2rem 0;
+}
+
+.prayer-circle {
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.prayer-circle.praying {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); box-shadow: 0 0 30px var(--accent-gold); }
+  100% { transform: scale(1); }
+}
+
+/* Prayer Music Card */
+.prayer-music-card {
+  position: fixed;
+  bottom: 15rem;
+  right: 2rem;
+  width: 35rem;
+  z-index: 999;
+  box-shadow: var(--shadow-lg);
+  animation: slideInRight 0.5s;
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+/* Prayer Calendar */
+.prayer-calendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.5rem;
+  margin: 2rem 0;
+}
+
+/* Prayer Groups */
+.prayer-group-card {
+  background: var(--bg-card);
+  border-radius: 1.6rem;
+  padding: 2rem;
+  margin-bottom: 1.5rem;
+  border: 2px solid var(--border-color);
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.prayer-group-card:hover {
+  border-color: var(--accent-green);
+  transform: translateX(5px);
+  box-shadow: var(--shadow);
+}
+
+.group-meta {
+  display: flex;
+  gap: 2rem;
+  margin-top: 1.5rem;
+  color: var(--text-secondary);
+  font-size: 1.3rem;
+}
+
+/* Prayer Slots */
+.prayer-slot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.prayer-slot:hover {
+  background: rgba(34, 197, 94, 0.1);
+  transform: translateX(5px);
+}
+
+/* Answered Prayers */
+.answered-prayer-card {
+  transition: all 0.3s;
+}
+
+.answered-prayer-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Intention Cards */
+.intention-card {
+  transition: all 0.3s;
+}
+
+.intention-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow);
+}
+
+/* Prayer Partner Cards */
+.prayer-partner-card {
+  transition: all 0.3s;
+}
+
+.prayer-partner-card:hover {
+  background: var(--bg-primary);
+}
+
+/* Challenge Cards */
+.challenge-card {
+  transition: all 0.3s;
+}
+
+.challenge-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow);
+}
+
+/* Responsive adjustments for new features */
+@media (max-width: 768px) {
+  .prayer-music-card {
+    width: 90%;
+    right: 5%;
+    bottom: 12rem;
+  }
+  
+  .search-overlay {
+    padding-top: 5rem;
+  }
+  
+  .prayer-calendar {
+    gap: 0.2rem;
+  }
+  
+  .prayer-calendar div {
+    width: 3rem;
+    height: 3rem;
+    font-size: 1.2rem;
+  }
+}
   </style>
 </head>
 <body>
@@ -3390,18 +4400,30 @@
     </div>
   </div>
   <div class="header-actions">
-    <button class="notification-btn" onclick="showNotifications()">
-      <i class="fas fa-bell"></i>
-      <span class="notification-badge" id="notificationBadge">0</span>
-    </button>
-    <button class="theme-toggle" onclick="toggleTheme()">
-      <i class="fas fa-moon"></i>
-    </button>
-    <button class="user-btn" onclick="showUserMenu()">
-      <i class="fas fa-user"></i>
-    </button>
-  </div>
+  <button class="notification-btn" onclick="showNotifications()">
+    <i class="fas fa-bell"></i>
+    <span class="notification-badge" id="notificationBadge">0</span>
+  </button>
+  <button class="theme-toggle" onclick="openSearch()" style="margin-right: 5px;">
+    <i class="fas fa-search"></i>
+  </button>
+  <button class="theme-toggle" onclick="toggleTheme()">
+    <i class="fas fa-moon"></i>
+  </button>
+</div>
 </header>
+
+<!-- Global Search Overlay -->
+<div class="search-overlay" id="globalSearch" style="display: none;">
+  <div class="search-container">
+    <div class="search-header">
+      <i class="fas fa-search"></i>
+      <input type="text" id="searchInput" placeholder="Search Bible, prayers, events..." autocomplete="off">
+      <button onclick="closeSearch()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="search-results" id="searchResults"></div>
+  </div>
+</div>
 
 <!-- Scroll to Top -->
 <button class="scroll-top-btn" id="scrollTopBtn" onclick="scrollToTop()">
@@ -3431,6 +4453,7 @@
   <button class="nav-item" onclick="showSection('testimonies')"><i class="fas fa-star"></i><span>STORIES</span></button>
   <button class="nav-item" onclick="showSection('give')"><i class="fas fa-heart"></i><span>GIVE</span></button>
   <button class="nav-item" onclick="showSection('membership')"><i class="fas fa-user-plus"></i><span>MEMBERSHIP</span></button>
+  <button class="nav-item" onclick="showUserMenu()"><i class="fas fa-user-circle"></i><span>ACCOUNT</span></button>
 </nav>
 
 <!-- Verse Ticker - This must be BEFORE your main content -->
@@ -3491,6 +4514,26 @@
   <div class="devotional-reflection" id="devotionalReflection">Prayer is not just a religious activity; it is a lifeline to our Creator. Jesus taught us to pray persistently, not because God is reluctant to answer, but because persistent prayer changes us. It builds our faith, deepens our dependence on God, and aligns our will with His.</div>
   <div class="devotional-prayer" id="devotionalPrayer">
     <strong>Prayer:</strong> <span id="devotionalPrayerText">Lord, teach me to pray without ceasing. Give me the persistence to keep bringing my requests before You, trusting that You hear and will answer according to Your perfect will. Amen.</span>
+  </div>
+</div>
+
+   <!-- Prayer Widget -->
+<div class="prayer-widget card">
+  <div class="card-header">
+    <h2><i class="fas fa-pray"></i> Quick Prayer</h2>
+    <span class="prayer-badge" id="quickPrayerTimer">00:00</span>
+  </div>
+  <div style="text-align: center; padding: 20px;">
+    <div class="prayer-circle" style="width: 150px; height: 150px; border-radius: 50%; background: linear-gradient(135deg, var(--accent-green), var(--accent-gold)); margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; flex-direction: column; color: white; cursor: pointer;" onclick="startQuickPrayer()">
+      <i class="fas fa-play" style="font-size: 40px; margin-bottom: 5px;"></i>
+      <span style="font-size: 16px;">Start Prayer</span>
+    </div>
+    <div style="display: flex; gap: 10px; justify-content: center; margin-top: 15px; flex-wrap: wrap;">
+      <button class="btn btn-outline btn-small" onclick="setPrayerDuration(5)">5 min</button>
+      <button class="btn btn-outline btn-small" onclick="setPrayerDuration(10)">10 min</button>
+      <button class="btn btn-outline btn-small" onclick="setPrayerDuration(15)">15 min</button>
+      <button class="btn btn-outline btn-small" onclick="setPrayerDuration(30)">30 min</button>
+    </div>
   </div>
 </div>
     
@@ -4473,6 +5516,29 @@
     </div>
   </section>
 </main>
+
+<!-- Prayer Music Player -->
+<div class="prayer-music-card card" style="display: none;" id="prayerMusicCard">
+  <div class="card-header">
+    <h2><i class="fas fa-music"></i> Prayer Music</h2>
+    <button class="btn btn-circle btn-small" onclick="closePrayerMusic()">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div style="text-align: center;">
+    <div class="music-player" style="margin: 20px 0;">
+      <audio id="prayerAudio" controls loop style="width: 100%;">
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+      </audio>
+    </div>
+    <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+      <button class="btn btn-outline btn-small" onclick="playPrayerMusic('soft')">Soft Piano</button>
+      <button class="btn btn-outline btn-small" onclick="playPrayerMusic('instrumental')">Instrumental</button>
+      <button class="btn btn-outline btn-small" onclick="playPrayerMusic('nature')">Nature Sounds</button>
+      <button class="btn btn-outline btn-small" onclick="playPrayerMusic('worship')">Worship</button>
+    </div>
+  </div>
+</div>
 
 <!-- FOOTER -->
 <footer>
@@ -7264,14 +8330,14 @@ function updateDonationSection() {
     note.className = 'location-note';
     note.style.cssText = `
       background: rgba(34, 197, 94, 0.1);
-      padding: 8px 12px;
-      border-radius: 12px;
-      margin-top: 10px;
-      font-size: 12px;
+      padding: 5px 9px;
+      border-radius: 9px;
+      margin-top: 7px;
+      font-size: 9px;
       color: var(--text-secondary);
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 5px;
     `;
     note.innerHTML = `
       <i class="fas fa-map-marker-alt" style="color: var(--accent-green);"></i>
@@ -7311,12 +8377,12 @@ function updateBranchInfo() {
     suggestion.style.cssText = `
       background: linear-gradient(135deg, var(--accent-green), #166534);
       color: white;
-      padding: 15px;
-      border-radius: 12px;
-      margin-bottom: 20px;
+      padding: 10px;
+      border-radius: 7px;
+      margin-bottom: 15px;
       display: flex;
       align-items: center;
-      gap: 15px;
+      gap: 10px;
     `;
     suggestion.innerHTML = `
       <i class="fas fa-map-pin" style="font-size: 24px;"></i>
@@ -7375,9 +8441,9 @@ function updateContactInfo() {
   contactNote.id = 'locationContactNote';
   contactNote.style.cssText = `
     background: rgba(212, 175, 55, 0.1);
-    padding: 10px;
+    padding: 7px;
     border-radius: 8px;
-    margin-top: 15px;
+    margin-top: 10px;
     font-size: 12px;
     border-left: 3px solid var(--accent-gold);
   `;
@@ -7417,14 +8483,14 @@ function addLocationBadge() {
   badge.style.cssText = `
     background: var(--bg-card);
     color: var(--text-primary);
-    padding: 5px 12px;
-    border-radius: 30px;
+    padding: 5px 6px;
+    border-radius: 15px;
     font-size: 11px;
     font-weight: 500;
     display: flex;
     align-items: center;
     gap: 5px;
-    margin-right: 10px;
+    margin-right: 5px;
     border: 1px solid var(--border-color);
     cursor: pointer;
   `;
@@ -15349,6 +16415,612 @@ window.showMembershipNotes = showMembershipNotes;
 window.toggleMembershipStatus = toggleMembershipStatus;
 window.filterMemberships = filterMemberships;
 window.exportMemberships = exportMemberships;
+
+// ==================== NEW FEATURES IMPLEMENTATION ====================
+
+// Offline Detection
+function initOfflineDetection() {
+  // Check if indicator already exists
+  if (document.getElementById('offlineIndicator')) return;
+  
+  const indicator = document.createElement('div');
+  indicator.className = 'offline-indicator';
+  indicator.id = 'offlineIndicator';
+  indicator.innerHTML = `
+    <i class="fas fa-wifi-slash"></i>
+    <span>You are offline. Some features may be limited.</span>
+    <button onclick="window.location.reload()">Retry</button>
+  `;
+  document.body.appendChild(indicator);
+
+  window.addEventListener('online', () => {
+    document.getElementById('offlineIndicator').classList.remove('show');
+    showToast('✅ You are back online!', 'success');
+  });
+
+  window.addEventListener('offline', () => {
+    document.getElementById('offlineIndicator').classList.add('show');
+    showToast('📡 You are offline. Using cached content.', 'info');
+  });
+}
+
+// Analytics Class
+class Analytics {
+  static async logEvent(eventName, eventParams = {}) {
+    try {
+      if (typeof db === 'undefined') return;
+      await addDoc(collection(db, "analytics"), {
+        eventName,
+        eventParams,
+        timestamp: Timestamp.now(),
+        userId: currentUser?.uid || 'anonymous',
+        url: window.location.href,
+        userAgent: navigator.userAgent,
+        screenSize: `${window.innerWidth}x${window.innerHeight}`
+      });
+    } catch (error) {
+      console.error('Analytics error:', error);
+    }
+  }
+
+  static async logError(error, context = {}) {
+    try {
+      if (typeof db === 'undefined') return;
+      await addDoc(collection(db, "errors"), {
+        message: error.message,
+        stack: error.stack,
+        context,
+        timestamp: Timestamp.now(),
+        userId: currentUser?.uid || 'anonymous',
+        url: window.location.href
+      });
+    } catch (e) {
+      console.error('Error logging failed:', e);
+    }
+  }
+}
+
+// Global error handler
+window.onerror = function(msg, url, lineNo, columnNo, error) {
+  Analytics.logError(error || new Error(msg), { url, lineNo, columnNo });
+  return false;
+};
+
+// Cache System
+const CACHE_KEYS = {
+  BIBLE: 'prayerDome_bible',
+  DEVOTIONALS: 'prayerDome_devotionals',
+  PRAYERS: 'prayerDome_prayers',
+  EVENTS: 'prayerDome_events'
+};
+
+class DataCache {
+  static async set(key, data, expiryHours = 24) {
+    const cacheData = {
+      data,
+      timestamp: Date.now(),
+      expiry: Date.now() + (expiryHours * 60 * 60 * 1000)
+    };
+    
+    try {
+      localStorage.setItem(key, JSON.stringify(cacheData));
+      return true;
+    } catch (error) {
+      console.error('Cache set error:', error);
+      return false;
+    }
+  }
+
+  static get(key) {
+    try {
+      const cached = localStorage.getItem(key);
+      if (!cached) return null;
+      
+      const { data, expiry } = JSON.parse(cached);
+      if (Date.now() > expiry) {
+        localStorage.removeItem(key);
+        return null;
+      }
+      
+      return data;
+    } catch (error) {
+      console.error('Cache get error:', error);
+      return null;
+    }
+  }
+}
+
+// Search functionality
+window.openSearch = function() {
+  document.getElementById('globalSearch').style.display = 'flex';
+  document.getElementById('searchInput').focus();
+  document.getElementById('searchInput').value = '';
+  document.getElementById('searchResults').innerHTML = '';
+};
+
+window.closeSearch = function() {
+  document.getElementById('globalSearch').style.display = 'none';
+};
+
+let searchTimeout;
+document.getElementById('searchInput')?.addEventListener('input', function(e) {
+  clearTimeout(searchTimeout);
+  const query = e.target.value.trim();
+  
+  if (query.length < 2) {
+    document.getElementById('searchResults').innerHTML = '';
+    return;
+  }
+  
+  searchTimeout = setTimeout(() => performSearch(query), 500);
+});
+
+async function performSearch(query) {
+  showSpinner();
+  const results = [];
+  
+  try {
+    // Search Bible verses locally
+    if (typeof bibleVerses !== 'undefined') {
+      bibleVerses.forEach(verse => {
+        if (verse.text.toLowerCase().includes(query.toLowerCase()) ||
+            verse.reference.toLowerCase().includes(query.toLowerCase())) {
+          results.push({
+            id: verse.reference,
+            title: verse.reference,
+            preview: verse.text.substring(0, 100),
+            category: 'bible',
+            data: verse
+          });
+        }
+      });
+    }
+    
+    // Limit results
+    const displayResults = results.slice(0, 10);
+    displaySearchResults(displayResults);
+    
+  } catch (error) {
+    console.error('Search error:', error);
+  } finally {
+    hideSpinner();
+  }
+}
+
+function displaySearchResults(results) {
+  const container = document.getElementById('searchResults');
+  
+  if (results.length === 0) {
+    container.innerHTML = `
+      <div class="no-results">
+        <i class="fas fa-search"></i>
+        <h3>No results found</h3>
+        <p>Try different keywords</p>
+      </div>
+    `;
+    return;
+  }
+  
+  container.innerHTML = results.map(result => `
+    <div class="search-result-item" onclick="handleSearchResult('${result.category}')">
+      <div class="search-result-title">${result.title}</div>
+      <div class="search-result-preview">${result.preview}</div>
+      <span class="search-result-category">
+        <i class="fas ${getCategoryIcon(result.category)}"></i> ${result.category}
+      </span>
+    </div>
+  `).join('');
+}
+
+function getCategoryIcon(category) {
+  const icons = {
+    bible: 'fa-bible',
+    prayer: 'fa-pray',
+    event: 'fa-calendar',
+    testimony: 'fa-star',
+    video: 'fa-video'
+  };
+  return icons[category] || 'fa-file';
+}
+
+function handleSearchResult(category) {
+  closeSearch();
+  showSection(category);
+}
+
+// Prayer Widget
+let prayerTimer = null;
+let prayerSeconds = 0;
+let prayerDuration = 0;
+
+window.startQuickPrayer = function() {
+  const circle = document.querySelector('.prayer-circle');
+  const icon = circle.querySelector('i');
+  const text = circle.querySelector('span');
+  
+  if (prayerTimer) {
+    // Stop prayer
+    clearInterval(prayerTimer);
+    prayerTimer = null;
+    icon.className = 'fas fa-play';
+    text.textContent = 'Start Prayer';
+    circle.classList.remove('praying');
+    
+    // Log prayer time
+    if (prayerSeconds > 0) {
+      logPrayerTime(prayerSeconds);
+    }
+    
+    prayerSeconds = 0;
+    document.getElementById('quickPrayerTimer').textContent = '00:00';
+    
+  } else {
+    // Start prayer
+    if (prayerDuration === 0) {
+      prayerDuration = 300; // Default 5 minutes
+    }
+    
+    prayerSeconds = 0;
+    icon.className = 'fas fa-stop';
+    text.textContent = 'Stop Prayer';
+    circle.classList.add('praying');
+    
+    prayerTimer = setInterval(() => {
+      prayerSeconds++;
+      const mins = Math.floor(prayerSeconds / 60);
+      const secs = prayerSeconds % 60;
+      document.getElementById('quickPrayerTimer').textContent = 
+        `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+      
+      if (prayerSeconds >= prayerDuration) {
+        completePrayerSession();
+      }
+    }, 1000);
+  }
+};
+
+window.setPrayerDuration = function(minutes) {
+  prayerDuration = minutes * 60;
+  showToast(`Prayer timer set to ${minutes} minutes`, 'success');
+};
+
+function completePrayerSession() {
+  if (prayerTimer) {
+    clearInterval(prayerTimer);
+    prayerTimer = null;
+    
+    const circle = document.querySelector('.prayer-circle');
+    circle.querySelector('i').className = 'fas fa-play';
+    circle.querySelector('span').textContent = 'Start Prayer';
+    circle.classList.remove('praying');
+    
+    // Log prayer time
+    logPrayerTime(prayerSeconds);
+    
+    // Show completion message
+    const minutes = Math.floor(prayerSeconds / 60);
+    showToast(`🎉 Great job! You prayed for ${minutes} minutes`, 'success');
+    confetti({ particleCount: 50, spread: 50, origin: { y: 0.6 } });
+    
+    prayerSeconds = 0;
+    document.getElementById('quickPrayerTimer').textContent = '00:00';
+  }
+}
+
+async function logPrayerTime(seconds) {
+  if (!currentUser || typeof db === 'undefined') return;
+  
+  try {
+    const minutes = Math.floor(seconds / 60);
+    
+    await addDoc(collection(db, "prayerSessions"), {
+      userId: currentUser.uid,
+      duration: minutes,
+      timestamp: Timestamp.now(),
+      date: new Date().toDateString()
+    });
+    
+  } catch (error) {
+    console.error('Error logging prayer time:', error);
+  }
+}
+
+// Prayer Music
+window.playPrayerMusic = function(type) {
+  const audio = document.getElementById('prayerAudio');
+  const musicMap = {
+    soft: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
+    instrumental: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
+    nature: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
+    worship: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3'
+  };
+  
+  audio.src = musicMap[type];
+  audio.play().catch(e => console.log('Audio play failed:', e));
+  document.getElementById('prayerMusicCard').style.display = 'block';
+  
+  showToast(`🎵 Playing ${type} music`, 'success');
+};
+
+window.closePrayerMusic = function() {
+  const audio = document.getElementById('prayerAudio');
+  audio.pause();
+  document.getElementById('prayerMusicCard').style.display = 'none';
+};
+
+// Prayer Intentions
+const PRAYER_INTENTIONS = [
+  {
+    id: 'peace',
+    title: 'Peace in the World',
+    icon: 'fa-globe',
+    color: '#3b82f6',
+    prayer: 'Lord, bring your peace to our world. Heal divisions, calm conflicts, and let your love reign.'
+  },
+  {
+    id: 'family',
+    title: 'Family Unity',
+    icon: 'fa-heart',
+    color: '#ef4444',
+    prayer: 'Father, bless our families with love, understanding, and unity. Protect our homes.'
+  },
+  {
+    id: 'healing',
+    title: 'Physical Healing',
+    icon: 'fa-heartbeat',
+    color: '#22c55e',
+    prayer: 'Lord, touch the sick with your healing power. Restore health and strength.'
+  },
+  {
+    id: 'provision',
+    title: 'Financial Provision',
+    icon: 'fa-coins',
+    color: '#d4af37',
+    prayer: 'Provide for those in need, Lord. Open doors of opportunity and bless the work of hands.'
+  },
+  {
+    id: 'leaders',
+    title: 'World Leaders',
+    icon: 'fa-landmark',
+    color: '#8b5cf6',
+    prayer: 'Guide our leaders with wisdom and righteousness. Let them govern with justice.'
+  },
+  {
+    id: 'missionaries',
+    title: 'Missionaries',
+    icon: 'fa-cross',
+    color: '#f97316',
+    prayer: 'Protect and strengthen missionaries spreading the gospel around the world.'
+  }
+];
+
+window.showPrayerIntentions = function() {
+  const modal = document.createElement('div');
+  modal.className = 'modal';
+  modal.style.display = 'flex';
+  
+  modal.innerHTML = `
+    <div class="modal-content" style="max-width: 700px;">
+      <h2><i class="fas fa-pray"></i> Prayer Intentions</h2>
+      <p style="margin: 15px 0; color: var(--text-secondary);">Join us in praying for these intentions</p>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; max-height: 400px; overflow-y: auto;">
+        ${PRAYER_INTENTIONS.map(intention => `
+          <div class="intention-card" style="background: linear-gradient(135deg, ${intention.color}20, transparent); border-radius: 16px; padding: 20px; cursor: pointer; border: 2px solid transparent; transition: all 0.3s;" 
+               onmouseover="this.style.borderColor='${intention.color}'" 
+               onmouseout="this.style.borderColor='transparent'"
+               onclick="prayForIntention('${intention.id}')">
+            <i class="fas ${intention.icon}" style="font-size: 32px; color: ${intention.color}; margin-bottom: 10px;"></i>
+            <h4 style="color: var(--accent-green); margin-bottom: 8px;">${intention.title}</h4>
+            <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">${intention.prayer.substring(0, 60)}...</p>
+            <button class="btn btn-small btn-outline" style="margin-top: 15px;">Pray Now</button>
+          </div>
+        `).join('')}
+      </div>
+      <button class="btn btn-outline" style="margin-top: 20px;" onclick="this.closest('.modal').remove()">Close</button>
+    </div>
+  `;
+  
+  document.body.appendChild(modal);
+};
+
+window.prayForIntention = function(intentionId) {
+  const intention = PRAYER_INTENTIONS.find(i => i.id === intentionId);
+  
+  const prayerModal = document.createElement('div');
+  prayerModal.className = 'modal';
+  prayerModal.style.display = 'flex';
+  prayerModal.innerHTML = `
+    <div class="modal-content" style="max-width: 500px; text-align: center;">
+      <i class="fas ${intention.icon}" style="font-size: 48px; color: ${intention.color}; margin-bottom: 20px;"></i>
+      <h2 style="color: var(--accent-green); margin-bottom: 15px;">${intention.title}</h2>
+      <div style="background: var(--bg-primary); padding: 25px; border-radius: 16px; margin: 20px 0;">
+        <p style="font-size: 18px; line-height: 1.8; font-style: italic;">"${intention.prayer}"</p>
+      </div>
+      <div style="display: flex; gap: 15px; justify-content: center;">
+        <button class="btn btn-primary" onclick="recordIntentionPrayer('${intentionId}')">
+          <i class="fas fa-check"></i> I Prayed
+        </button>
+        <button class="btn btn-outline" onclick="this.closest('.modal').remove()">
+          Close
+        </button>
+      </div>
+    </div>
+  `;
+  
+  document.body.appendChild(prayerModal);
+};
+
+window.recordIntentionPrayer = async function(intentionId) {
+  if (!currentUser) {
+    showToast('Please login to track your prayers', 'info');
+    showLoginModal();
+    return;
+  }
+  
+  try {
+    if (typeof db !== 'undefined') {
+      await addDoc(collection(db, "intentionPrayers"), {
+        userId: currentUser.uid,
+        intentionId: intentionId,
+        timestamp: Timestamp.now()
+      });
+    }
+    
+    showToast('🙏 Prayer recorded! Thank you for praying.', 'success');
+    document.querySelector('.modal').remove();
+    
+  } catch (error) {
+    console.error('Error recording intention:', error);
+    showToast('Error recording prayer', 'error');
+  }
+};
+
+// Add prayer group button to prayer section
+function addPrayerGroupButton() {
+  const prayerSection = document.querySelector('#prayer .card');
+  if (!prayerSection) return;
+  
+  const groupBtn = document.createElement('button');
+  groupBtn.className = 'btn btn-outline btn-small';
+  groupBtn.style.marginRight = '10px';
+  groupBtn.innerHTML = '<i class="fas fa-users"></i> Prayer Groups';
+  groupBtn.onclick = showPrayerGroups;
+  
+  const musicBtn = document.createElement('button');
+  musicBtn.className = 'btn btn-outline btn-small';
+  musicBtn.style.marginRight = '10px';
+  musicBtn.innerHTML = '<i class="fas fa-music"></i> Prayer Music';
+  musicBtn.onclick = () => {
+    document.getElementById('prayerMusicCard').style.display = 'block';
+  };
+  
+  const intentionsBtn = document.createElement('button');
+  intentionsBtn.className = 'btn btn-outline btn-small';
+  intentionsBtn.innerHTML = '<i class="fas fa-list"></i> Intentions';
+  intentionsBtn.onclick = showPrayerIntentions;
+  
+  const submitBtn = prayerSection.querySelector('.btn-primary');
+  if (submitBtn) {
+    const container = document.createElement('div');
+    container.style.display = 'flex';
+    container.style.gap = '10px';
+    container.style.marginBottom = '15px';
+    container.style.flexWrap = 'wrap';
+    
+    container.appendChild(groupBtn);
+    container.appendChild(musicBtn);
+    container.appendChild(intentionsBtn);
+    
+    prayerSection.insertBefore(container, submitBtn);
+  }
+}
+
+// Show prayer groups
+window.showPrayerGroups = function() {
+  showToast('Prayer groups feature coming soon!', 'info');
+};
+
+// Data export
+window.exportMyData = function() {
+  if (!currentUser) {
+    showToast('Please login first', 'error');
+    return;
+  }
+  
+  const userData = {
+    profile: currentUser ? {
+      uid: currentUser.uid,
+      email: currentUser.email,
+      name: currentUser.displayName
+    } : null,
+    favorites: JSON.parse(localStorage.getItem('bibleFavorites') || '[]'),
+    exportedAt: new Date().toISOString()
+  };
+  
+  const blob = new Blob([JSON.stringify(userData, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `prayer-dome-data-${new Date().toISOString().split('T')[0]}.json`;
+  a.click();
+  
+  showToast('✅ Your data has been exported!', 'success');
+};
+
+// Add data buttons to user menu
+function addDataButtonsToUserMenu() {
+  const authButtons = document.getElementById('authButtons');
+  if (!authButtons) return;
+  
+  const exportBtn = document.createElement('button');
+  exportBtn.className = 'btn btn-outline';
+  exportBtn.innerHTML = '<i class="fas fa-download"></i> Export My Data';
+  exportBtn.onclick = exportMyData;
+  exportBtn.style.marginBottom = '10px';
+  
+  const logoutBtn = document.getElementById('logoutBtn');
+  if (logoutBtn) {
+    authButtons.insertBefore(exportBtn, logoutBtn);
+  }
+}
+
+// Share app
+window.shareApp = function() {
+  const shareData = {
+    title: 'Prayer Dome',
+    text: 'Join me on Prayer Dome - A House of Prayer for All Nations',
+    url: window.location.href
+  };
+  
+  if (navigator.share) {
+    navigator.share(shareData).catch(console.error);
+  } else {
+    navigator.clipboard.writeText(shareData.text + ' ' + shareData.url);
+    showToast('📋 Link copied to clipboard!', 'success');
+  }
+};
+
+// Add share button to footer
+function addShareButton() {
+  const footer = document.querySelector('.footer-bottom');
+  if (footer) {
+    const shareBtn = document.createElement('button');
+    shareBtn.className = 'btn btn-outline btn-small';
+    shareBtn.style.marginTop = '15px';
+    shareBtn.innerHTML = '<i class="fas fa-share-alt"></i> Share Prayer Dome';
+    shareBtn.onclick = shareApp;
+    footer.appendChild(shareBtn);
+  }
+}
+
+// Initialize all new features
+function initNewFeatures() {
+  initOfflineDetection();
+  addPrayerGroupButton();
+  addDataButtonsToUserMenu();
+  addShareButton();
+  
+  // Add search input listener
+  const searchInput = document.getElementById('searchInput');
+  if (searchInput) {
+    searchInput.addEventListener('input', function(e) {
+      clearTimeout(searchTimeout);
+      const query = e.target.value.trim();
+      if (query.length < 2) {
+        document.getElementById('searchResults').innerHTML = '';
+        return;
+      }
+      searchTimeout = setTimeout(() => performSearch(query), 500);
+    });
+  }
+}
+
+// Call initialization after DOM is loaded
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initNewFeatures);
+} else {
+  initNewFeatures();
+}
 
 console.log('All functions exported to global scope - buttons should now work');
 </script>
