@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Prayer Dome | Savings Calculator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1e5631;
+            --primary-dark: #0f3b1f;
+            --primary-light: #2e7d44;
+            --gold: #e6b422;
+            --gold-dark: #c49a1a;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --bg-light: #fef7e0;
+            --bg-white: #ffffff;
+            --text-dark: #2d3e2b;
+            --text-light: #5a6e4a;
+            --shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.15);
+            --shadow-hover: 0 25px 45px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #fef7e0 0%, #f9efd6 100%);
+            color: var(--text-dark);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 32px;
+            padding: 20px 35px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-area img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: white;
+            padding: 5px;
+        }
+
+        .logo-area h1 {
+            font-size: 22px;
+            color: white;
+        }
+
+        .logo-area p {
+            font-size: 11px;
+            opacity: 0.8;
+            color: white;
+        }
+
+        .header-right {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .currency-select {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            padding: 8px 15px;
+            border-radius: 30px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .nav-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            padding: 8px 18px;
+            border-radius: 30px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .nav-btn:hover {
+            background: var(--gold);
+            color: var(--primary-dark);
+        }
+
+        /* Left Menu */
+        .left-menu {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 300px;
+            height: 100vh;
+            background: linear-gradient(180deg, var(--primary-dark), var(--primary));
+            color: white;
+            z-index: 1000;
+            transform: translateX(-100%);
+            transition: transform 0.4s ease;
+            padding: 30px 20px;
+            overflow-y: auto;
+            box-shadow: 5px 0 35px rgba(0,0,0,0.3);
+        }
+
+        .left-menu.open {
+            transform: translateX(0);
+        }
+
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+            display: none;
+        }
+
+        .menu-overlay.active {
+            display: block;
+        }
+
+        .menu-toggle {
+            position: fixed;
+            left: 20px;
+            top: 30px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border: none;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            color: white;
+            font-size: 22px;
+            cursor: pointer;
+            z-index: 1001;
+            box-shadow: var(--shadow);
+            transition: all 0.3s;
+        }
+
+        .menu-toggle:hover {
+            background: var(--gold);
+            transform: scale(1.05);
+        }
+
+        .menu-header {
+            text-align: center;
+            padding-bottom: 25px;
+            border-bottom: 2px solid var(--gold);
+            margin-bottom: 25px;
+        }
+
+        .menu-logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: white;
+            padding: 8px;
+            margin-bottom: 15px;
+        }
+
+        .menu-items {
+            list-style: none;
+        }
+
+        .menu-items li {
+            margin-bottom: 8px;
+        }
+
+        .menu-items a {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 18px;
+            color: white;
+            text-decoration: none;
+            border-radius: 14px;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .menu-items a:hover {
+            background: var(--gold);
+            color: var(--primary-dark);
+            transform: translateX(8px);
+        }
+
+        .menu-items a i {
+            width: 24px;
+        }
+
+        .menu-footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            font-size: 12px;
+            text-align: center;
+        }
+
+        /* Calculator Hero */
+        .calculator-hero {
+            background: linear-gradient(135deg, var(--primary-light), var(--primary));
+            border-radius: 32px;
+            padding: 40px;
+            margin-bottom: 30px;
+            text-align: center;
+            color: white;
+        }
+
+        .calculator-hero h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .calculator-hero p {
+            opacity: 0.9;
+        }
+
+        /* Calculator Card */
+        .calculator-card {
+            background: var(--bg-white);
+            border-radius: 32px;
+            padding: 40px;
+            box-shadow: var(--shadow);
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e5e7eb;
+            border-radius: 20px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .input-group input:focus, .input-group select:focus {
+            outline: none;
+            border-color: var(--gold);
+        }
+
+        .calculate-btn {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+        }
+
+        .calculate-btn:hover {
+            background: var(--gold);
+            color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        /* Result Card */
+        .result-card {
+            margin-top: 30px;
+            padding: 30px;
+            background: linear-gradient(135deg, #fef7e0, #fff5e6);
+            border-radius: 28px;
+            text-align: center;
+            display: none;
+        }
+
+        .result-card h3 {
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .result-amount {
+            font-size: 48px;
+            font-weight: 800;
+            color: var(--gold-dark);
+            margin: 20px 0;
+        }
+
+        .result-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .result-detail {
+            background: white;
+            padding: 15px;
+            border-radius: 20px;
+        }
+
+        .result-detail span:first-child {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            display: block;
+        }
+
+        .result-detail span:last-child {
+            font-size: 12px;
+            color: var(--text-light);
+        }
+
+        /* Plans Grid */
+        .plans-preview {
+            margin-top: 40px;
+        }
+
+        .plans-preview h3 {
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+
+        .plans-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .plan-preview-card {
+            background: var(--bg-white);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: all 0.3s;
+        }
+
+        .plan-preview-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .plan-preview-card h4 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .plan-preview-card .amount {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--gold-dark);
+            margin: 10px 0;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px;
+            background: var(--primary-dark);
+            color: white;
+            border-radius: 30px;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .result-amount { font-size: 32px; }
+            .header { flex-direction: column; text-align: center; }
+            .menu-toggle { width: 40px; height: 40px; top: 20px; left: 15px; }
+            .left-menu { width: 85%; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Menu Toggle Button -->
+<button class="menu-toggle" id="menuToggle" onclick="toggleMenu()">
+    <i class="fas fa-bars"></i>
+</button>
+
+<!-- Left Menu -->
+<div class="left-menu" id="leftMenu">
+    <div class="menu-header">
+        <img src="https://i.ibb.co/TB5Fx4tb/logo-0.png" class="menu-logo">
+        <h3>Prayer Dome</h3>
+        <p>Community Support Program</p>
+    </div>
+    <ul class="menu-items">
+        <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+        <li><a href="about-us.html"><i class="fas fa-info-circle"></i> About Us</a></li>
+        <li><a href="wallet.html"><i class="fas fa-wallet"></i> My Wallet</a></li>
+        <li><a href="calculator.html"><i class="fas fa-calculator"></i> Savings Calculator</a></li>
+        <li><a href="support.html"><i class="fas fa-chart-line"></i> Business Support</a></li>
+        <li><a href="support.html"><i class="fas fa-graduation-cap"></i> Education Support</a></li>
+        <li><a href="support.html"><i class="fas fa-heart"></i> Funeral Cover</a></li>
+        <li><a href="support.html"><i class="fas fa-piggy-bank"></i> Saving Plans</a></li>
+        <li><a href="support.html"><i class="fas fa-images"></i> Gallery</a></li>
+        <li><a href="support.html"><i class="fas fa-file-contract"></i> Terms</a></li>
+        <li><a href="support.html"><i class="fas fa-envelope"></i> Contact</a></li>
+    </ul>
+    <div class="menu-footer">
+        <p><i class="fas fa-phone"></i> +268 7604 3539</p>
+        <p><i class="fas fa-envelope"></i> support@prayerdome.org</p>
+        <p>© 2024 Prayer Dome</p>
+    </div>
+</div>
+
+<div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
+
+<div class="container">
+    <!-- Header -->
+    <div class="header">
+        <div class="logo-area">
+            <img src="https://i.ibb.co/TB5Fx4tb/logo-0.png" alt="Prayer Dome">
+            <div>
+                <h1>PRAYER DOME</h1>
+                <p>Community Support Program</p>
+            </div>
+        </div>
+        <div class="header-right">
+            <select id="currencySelect" class="currency-select" onchange="updateCurrency()">
+                <option value="ZM">🇿🇲 ZK</option>
+                <option value="ZA">🇿🇦 R</option>
+                <option value="SZ">🇸🇿 E</option>
+                <option value="US">🇺🇸 $</option>
+            </select>
+            <a href="index.html" class="nav-btn"><i class="fas fa-home"></i> Home</a>
+            <a href="about-us.html" class="nav-btn"><i class="fas fa-info-circle"></i> About</a>
+        </div>
+    </div>
+
+    <!-- Calculator Hero -->
+    <div class="calculator-hero">
+        <h1><i class="fas fa-calculator"></i> Savings Calculator</h1>
+        <p>Calculate how much support you'll receive after 12 months of consistent saving</p>
+    </div>
+
+    <!-- Calculator Card -->
+    <div class="calculator-card">
+        <div class="input-group">
+            <label><i class="fas fa-dollar-sign"></i> Monthly Savings Amount</label>
+            <input type="number" id="monthlyAmount" placeholder="Enter amount you plan to save each month" value="50">
+        </div>
+        
+        <div class="input-group">
+            <label><i class="fas fa-chart-line"></i> Select Savings Plan</label>
+            <select id="savingsPlan">
+                <option value="starter">Starter Plan ($5 - $50/month)</option>
+                <option value="standard">Standard Plan ($60 - $100/month)</option>
+                <option value="premium">Premium Plan ($100 - $500/month)</option>
+                <option value="elite">Elite Plan ($500 - $1,000/month)</option>
+            </select>
+        </div>
+        
+        <button class="calculate-btn" onclick="calculateSavings()">
+            <i class="fas fa-chart-simple"></i> Calculate My Support
+        </button>
+        
+        <!-- Result Card -->
+        <div id="resultCard" class="result-card">
+            <h3>📊 Your Savings Projection</h3>
+            <div id="resultAmount" class="result-amount">$0</div>
+            <div class="result-details">
+                <div class="result-detail">
+                    <span id="totalSavings">$0</span>
+                    <span>Total Savings (12 months)</span>
+                </div>
+                <div class="result-detail">
+                    <span id="minSupport">$0</span>
+                    <span>Minimum Support</span>
+                </div>
+                <div class="result-detail">
+                    <span id="maxSupport">$0</span>
+                    <span>Maximum Support</span>
+                </div>
+                <div class="result-detail">
+                    <span id="interestEarned">$0</span>
+                    <span>Interest Earned (0.015%)</span>
+                </div>
+            </div>
+            <p style="margin-top: 20px; font-size: 14px; color: var(--text-light);">
+                <i class="fas fa-info-circle"></i> Support amount is calculated based on 1.33x to 2.5x of your total savings
+            </p>
+        </div>
+    </div>
+
+    <!-- Plan Preview -->
+    <div class="plans-preview">
+        <h3><i class="fas fa-chart-line"></i> Plan Comparison</h3>
+        <div class="plans-grid" id="plansGrid"></div>
+    </div>
+
+    <footer>
+        <p>🙏 "A House of Prayer for All Nations" - Matthew 21:13</p>
+        <p style="margin-top: 15px;">MTN Mobile Money: <strong>+268 7604 3539</strong> | Reference: Your Membership Number</p>
+        <p style="margin-top: 10px;">© 2024 Prayer Dome Ministry | Community Support Program</p>
+    </footer>
+</div>
+
+<script>
+    // Currency settings
+    let currentCurrency = 'US';
+    const rates = { ZM: 25, ZA: 19, SZ: 19, US: 1 };
+    const symbols = { ZM: 'ZK', ZA: 'R', SZ: 'E', US: '$' };
+    
+    const plans = {
+        starter: { name: 'Starter', min: 5, max: 50, color: '#b87c4f' },
+        standard: { name: 'Standard', min: 60, max: 100, color: '#8b9a6e' },
+        premium: { name: 'Premium', min: 100, max: 500, color: '#b0b0b0' },
+        elite: { name: 'Elite', min: 500, max: 1000, color: '#b9e6ff' }
+    };
+    
+    function formatMoney(usd) {
+        let converted = usd * rates[currentCurrency];
+        return `${symbols[currentCurrency]}${Math.floor(converted)}`;
+    }
+    
+    function updateCurrency() {
+        currentCurrency = document.getElementById('currencySelect').value;
+        calculateSavings();
+        renderPlansPreview();
+    }
+    
+    function calculateSavings() {
+        let monthly = parseFloat(document.getElementById('monthlyAmount').value);
+        let plan = document.getElementById('savingsPlan').value;
+        
+        if (isNaN(monthly) || monthly < 1) {
+            monthly = 50;
+            document.getElementById('monthlyAmount').value = 50;
+        }
+        
+        // Validate against plan limits
+        const planLimits = plans[plan];
+        if (monthly < planLimits.min) {
+            monthly = planLimits.min;
+            document.getElementById('monthlyAmount').value = monthly;
+            alert(`Minimum for ${planLimits.name} plan is ${formatMoney(planLimits.min)}`);
+        }
+        if (monthly > planLimits.max) {
+            monthly = planLimits.max;
+            document.getElementById('monthlyAmount').value = monthly;
+            alert(`Maximum for ${planLimits.name} plan is ${formatMoney(planLimits.max)}`);
+        }
+        
+        let totalSavings = monthly * 12;
+        let interest = totalSavings * 0.00015 * 12;
+        let totalWithInterest = totalSavings + interest;
+        let minSupport = Math.floor(totalWithInterest * 1.33);
+        let maxSupport = Math.floor(totalWithInterest * 2.5);
+        
+        document.getElementById('resultAmount').innerHTML = formatMoney(totalWithInterest);
+        document.getElementById('totalSavings').innerHTML = formatMoney(totalSavings);
+        document.getElementById('minSupport').innerHTML = formatMoney(minSupport);
+        document.getElementById('maxSupport').innerHTML = formatMoney(maxSupport);
+        document.getElementById('interestEarned').innerHTML = formatMoney(interest);
+        document.getElementById('resultCard').style.display = 'block';
+        
+        // Confetti animation
+        canvasConfetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+    }
+    
+    function renderPlansPreview() {
+        const grid = document.getElementById('plansGrid');
+        grid.innerHTML = Object.entries(plans).map(([key, plan]) => `
+            <div class="plan-preview-card" onclick="document.getElementById('savingsPlan').value='${key}'; calculateSavings();">
+                <h4>${plan.name} Plan</h4>
+                <div class="amount">${formatMoney(plan.min)} - ${formatMoney(plan.max)}</div>
+                <p style="font-size: 12px;">per month</p>
+                <small>Support after 12 months: ${formatMoney(plan.min * 12 * 1.8)} - ${formatMoney(plan.max * 12 * 2.5)}</small>
+            </div>
+        `).join('');
+    }
+    
+    function toggleMenu() {
+        document.getElementById('leftMenu').classList.toggle('open');
+        document.getElementById('menuOverlay').classList.toggle('active');
+    }
+    
+    // Canvas Confetti
+    const canvasConfetti = (options) => {
+        confetti(options);
+    };
+    
+    // Initialize
+    renderPlansPreview();
+    calculateSavings();
+    
+    window.calculateSavings = calculateSavings;
+    window.updateCurrency = updateCurrency;
+    window.toggleMenu = toggleMenu;
+</script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</body>
+</html>

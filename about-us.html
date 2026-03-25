@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Prayer Dome | About Us</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1e5631;
+            --primary-dark: #0f3b1f;
+            --primary-light: #2e7d44;
+            --gold: #e6b422;
+            --gold-dark: #c49a1a;
+            --gold-light: #f5d742;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --bg-light: #fef7e0;
+            --bg-white: #ffffff;
+            --text-dark: #2d3e2b;
+            --text-light: #5a6e4a;
+            --shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.15);
+            --shadow-hover: 0 25px 45px -12px rgba(0, 0, 0, 0.25);
+            --gradient-gold: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            --gradient-primary: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            --gradient-bg: linear-gradient(135deg, #fef7e0 0%, #f9efd6 50%, #fef5e8 100%);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--gradient-bg);
+            color: var(--text-dark);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            background: var(--gradient-primary);
+            border-radius: 32px;
+            padding: 20px 35px;
+            margin-bottom: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+            animation: slideDown 0.6s ease-out;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header::before {
+            content: "🙏";
+            position: absolute;
+            font-size: 100px;
+            opacity: 0.05;
+            bottom: -20px;
+            right: -20px;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-area img {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            background: white;
+            padding: 5px;
+            transition: transform 0.3s;
+        }
+
+        .logo-area img:hover {
+            transform: scale(1.05);
+        }
+
+        .logo-area h1 {
+            font-size: 24px;
+            color: white;
+        }
+
+        .logo-area p {
+            font-size: 12px;
+            opacity: 0.8;
+            color: white;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 40px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-btn:hover {
+            background: var(--gold);
+            color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        /* About Hero */
+        .about-hero {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 32px;
+            padding: 60px 40px;
+            text-align: center;
+            color: white;
+            margin-bottom: 50px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .about-hero::before {
+            content: "✝";
+            position: absolute;
+            font-size: 180px;
+            opacity: 0.08;
+            bottom: -40px;
+            right: -30px;
+            font-family: serif;
+        }
+
+        .about-hero h1 {
+            font-size: 52px;
+            margin-bottom: 15px;
+            font-weight: 800;
+        }
+
+        .about-hero p {
+            font-size: 20px;
+            opacity: 0.9;
+            letter-spacing: 1px;
+        }
+
+        .about-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Founder Section */
+        .founder-section {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 50px;
+            background: var(--bg-white);
+            border-radius: 32px;
+            padding: 45px;
+            margin-bottom: 50px;
+            box-shadow: var(--shadow);
+            transition: all 0.4s;
+            animation: fadeInUp 0.7s ease-out;
+        }
+
+        .founder-section:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .founder-image {
+            text-align: center;
+            position: relative;
+        }
+
+        .founder-image img {
+            width: 100%;
+            max-width: 300px;
+            border-radius: 28px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            transition: transform 0.4s;
+            border: 4px solid var(--gold);
+        }
+
+        .founder-image img:hover {
+            transform: scale(1.02);
+        }
+
+        .founder-social {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .founder-social a {
+            width: 42px;
+            height: 42px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .founder-social a:hover {
+            background: var(--gold);
+            transform: translateY(-3px) rotate(360deg);
+        }
+
+        .founder-info h2 {
+            font-size: 40px;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .founder-title {
+            font-size: 18px;
+            color: var(--gold-dark);
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .founder-quote {
+            font-style: italic;
+            font-size: 18px;
+            padding: 18px 22px;
+            background: linear-gradient(135deg, #fef7e0, #fff5e6);
+            border-left: 5px solid var(--gold);
+            border-radius: 20px;
+            margin: 20px 0;
+        }
+
+        .founder-stats {
+            display: flex;
+            gap: 35px;
+            margin-top: 25px;
+        }
+
+        .founder-stats div {
+            text-align: center;
+            background: rgba(30, 86, 49, 0.05);
+            padding: 12px 20px;
+            border-radius: 20px;
+            flex: 1;
+        }
+
+        .founder-stats span {
+            display: block;
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--gold-dark);
+        }
+
+        /* Mission & Vision */
+        .mission-vision {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 35px;
+            margin-bottom: 60px;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .mission-card, .vision-card {
+            background: var(--bg-white);
+            border-radius: 28px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mission-card:hover, .vision-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .mission-card::before, .vision-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--gradient-gold);
+        }
+
+        .mission-card .icon, .vision-card .icon {
+            width: 85px;
+            height: 85px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            transition: transform 0.3s;
+        }
+
+        .mission-card:hover .icon, .vision-card:hover .icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .mission-card .icon i, .vision-card .icon i {
+            font-size: 40px;
+            color: var(--gold);
+        }
+
+        .mission-card h3, .vision-card h3 {
+            font-size: 30px;
+            color: var(--primary);
+            margin-bottom: 18px;
+        }
+
+        .mission-card p, .vision-card p {
+            color: var(--text-light);
+            line-height: 1.8;
+            font-size: 16px;
+        }
+
+        /* Core Values */
+        .values-section {
+            margin-bottom: 60px;
+            animation: fadeInUp 0.9s ease-out;
+        }
+
+        .values-section h2 {
+            text-align: center;
+            font-size: 38px;
+            color: var(--primary);
+            margin-bottom: 45px;
+            position: relative;
+        }
+
+        .values-section h2:after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 4px;
+            background: var(--gold);
+            border-radius: 3px;
+        }
+
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 30px;
+        }
+
+        .value-card {
+            background: var(--bg-white);
+            border-radius: 24px;
+            padding: 35px 25px;
+            text-align: center;
+            transition: all 0.4s;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .value-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .value-card i {
+            font-size: 52px;
+            color: var(--gold);
+            margin-bottom: 20px;
+            transition: transform 0.3s;
+        }
+
+        .value-card:hover i {
+            transform: scale(1.1);
+        }
+
+        .value-card h4 {
+            font-size: 24px;
+            color: var(--primary);
+            margin-bottom: 12px;
+        }
+
+        .value-card p {
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        /* Full About Content */
+        .about-full-content {
+            background: var(--bg-white);
+            border-radius: 28px;
+            padding: 45px;
+            margin-bottom: 50px;
+            box-shadow: var(--shadow);
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .about-full-content p {
+            line-height: 1.9;
+            margin-bottom: 20px;
+            color: var(--text-dark);
+            font-size: 16px;
+        }
+
+        .closing-quote {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--primary);
+            text-align: center;
+            padding-top: 25px;
+            border-top: 2px solid var(--gold-light);
+            margin-top: 25px;
+            font-style: italic;
+        }
+
+        /* Stats Section */
+        .about-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+            animation: fadeInUp 1.1s ease-out;
+        }
+
+        .stat-item {
+            background: var(--bg-white);
+            border-radius: 24px;
+            padding: 35px 20px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-5px);
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .stat-item:hover i,
+        .stat-item:hover .stat-number,
+        .stat-item:hover .stat-label {
+            color: white;
+        }
+
+        .stat-item i {
+            font-size: 52px;
+            color: var(--gold);
+            margin-bottom: 15px;
+            transition: color 0.3s;
+        }
+
+        .stat-number {
+            font-size: 38px;
+            font-weight: 800;
+            color: var(--primary);
+            transition: color 0.3s;
+        }
+
+        .stat-label {
+            color: var(--text-light);
+            margin-top: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        /* Call to Action */
+        .cta-section {
+            background: var(--gradient-primary);
+            border-radius: 32px;
+            padding: 50px;
+            text-align: center;
+            color: white;
+            margin: 40px 0;
+            animation: fadeInUp 1.2s ease-out;
+        }
+
+        .cta-section h3 {
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        .cta-section p {
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .cta-btn {
+            background: var(--gold);
+            color: var(--primary-dark);
+            padding: 15px 40px;
+            font-size: 18px;
+            font-weight: 700;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .cta-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px;
+            background: var(--primary-dark);
+            color: white;
+            border-radius: 30px;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .founder-section {
+                grid-template-columns: 1fr;
+                text-align: center;
+                padding: 30px;
+            }
+            .mission-vision {
+                grid-template-columns: 1fr;
+            }
+            .about-hero h1 {
+                font-size: 36px;
+            }
+            .founder-stats {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .founder-stats div {
+                padding: 10px;
+            }
+            .values-grid {
+                grid-template-columns: 1fr;
+            }
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+            .nav-buttons {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Header -->
+    <div class="header">
+        <div class="logo-area">
+            <img src="https://i.ibb.co/TB5Fx4tb/logo-0.png" alt="Prayer Dome Logo">
+            <div>
+                <h1>PRAYER DOME</h1>
+                <p>A House of Prayer for All Nations</p>
+            </div>
+        </div>
+        <div class="nav-buttons">
+            <a href="#" class="nav-btn" onclick="window.location.href='index.html'"><i class="fas fa-home"></i> Home</a>
+            <a href="#" class="nav-btn" onclick="window.location.href='support.html'"><i class="fas fa-hand-holding-heart"></i> Support</a>
+            <a href="#" class="nav-btn" onclick="window.location.href='index.html#give'"><i class="fas fa-heart"></i> Give</a>
+        </div>
+    </div>
+
+    <!-- About Hero -->
+    <div class="about-hero">
+        <h1>About Prayer Dome</h1>
+        <p>Faith-Driven • Community-Powered • Transforming Lives</p>
+    </div>
+
+    <div class="about-container">
+        <!-- Founder Section -->
+        <div class="founder-section">
+            <div class="founder-image">
+                <img src="https://i.ibb.co/RTbNh1hB/founder-2.jpg" alt="Seedwell Khayalethu Masuku">
+                <div class="founder-social">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            <div class="founder-info">
+                <h2>Seedwell Khayalethu Masuku</h2>
+                <p class="founder-title">Founder & Senior Pastor</p>
+                <p class="founder-quote">"A House of Prayer for All Nations – Matthew 21:13"</p>
+                <p>With over 7 years of dedicated service, Seedwell Khayalethu Masuku founded Prayer Dome with a divine vision to create a community where faith meets practical support. His leadership has transformed thousands of lives through structured saving programs, business empowerment, education funding, and dignified funeral support.</p>
+                <div class="founder-stats">
+                    <div><span>7+</span> Years Serving</div>
+                    <div><span>500+</span> Members</div>
+                    <div><span>2</span> Countries</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mission & Vision -->
+        <div class="mission-vision">
+            <div class="mission-card">
+                <div class="icon"><i class="fas fa-bullseye"></i></div>
+                <h3>Our Mission</h3>
+                <p>To turn saving into a powerful tool for change by combining financial discipline with community support, helping individuals achieve their goals while building a culture of accountability and growth.</p>
+            </div>
+            <div class="vision-card">
+                <div class="icon"><i class="fas fa-eye"></i></div>
+                <h3>Our Vision</h3>
+                <p>To create a self-sustaining ecosystem where people can grow financially, socially, and spiritually through structured programs, responsibility, transparency, and long-term planning.</p>
+            </div>
+        </div>
+
+        <!-- Core Values -->
+        <div class="values-section">
+            <h2>Our Core Values</h2>
+            <div class="values-grid">
+                <div class="value-card">
+                    <i class="fas fa-hand-holding-heart"></i>
+                    <h4>Faith & Compassion</h4>
+                    <p>Rooted in spiritual values, we serve with love and empathy, recognizing that every person deserves dignity and care.</p>
+                </div>
+                <div class="value-card">
+                    <i class="fas fa-chart-line"></i>
+                    <h4>Discipline & Growth</h4>
+                    <p>Small consistent actions lead to great outcomes. We believe in the power of regular saving and intentional planning.</p>
+                </div>
+                <div class="value-card">
+                    <i class="fas fa-users"></i>
+                    <h4>Community & Unity</h4>
+                    <p>No member walks alone. We uplift each other, share burdens, and celebrate victories together as one family.</p>
+                <div class="value-card">
+                    <i class="fas fa-shield-alt"></i>
+                    <h4>Transparency & Trust</h4>
+                    <p>Building confidence through clear, honest systems. Every member deserves to know how their contributions are managed.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Full About Content -->
+        <div class="about-full-content">
+            <p>Prayer Dome is a faith-driven community support platform dedicated to empowering individuals and transforming lives through structured saving, unity, and shared responsibility. Built on the foundation of trust, discipline, and spiritual values, Prayer Dome brings people together with a common purpose — to create financial stability while supporting one another in times of need.</p>
+            
+            <p>At Prayer Dome, we believe that small, consistent actions lead to great outcomes. Our system encourages members to save regularly over a period of time, creating a strong financial base that unlocks access to meaningful support. Whether it is starting or expanding a business, funding education, or preparing for life's unexpected moments such as funerals, Prayer Dome ensures that no member walks alone.</p>
+            
+            <p>Our mission is to turn saving into a powerful tool for change. By combining financial discipline with community support, we help individuals achieve their goals while building a culture of accountability and growth. Members are not just participants; they are part of a supportive network that uplifts, encourages, and contributes to each other's success.</p>
+            
+            <p>Prayer Dome operates with a vision of creating a self-sustaining ecosystem where people can grow financially, socially, and spiritually. Through our structured programs, we promote responsibility, transparency, and long-term planning. Every contribution made is a step toward a more secure and empowered future.</p>
+            
+            <p>We also recognize the importance of compassion and dignity. In times of loss, our funeral support ensures that families are cared for. In times of ambition, our business support fuels entrepreneurship. In times of growth, our education support opens doors to knowledge and opportunity. All these pillars are built upon the discipline of saving, which remains the heart of our system.</p>
+            
+            <p>As a community, Prayer Dome is more than just a financial platform — it is a movement. A movement that inspires hope, builds resilience, and creates opportunities for individuals and families to thrive. With every member who joins, the network becomes stronger, more impactful, and more capable of changing lives.</p>
+            
+            <p class="closing-quote">At Prayer Dome, we don't just save — we build futures, strengthen communities, and turn faith into action.</p>
+        </div>
+        
+        <!-- Stats Section -->
+        <div class="about-stats">
+            <div class="stat-item">
+                <i class="fas fa-calendar-alt"></i>
+                <div class="stat-number">2018</div>
+                <div class="stat-label">Year Founded</div>
+            </div>
+            <div class="stat-item">
+                <i class="fas fa-users"></i>
+                <div class="stat-number">500+</div>
+                <div class="stat-label">Active Members</div>
+            </div>
+            <div class="stat-item">
+                <i class="fas fa-dollar-sign"></i>
+                <div class="stat-number">$45K+</div>
+                <div class="stat-label">Support Disbursed</div>
+            </div>
+            <div class="stat-item">
+                <i class="fas fa-smile"></i>
+                <div class="stat-number">98%</div>
+                <div class="stat-label">Satisfaction Rate</div>
+            </div>
+        </div>
+
+        <!-- Call to Action -->
+        <div class="cta-section">
+            <h3>Ready to Start Your Journey?</h3>
+            <p>Join thousands of believers who are building their future through consistent saving and community support.</p>
+            <button class="cta-btn" onclick="window.location.href='support.html'"><i class="fas fa-pray"></i> Join Prayer Dome Today</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>🙏 "A House of Prayer for All Nations" - Matthew 21:13</p>
+        <p style="margin-top: 15px;">MTN Mobile Money: <strong>+268 7604 3539</strong> | Reference: Your Membership Number</p>
+        <p style="margin-top: 10px;">© 2024 Prayer Dome Ministry | Community Support Program</p>
+    </footer>
+</div>
+
+<script>
+    // Smooth scroll to top
+    window.addEventListener('load', function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        
+        // Add entrance animations for elements
+        const elements = document.querySelectorAll('.founder-section, .mission-card, .vision-card, .value-card, .about-full-content, .stat-item');
+        elements.forEach((el, index) => {
+            el.style.animationDelay = `${index * 0.05}s`;
+        });
+        
+        // Confetti on page load celebration
+        setTimeout(() => {
+            confetti({
+                particleCount: 80,
+                spread: 60,
+                origin: { y: 0.7 },
+                colors: ['#1e5631', '#e6b422', '#ffffff']
+            });
+        }, 1000);
+    });
+    
+    // Animate stats on scroll
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const numbers = entry.target.querySelectorAll('.stat-number');
+                numbers.forEach(num => {
+                    const finalValue = parseInt(num.innerText);
+                    let current = 0;
+                    const increment = finalValue / 50;
+                    const timer = setInterval(() => {
+                        current += increment;
+                        if (current >= finalValue) {
+                            num.innerText = finalValue.toString().includes('K') ? finalValue : Math.floor(finalValue);
+                            clearInterval(timer);
+                        } else {
+                            if (finalValue.toString().includes('K')) {
+                                num.innerText = Math.floor(current) + 'K+';
+                            } else {
+                                num.innerText = Math.floor(current);
+                            }
+                        }
+                    }, 30);
+                });
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.5 });
+    
+    const statsSection = document.querySelector('.about-stats');
+    if (statsSection) observer.observe(statsSection);
+</script>
+</body>
+</html>
