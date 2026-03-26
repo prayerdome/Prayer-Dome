@@ -1,1437 +1,2147 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Prayer Dome | Community Support Program | Save & Receive Blessings</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --primary: #1e5631;
-            --primary-dark: #0f3b1f;
-            --primary-light: #2e7d44;
-            --gold: #e6b422;
-            --gold-dark: #c49a1a;
-            --gold-light: #f5d742;
-            --success: #22c55e;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-            --bg-light: #fef7e0;
-            --bg-white: #ffffff;
-            --text-dark: #2d3e2b;
-            --text-light: #5a6e4a;
-            --shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.15);
-            --shadow-hover: 0 25px 45px -12px rgba(0, 0, 0, 0.25);
-            --gradient-gold: linear-gradient(135deg, var(--gold), var(--gold-dark));
-            --gradient-primary: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            --gradient-bg: linear-gradient(135deg, #fef7e0 0%, #f9efd6 50%, #fef5e8 100%);
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--gradient-bg);
-            color: var(--text-dark);
-            min-height: 100vh;
-        }
-
-        .container {
-            max-width: 1300px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        /* Header Bar */
-        .top-bar {
-            background: var(--primary-dark);
-            padding: 8px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 15px;
-            font-size: 13px;
-            color: rgba(255,255,255,0.8);
-            border-radius: 20px 20px 0 0;
-        }
-
-        .top-bar-left {
-            display: flex;
-            gap: 25px;
-            flex-wrap: wrap;
-        }
-
-        .top-bar-left span i {
-            margin-right: 6px;
-            color: var(--gold);
-        }
-
-        .top-bar-right {
-            display: flex;
-            gap: 20px;
-        }
-
-        .top-bar-right a {
-            color: rgba(255,255,255,0.8);
-            text-decoration: none;
-            transition: color 0.3s;
-            font-size: 13px;
-        }
-
-        .top-bar-right a:hover {
-            color: var(--gold);
-        }
-
-        /* Main Header */
-        .main-header {
-            background: var(--gradient-primary);
-            padding: 15px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 20px;
-            position: sticky;
-            top: 0;
-            z-index: 999;
-            box-shadow: var(--shadow);
-        }
-
-        .menu-icon {
-            background: rgba(255,255,255,0.2);
-            border: none;
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            color: white;
-            font-size: 20px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .menu-icon:hover {
-            background: var(--gold);
-            transform: rotate(90deg);
-        }
-
-        .logo-center {
-            text-align: center;
-        }
-
-        .logo-center img {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: white;
-            padding: 5px;
-            margin-bottom: 5px;
-        }
-
-        .logo-center h1 {
-            font-size: 24px;
-            color: white;
-            letter-spacing: 1px;
-        }
-
-        .header-right {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-        }
-
-        .learn-more-btn {
-            background: var(--gold);
-            color: var(--primary-dark);
-            padding: 10px 22px;
-            border-radius: 40px;
-            font-weight: 700;
-            text-decoration: none;
-            font-size: 14px;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .learn-more-btn:hover {
-            background: white;
-            transform: translateY(-2px);
-        }
-
-        .user-icon {
-            background: rgba(255,255,255,0.2);
-            border: none;
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            color: white;
-            font-size: 18px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .user-icon:hover {
-            background: var(--gold);
-        }
-
-        /* Moving Animation Words */
-        .moving-words {
-            background: linear-gradient(135deg, var(--primary-light), var(--primary));
-            padding: 15px 0;
-            text-align: center;
-            overflow: hidden;
-            white-space: nowrap;
-            position: relative;
-        }
-
-        .moving-words-container {
-            display: inline-block;
-            animation: scrollWords 25s linear infinite;
-        }
-
-        .moving-word {
-            display: inline-block;
-            padding: 8px 25px;
-            margin: 0 10px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 50px;
-            color: white;
-            font-weight: 600;
-            font-size: 15px;
-            backdrop-filter: blur(5px);
-        }
-
-        .moving-word i {
-            margin-right: 8px;
-            color: var(--gold);
-        }
-
-        @keyframes scrollWords {
-            0% { transform: translateX(100%); }
-            100% { transform: translateX(-100%); }
-        }
-
-        /* Hero Section with Photo */
-        .hero-section {
-            position: relative;
-            height: 480px;
-            margin: 25px 0;
-            border-radius: 30px;
-            overflow: hidden;
-            box-shadow: var(--shadow);
-        }
-
-        .hero-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s;
-        }
-
-        .hero-image:hover {
-            transform: scale(1.05);
-        }
-
-        .hero-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
-            padding: 40px 40px;
-            color: white;
-        }
-
-        .hero-overlay h2 {
-            font-size: 38px;
-            margin-bottom: 15px;
-        }
-
-        .hero-overlay p {
-            font-size: 18px;
-            max-width: 500px;
-            opacity: 0.9;
-        }
-
-        /* Program Cards */
-        .programs-section {
-            padding: 30px 0;
-        }
-
-        .section-title {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .section-title h2 {
-            font-size: 36px;
-            color: var(--primary);
-            position: relative;
-            display: inline-block;
-        }
-
-        .section-title h2:after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 3px;
-            background: var(--gold);
-            border-radius: 3px;
-        }
-
-        .cards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 35px;
-            max-width: 1300px;
-            margin: 0 auto;
-        }
-
-        .program-card {
-            background: var(--bg-white);
-            border-radius: 28px;
-            overflow: hidden;
-            box-shadow: var(--shadow);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            cursor: pointer;
-        }
-
-        .program-card:hover {
-            transform: translateY(-12px);
-            box-shadow: var(--shadow-hover);
-        }
-
-        .card-image {
-            height: 220px;
-            overflow: hidden;
-        }
-
-        .card-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.6s;
-        }
-
-        .program-card:hover .card-image img {
-            transform: scale(1.1);
-        }
-
-        .card-content {
-            padding: 25px;
-        }
-
-        .card-badge {
-            display: inline-block;
-            background: var(--gradient-gold);
-            color: var(--primary-dark);
-            padding: 5px 15px;
-            border-radius: 30px;
-            font-size: 12px;
-            font-weight: 700;
-            margin-bottom: 15px;
-        }
-
-        .card-content h3 {
-            font-size: 24px;
-            margin-bottom: 12px;
-            color: var(--primary);
-        }
-
-        .card-content p {
-            color: var(--text-light);
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-
-        .support-range {
-            font-size: 20px;
-            font-weight: 800;
-            color: var(--gold-dark);
-            margin-bottom: 15px;
-        }
-
-        .btn-card {
-            width: 100%;
-            padding: 12px;
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 40px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .btn-card:hover {
-            background: var(--gold);
-            color: var(--primary-dark);
-        }
-
-        /* Auto-scrolling Reviews */
-        .reviews-section {
-            background: var(--gradient-primary);
-            padding: 60px 30px;
-            margin: 50px 0;
-            border-radius: 40px;
-        }
-
-        .reviews-section .section-title h2 {
-            color: white;
-        }
-
-        .reviews-section .section-title h2:after {
-            background: var(--gold);
-        }
-
-        .reviews-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .reviews-track {
-            display: flex;
-            animation: scrollReviews 35s linear infinite;
-            gap: 30px;
-            width: fit-content;
-        }
-
-        .reviews-track:hover {
-            animation-play-state: paused;
-        }
-
-        .review-card {
-            background: white;
-            border-radius: 24px;
-            padding: 30px;
-            width: 350px;
-            flex-shrink: 0;
-            box-shadow: var(--shadow);
-            transition: all 0.3s;
-        }
-
-        .review-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .review-stars {
-            color: var(--gold);
-            margin-bottom: 15px;
-            font-size: 18px;
-        }
-
-        .review-text {
-            font-style: italic;
-            line-height: 1.7;
-            margin-bottom: 20px;
-            color: var(--text-dark);
-        }
-
-        .review-author {
-            font-weight: 700;
-            color: var(--primary);
-            margin-top: 10px;
-        }
-
-        .review-location {
-            font-size: 12px;
-            color: var(--text-light);
-        }
-
-        @keyframes scrollReviews {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
-
-        /* Left Menu */
-        .left-menu {
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 320px;
-            height: 100vh;
-            background: linear-gradient(180deg, var(--primary-dark), var(--primary));
-            color: white;
-            z-index: 2000;
-            transform: translateX(-100%);
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            padding: 30px 20px;
-            overflow-y: auto;
-            box-shadow: 5px 0 35px rgba(0,0,0,0.3);
-        }
-
-        .left-menu.open {
-            transform: translateX(0);
-        }
-
-        .menu-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 1999;
-            display: none;
-        }
-
-        .menu-overlay.active {
-            display: block;
-        }
-
-        .menu-header {
-            text-align: center;
-            padding-bottom: 25px;
-            border-bottom: 2px solid var(--gold);
-            margin-bottom: 25px;
-        }
-
-        .menu-logo {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: white;
-            padding: 8px;
-            margin-bottom: 15px;
-        }
-
-        .menu-items {
-            list-style: none;
-        }
-
-        .menu-items li {
-            margin-bottom: 8px;
-        }
-
-        .menu-items a {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 12px 18px;
-            color: white;
-            text-decoration: none;
-            border-radius: 14px;
-            transition: all 0.3s;
-            font-weight: 500;
-        }
-
-        .menu-items a:hover {
-            background: var(--gold);
-            color: var(--primary-dark);
-            transform: translateX(8px);
-        }
-
-        .menu-items a i {
-            width: 24px;
-        }
-
-        .menu-footer {
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255,255,255,0.2);
-            font-size: 12px;
-            text-align: center;
-        }
-
-        /* Modals */
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 3000;
-            backdrop-filter: blur(8px);
-        }
-
-        .modal-content {
-            background: white;
-            border-radius: 32px;
-            padding: 40px;
-            max-width: 500px;
-            width: 90%;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 14px;
-            border: 2px solid #e5e7eb;
-            border-radius: 16px;
-            font-size: 16px;
-        }
-
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-            padding: 14px;
-            border: none;
-            border-radius: 40px;
-            font-weight: 700;
-            cursor: pointer;
-            width: 100%;
-        }
-
-        .mtn-info {
-            background: linear-gradient(135deg, #fef3c7, #fde68a);
-            padding: 20px;
-            border-radius: 20px;
-            text-align: center;
-            margin: 20px 0;
-        }
-
-        .mtn-number {
-            font-size: 24px;
-            font-weight: 800;
-            letter-spacing: 2px;
-            color: var(--primary-dark);
-        }
-
-        .toast-container {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 4000;
-        }
-
-        .toast {
-            background: white;
-            padding: 15px 25px;
-            border-radius: 16px;
-            margin-bottom: 10px;
-            box-shadow: var(--shadow);
-            border-left: 4px solid var(--success);
-            animation: slideIn 0.3s ease;
-        }
-
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-
-        footer {
-            text-align: center;
-            padding: 40px;
-            background: var(--primary-dark);
-            color: white;
-            border-radius: 30px;
-            margin-top: 40px;
-        }
-
-        @media (max-width: 768px) {
-            .top-bar { display: none; }
-            .hero-section { height: 350px; margin: 15px; }
-            .hero-overlay h2 { font-size: 28px; }
-            .cards-grid { grid-template-columns: 1fr; }
-            .review-card { width: 280px; }
-            .main-header { padding: 12px 20px; }
-            .logo-center h1 { font-size: 18px; }
-            .logo-center img { width: 40px; height: 40px; }
-        }
-        
-        /* About Us Page Styles */
-.page-section {
-    display: none;
-    animation: fadeIn 0.5s ease;
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>Prayer Dome | Community Support Program</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --accent-green: #22c55e;
+      --accent-gold: #d4af37;
+      --accent-blue: #3b82f6;
+      --accent-red: #ef4444;
+      --accent-purple: #8b5cf6;
+      --bg-primary: #f8fafc;
+      --bg-secondary: #ffffff;
+      --bg-card: #ffffff;
+      --text-primary: #0f172a;
+      --text-secondary: #334155;
+      --border-color: #e2e8f0;
+      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 20px 40px -10px rgba(0, 0, 0, 0.2);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      transition: all 0.3s;
+    }
+
+    body.dark-mode {
+      --bg-primary: #0f172a;
+      --bg-secondary: #1e293b;
+      --bg-card: #1e293b;
+      --text-primary: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --border-color: #334155;
+    }
+
+    /* Navigation Tabs */
+    .nav-tabs {
+      display: flex;
+      gap: 8px;
+      background: var(--bg-secondary);
+      padding: 12px 16px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      overflow-x: auto;
+      border-bottom: 2px solid var(--border-color);
+      box-shadow: var(--shadow);
+    }
+
+    .nav-tab {
+      padding: 12px 24px;
+      border: none;
+      background: transparent;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: 40px;
+      transition: all 0.3s;
+      color: var(--text-secondary);
+      white-space: nowrap;
+    }
+
+    .nav-tab.active {
+      background: linear-gradient(135deg, var(--accent-green), #16a34a);
+      color: white;
+      box-shadow: 0 4px 12px rgba(34,197,94,0.3);
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 24px 20px;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--bg-card);
+      border-radius: 28px;
+      padding: 28px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border-color);
+      transition: all 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    /* Hero Slider */
+    .hero-slider {
+      position: relative;
+      border-radius: 32px;
+      overflow: hidden;
+      margin-bottom: 32px;
+      height: 400px;
+    }
+
+    .slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: white;
+    }
+
+    .slide.active {
+      opacity: 1;
+    }
+
+    .slide-content {
+      background: rgba(0,0,0,0.5);
+      padding: 40px;
+      border-radius: 32px;
+      max-width: 80%;
+    }
+
+    .slide-content h1 {
+      font-size: 3rem;
+      margin-bottom: 16px;
+    }
+
+    /* Plans Grid */
+    .plans-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      margin-top: 20px;
+    }
+
+    .plan-card {
+      background: var(--bg-primary);
+      border-radius: 24px;
+      padding: 24px;
+      border: 2px solid var(--border-color);
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+
+    .plan-card:hover {
+      border-color: var(--accent-green);
+      transform: translateY(-5px);
+    }
+
+    .plan-card.selected {
+      border-color: var(--accent-green);
+      background: linear-gradient(135deg, var(--bg-card), rgba(34,197,94,0.05));
+    }
+
+    .plan-amount {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--accent-green);
+      margin: 15px 0;
+    }
+
+    /* Wallet */
+    .wallet-card {
+      background: linear-gradient(135deg, var(--accent-green), #166534);
+      color: white;
+    }
+
+    .wallet-balance {
+      text-align: center;
+      padding: 20px;
+    }
+
+    .wallet-balance h3 {
+      font-size: 1rem;
+      opacity: 0.8;
+    }
+
+    .wallet-balance .amount {
+      font-size: 3rem;
+      font-weight: 800;
+      margin: 10px 0;
+    }
+
+    /* Buttons */
+    .btn {
+      padding: 14px 28px;
+      border-radius: 40px;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1rem;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent-green), #16a34a);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(34,197,94,0.4);
+    }
+
+    .btn-secondary {
+      background: var(--bg-primary);
+      border: 2px solid var(--accent-green);
+      color: var(--accent-green);
+    }
+
+    .btn-secondary:hover {
+      background: var(--accent-green);
+      color: white;
+    }
+
+    /* PIN Modal */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      backdrop-filter: blur(8px);
+    }
+
+    .modal-content {
+      background: var(--bg-card);
+      border-radius: 32px;
+      padding: 32px;
+      max-width: 450px;
+      width: 90%;
+    }
+
+    .pin-input {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin: 25px 0;
+    }
+
+    .pin-digit {
+      width: 55px;
+      height: 70px;
+      text-align: center;
+      font-size: 2rem;
+      font-weight: 700;
+      border: 2px solid var(--border-color);
+      border-radius: 16px;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+    }
+
+    /* Document Upload */
+    .upload-area {
+      border: 2px dashed var(--border-color);
+      border-radius: 20px;
+      padding: 30px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .upload-area:hover {
+      border-color: var(--accent-green);
+      background: rgba(34,197,94,0.05);
+    }
+
+    /* Toast */
+    .toast-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1100;
+    }
+
+    .toast {
+      background: var(--bg-card);
+      padding: 12px 24px;
+      border-radius: 40px;
+      margin-bottom: 10px;
+      box-shadow: var(--shadow-lg);
+      border-left: 5px solid var(--accent-green);
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero-slider { height: 300px; }
+      .slide-content h1 { font-size: 1.8rem; }
+      .plans-grid { grid-template-columns: 1fr; }
+      .nav-tabs { padding: 8px 12px; }
+      .nav-tab { padding: 8px 16px; font-size: 14px; }
+    }
+
+    .section-title {
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--accent-green);
+    }
+    
+    /* ==================== FOOTER STYLES ==================== */
+footer, .support-footer {
+  background: var(--bg-secondary);
+  margin-top: 60px;
+  border-top: 2px solid var(--border-color);
+  font-family: 'Inter', sans-serif;
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 50px 30px 30px;
 }
 
-.about-hero {
-    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-    border-radius: 32px;
-    padding: 60px 40px;
-    text-align: center;
-    color: white;
-    margin-bottom: 50px;
-    position: relative;
-    overflow: hidden;
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 40px;
+  margin-bottom: 40px;
 }
 
-.about-hero::before {
-    content: "🙏";
-    position: absolute;
-    font-size: 150px;
-    opacity: 0.1;
-    bottom: -30px;
-    right: -20px;
+.footer-section h3 {
+  color: var(--accent-green);
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  position: relative;
+  display: inline-block;
 }
 
-.about-hero h1 {
-    font-size: 48px;
-    margin-bottom: 15px;
+.footer-section h3::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 40px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent-green), var(--accent-gold));
+  border-radius: 3px;
 }
 
-.about-hero p {
-    font-size: 20px;
-    opacity: 0.9;
+.footer-section p {
+  margin: 12px 0;
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1.6;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
-.about-container {
-    max-width: 1200px;
-    margin: 0 auto;
+.footer-section p i {
+  width: 24px;
+  color: var(--accent-green);
+  font-size: 14px;
 }
 
-/* Founder Section */
-.founder-section {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 50px;
-    background: white;
-    border-radius: 32px;
-    padding: 40px;
-    margin-bottom: 50px;
-    box-shadow: var(--shadow);
-    transition: all 0.4s;
+.footer-section a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.founder-section:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-hover);
+.footer-section a:hover {
+  color: var(--accent-green);
+  transform: translateX(5px);
 }
 
-.founder-image {
-    text-align: center;
-    position: relative;
+.footer-section .social-links {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
 }
 
-.founder-image img {
-    width: 100%;
-    max-width: 280px;
-    border-radius: 28px;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-    transition: transform 0.4s;
+.footer-section .social-links a {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--bg-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
 }
 
-.founder-image img:hover {
-    transform: scale(1.02);
+.footer-section .social-links a:hover {
+  background: var(--accent-green);
+  color: white;
+  transform: translateY(-3px);
 }
 
-.founder-social {
-    margin-top: 20px;
-    display: flex;
-    justify-content: center;
-    gap: 15px;
+.footer-bottom {
+  text-align: center;
+  padding-top: 30px;
+  margin-top: 30px;
+  border-top: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-size: 13px;
 }
 
-.founder-social a {
-    width: 40px;
-    height: 40px;
-    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    text-decoration: none;
-    transition: all 0.3s;
+.footer-bottom p {
+  margin: 8px 0;
 }
 
-.founder-social a:hover {
-    background: var(--gold);
-    transform: translateY(-3px);
+.footer-bottom .scripture {
+  font-size: 12px;
+  color: var(--accent-gold);
+  margin-top: 10px;
+  font-style: italic;
 }
 
-.founder-info h2 {
-    font-size: 36px;
-    color: var(--primary);
-    margin-bottom: 10px;
-}
-
-.founder-title {
-    font-size: 18px;
-    color: var(--gold-dark);
-    font-weight: 600;
-    margin-bottom: 15px;
-}
-
-.founder-quote {
-    font-style: italic;
-    font-size: 18px;
-    padding: 15px 20px;
-    background: linear-gradient(135deg, #fef7e0, #fff5e6);
-    border-left: 4px solid var(--gold);
-    border-radius: 16px;
-    margin: 20px 0;
-}
-
-.founder-stats {
-    display: flex;
-    gap: 30px;
-    margin-top: 25px;
-}
-
-.founder-stats div {
-    text-align: center;
-}
-
-.founder-stats span {
-    display: block;
-    font-size: 28px;
-    font-weight: 800;
-    color: var(--gold-dark);
-}
-
-/* Mission & Vision */
-.mission-vision {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 30px;
-    margin-bottom: 60px;
-}
-
-.mission-card, .vision-card {
-    background: white;
-    border-radius: 28px;
-    padding: 35px;
-    text-align: center;
-    box-shadow: var(--shadow);
-    transition: all 0.4s;
-}
-
-.mission-card:hover, .vision-card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-hover);
-}
-
-.mission-card .icon, .vision-card .icon {
-    width: 80px;
-    height: 80px;
-    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 20px;
-}
-
-.mission-card .icon i, .vision-card .icon i {
-    font-size: 36px;
-    color: var(--gold);
-}
-
-.mission-card h3, .vision-card h3 {
-    font-size: 28px;
-    color: var(--primary);
-    margin-bottom: 15px;
-}
-
-.mission-card p, .vision-card p {
-    color: var(--text-light);
-    line-height: 1.7;
-}
-
-/* Core Values */
-.values-section {
-    margin-bottom: 60px;
-}
-
-.values-section h2 {
-    text-align: center;
-    font-size: 36px;
-    color: var(--primary);
-    margin-bottom: 40px;
-    position: relative;
-}
-
-.values-section h2:after {
-    content: '';
-    position: absolute;
-    bottom: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60px;
-    height: 3px;
-    background: var(--gold);
-    border-radius: 3px;
-}
-
-.values-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 30px;
-}
-
-.value-card {
-    background: white;
-    border-radius: 24px;
-    padding: 30px;
-    text-align: center;
-    transition: all 0.4s;
-    box-shadow: var(--shadow);
-}
-
-.value-card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-hover);
-}
-
-.value-card i {
-    font-size: 48px;
-    color: var(--gold);
-    margin-bottom: 20px;
-}
-
-.value-card h4 {
-    font-size: 22px;
-    color: var(--primary);
-    margin-bottom: 12px;
-}
-
-.value-card p {
-    color: var(--text-light);
-    line-height: 1.6;
-}
-
-/* Full About Content */
-.about-full-content {
-    background: white;
-    border-radius: 28px;
-    padding: 40px;
-    margin-bottom: 50px;
-    box-shadow: var(--shadow);
-}
-
-.about-full-content p {
-    line-height: 1.8;
-    margin-bottom: 20px;
-    color: var(--text-dark);
-}
-
-.closing-quote {
-    font-size: 20px;
-    font-weight: 600;
-    color: var(--primary);
-    text-align: center;
-    padding-top: 20px;
-    border-top: 2px solid var(--gold-light);
-    margin-top: 20px;
-}
-
-/* About Stats */
-.about-stats {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 30px;
-    margin-bottom: 60px;
-}
-
-.stat-item {
-    background: white;
-    border-radius: 24px;
-    padding: 30px;
-    text-align: center;
-    box-shadow: var(--shadow);
-    transition: all 0.3s;
-}
-
-.stat-item:hover {
-    transform: translateY(-3px);
-}
-
-.stat-item i {
-    font-size: 48px;
-    color: var(--gold);
-    margin-bottom: 15px;
-}
-
-.stat-number {
-    font-size: 32px;
-    font-weight: 800;
-    color: var(--primary);
-}
-
-.stat-label {
-    color: var(--text-light);
-    margin-top: 5px;
-}
-
+/* Responsive Footer */
 @media (max-width: 768px) {
-    .founder-section {
-        grid-template-columns: 1fr;
-        text-align: center;
-    }
-    .mission-vision {
-        grid-template-columns: 1fr;
-    }
-    .about-hero h1 {
-        font-size: 32px;
-    }
-    .founder-stats {
-        justify-content: center;
-    }
+  .footer-container {
+    padding: 40px 20px 20px;
+  }
+  
+  .footer-grid {
+    gap: 30px;
+  }
+  
+  .footer-section h3::after {
+    width: 30px;
+  }
 }
-    </style>
+
+@media (max-width: 480px) {
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+  
+  .footer-section p {
+    font-size: 13px;
+  }
+}
+
+/* ==================== HORIZONTAL MOVING WORDS ==================== */
+.moving-words-container {
+  background: rgba(0, 0, 0, 0.25);
+  padding: 12px 20px;
+  border-radius: 60px;
+  backdrop-filter: blur(8px);
+  flex: 1;
+  min-width: 280px;
+  overflow: hidden;
+}
+
+.moving-words {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  animation: scrollWords 20s linear infinite;
+  white-space: nowrap;
+  will-change: transform;
+}
+
+.moving-word-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 15px;
+  font-size: 20px;
+  font-weight: 800;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  letter-spacing: 1px;
+  padding: 0 20px;
+  position: relative;
+}
+
+.moving-word-item i {
+  font-size: 28px;
+  color: var(--accent-gold);
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+.moving-word-item .verse-ref {
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255,215,0,0.9);
+  margin-left: 12px;
+  background: rgba(0,0,0,0.3);
+  padding: 4px 12px;
+  border-radius: 30px;
+  font-style: italic;
+}
+
+@keyframes scrollWords {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Pause on hover */
+.moving-words-container:hover .moving-words {
+  animation-play-state: paused;
+}
+
+/* Back Button */
+.back-button {
+  background: white;
+  color: var(--accent-green);
+  border: none;
+  padding: 12px 28px;
+  border-radius: 50px;
+  cursor: pointer;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.3s ease;
+  font-size: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  white-space: nowrap;
+}
+
+.back-button:hover {
+  transform: translateX(-3px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  background: var(--accent-gold);
+  color: white;
+}
+
+.back-button i {
+  font-size: 18px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .moving-word-item {
+    font-size: 16px;
+    gap: 10px;
+  }
+  
+  .moving-word-item i {
+    font-size: 22px;
+  }
+  
+  .moving-word-item .verse-ref {
+    font-size: 11px;
+    padding: 3px 8px;
+  }
+  
+  .back-button {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 550px) {
+  .moving-words-container {
+    width: 100%;
+  }
+  
+  .moving-word-item {
+    font-size: 14px;
+  }
+  
+  .moving-word-item i {
+    font-size: 18px;
+  }
+}
+
+/* PIN Protection Modal */
+.pin-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  backdrop-filter: blur(10px);
+}
+
+.pin-box {
+  background: var(--bg-card);
+  border-radius: 32px;
+  padding: 30px;
+  max-width: 350px;
+  width: 90%;
+  text-align: center;
+}
+
+.pin-input {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin: 25px 0;
+}
+
+.pin-digit {
+  width: 50px;
+  height: 60px;
+  text-align: center;
+  font-size: 24px;
+  font-weight: 700;
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.pin-digit:focus {
+  border-color: var(--accent-green);
+  outline: none;
+}
+
+/* Security Badge */
+.security-badge {
+  background: var(--bg-primary);
+  padding: 8px 15px;
+  border-radius: 30px;
+  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--accent-green);
+  margin-bottom: 15px;
+}
+  </style>
 </head>
 <body>
 
-<!-- Top Header Bar -->
-<div class="top-bar">
-    <div class="top-bar-left">
-        <span><i class="fas fa-phone"></i> +268 7604 3539</span>
-        <span><i class="fas fa-envelope"></i> support@prayerdome.org</span>
-        <span><i class="fas fa-clock"></i> Mon-Fri: 8am - 5pm</span>
-    </div>
-    <div class="top-bar-right">
-        <a href="#" onclick="showPage('about')"><i class="fas fa-info-circle"></i> About</a>
-        <a href="#" onclick="showPage('business')"><i class="fas fa-chart-line"></i> Business</a>
-        <a href="#" onclick="showPage('education')"><i class="fas fa-graduation-cap"></i> Education</a>
-        <a href="#" onclick="showPage('funeral')"><i class="fas fa-heart"></i> Funeral</a>
-        <a href="saving.html" onclick="showPage('saving')"><i class="fas fa-piggy-bank"></i> Saving Plans</a>
-    </div>
-</div>
-
-<!-- Main Header -->
-<div class="main-header">
-    <button class="menu-icon" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
-    <div class="logo-center">
-        <img src="https://i.ibb.co/TB5Fx4tb/logo-0.png" alt="Prayer Dome">
-        <h1>PRAYER DOME</h1>
-    </div>
-    <div class="header-right">
-        <select id="currencySelect" class="currency-select" style="background: rgba(255,255,255,0.2); border: none; padding: 8px 15px; border-radius: 30px; color: white;">
-            <option value="ZM">🇿🇲 ZK</option>
-            <option value="ZA">🇿🇦 R</option>
-            <option value="SZ">🇸🇿 E</option>
-            <option value="US">🇺🇸 $</option>
-        </select>
-        <a href="#" class="learn-more-btn" onclick="showPage('about')"><i class="fas fa-graduation-cap"></i> Learn More</a>
-        <button class="user-icon" onclick="showUserMenu()"><i class="fas fa-user"></i></button>
-    </div>
-</div>
-
-<!-- Moving Animation Words -->
-<div class="moving-words">
-    <div class="moving-words-container">
-        <span class="moving-word"><i class="fas fa-chart-line"></i> Business Support up to $2,500</span>
-        <span class="moving-word"><i class="fas fa-graduation-cap"></i> Education Support up to $2,500</span>
-        <span class="moving-word"><i class="fas fa-heart"></i> Funeral Cover up to $3,000</span>
-        <span class="moving-word"><i class="fas fa-piggy-bank"></i> Save $5 - $1,000 Monthly</span>
-        <span class="moving-word"><i class="fas fa-percent"></i> 0.015% Monthly Interest</span>
-        <span class="moving-word"><i class="fas fa-users"></i> 500+ Active Members</span>
-        <span class="moving-word"><i class="fas fa-hand-holding-heart"></i> 12 Months = Support Guaranteed</span>
-    </div>
-</div>
-
-<!-- Hero Section with Photo -->
-<div class="hero-section">
-    <img src="https://i.ibb.co/RTbNh1hB/founder-2.jpg" alt="Prayer Dome Community" class="hero-image">
-    <div class="hero-overlay">
-        <h2>Save Faithfully, Receive Abundantly</h2>
-        <p>Join 500+ members saving for business, education, and funeral support. After 12 months, receive up to 2.5x your savings!</p>
-    </div>
-</div>
-
-<!-- Programs Section -->
-<div class="programs-section">
-    <div class="section-title">
-        <h2>Our Support Programs</h2>
-    </div>
-    <div class="cards-grid" id="programsGrid"></div>
-</div>
-
-<!-- Auto-scrolling Reviews -->
-<div class="reviews-section">
-    <div class="section-title">
-        <h2>What Our Members Say</h2>
-    </div>
-    <div class="reviews-container">
-        <div class="reviews-track" id="reviewsTrack"></div>
-    </div>
-</div>
-
-<!-- Join Section -->
-<div id="joinSection" style="background: var(--gradient-primary); border-radius: 40px; margin: 40px 0; padding: 50px; text-align: center; color: white;">
-    <h3 style="font-size: 32px; margin-bottom: 20px;">Start Your Journey Today</h3>
-    <p style="margin-bottom: 25px;">Join the Prayer Dome Community Support Program. Save consistently for 12 months and receive support to transform your life.</p>
-    <button class="btn-primary" onclick="showJoinModal()" style="width: auto; padding: 15px 40px; background: var(--gold); color: var(--primary-dark); font-size: 18px;">Join Now →</button>
-    <p style="margin-top: 20px;">Already a member? <a href="#" onclick="showLoginModal()" style="color: var(--gold);">Login here</a></p>
-</div>
-
-<!-- Dashboard -->
-<div id="dashboardSection" style="display: none; margin: 30px 0;">
-    <div style="background: white; border-radius: 32px; padding: 35px;">
-        <h2>My Savings Dashboard</h2>
-        <div class="stats-grid" id="dashboardStats" style="display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; margin: 25px 0;"></div>
-        <div class="progress-bar" style="height: 10px; background: #e5e7eb; border-radius: 10px;"><div class="progress-fill" id="savingsProgress" style="width: 0%; height: 100%; background: var(--gold); border-radius: 10px;"></div></div>
-        <p id="monthsProgressText" style="margin: 15px 0;"></p>
-        <div style="display: flex; gap: 15px;">
-            <button class="btn-primary" onclick="showDepositModal()" style="flex:1;">Make Deposit</button>
-            <button class="btn-primary" onclick="showClaimModal()" style="flex:1; background: var(--gold); color: var(--primary-dark);">Apply for Support</button>
-        </div>
-        <h3 style="margin-top: 30px;">Transaction History</h3>
-        <div id="transactionHistory"></div>
-    </div>
-</div>
-
-<!-- Left Menu -->
-<div class="left-menu" id="leftMenu">
-    <div class="menu-header">
-        <img src="https://i.ibb.co/TB5Fx4tb/logo-0.png" class="menu-logo">
-        <h3>Prayer Dome</h3>
-        <p>Community Support Program</p>
-    </div>
-    <ul class="menu-items">
-        <li><a href="index.html" onclick="showPage('home'); toggleMenu();"><i class="fas fa-home"></i> Home</a></li>
-        <li><a href="about-us.html"><i class="fas fa-info-circle"></i> About Us</a></li>
-        <li><a href="wallet.html" onclick="showPage('wallet'); toggleMenu();"><i class="fas fa-wallet"></i> My Wallet</a></li>
-        <li><a href="#" onclick="showPage('calculator'); toggleMenu();"><i class="fas fa-calculator"></i> Savings Calculator</a></li>
-        <li><a href="#" onclick="showPage('business'); toggleMenu();"><i class="fas fa-chart-line"></i> Business Support</a></li>
-        <li><a href="#" onclick="showPage('education'); toggleMenu();"><i class="fas fa-graduation-cap"></i> Education Support</a></li>
-        <li><a href="#" onclick="showPage('funeral'); toggleMenu();"><i class="fas fa-heart"></i> Funeral Cover</a></li>
-        <li><a href="#" onclick="showPage('saving'); toggleMenu();"><i class="fas fa-piggy-bank"></i> Saving Plans</a></li>
-        <li><a href="#" onclick="showPage('gallery'); toggleMenu();"><i class="fas fa-images"></i> Gallery</a></li>
-        <li><a href="#" onclick="showPage('terms'); toggleMenu();"><i class="fas fa-file-contract"></i> Terms</a></li>
-        <li><a href="#" onclick="showPage('contact'); toggleMenu();"><i class="fas fa-envelope"></i> Contact</a></li>
-    </ul>
-    <div class="menu-footer">
-        <p><i class="fas fa-phone"></i> +268 7604 3539</p>
-        <p><i class="fas fa-envelope"></i> support@prayerdome.org</p>
-        <p>© 2024 Prayer Dome</p>
-    </div>
-</div>
-
-<!-- Modals -->
-<div id="joinModal" class="modal" style="display: none;">
-    <div class="modal-content"><h2>Join the Program</h2>
-        <div class="form-group"><input type="text" id="joinName" placeholder="Full Name"></div>
-        <div class="form-group"><input type="tel" id="joinPhone" placeholder="Phone Number"></div>
-        <div class="form-group"><select id="joinPlan"><option value="starter">Starter ($5-$50/mo)</option><option value="standard">Standard ($60-$100/mo)</option><option value="premium">Premium ($100-$500/mo)</option><option value="elite">Elite ($500-$1,000/mo)</option></select></div>
-        <div class="mtn-info"><i class="fas fa-mobile-alt"></i> Registration Fee: <strong>E50 / $3</strong><br>MTN MoMo: <span class="mtn-number">+268 7604 3539</span><br>Reference: <strong>JOIN + Your Name</strong></div>
-        <button class="btn-primary" onclick="submitJoin()">Submit Application</button>
-        <button class="btn-primary" onclick="closeModal('joinModal')" style="background:#ccc; margin-top:10px;">Cancel</button>
-    </div>
-</div>
-
-<div id="loginModal" class="modal" style="display: none;">
-    <div class="modal-content"><h2>Login</h2>
-        <div class="form-group"><input type="text" id="loginPhone" placeholder="Phone or Member ID"></div>
-        <button class="btn-primary" onclick="loginUser()">Login</button>
-        <button class="btn-primary" onclick="closeModal('loginModal')" style="background:#ccc; margin-top:10px;">Cancel</button>
-    </div>
-</div>
-
-<div id="depositModal" class="modal" style="display: none;">
-    <div class="modal-content"><h2>Make Deposit</h2>
-        <div class="form-group"><input type="number" id="depositAmount" placeholder="Amount"></div>
-        <div class="mtn-info"><i class="fas fa-mobile-alt"></i> Send to: <strong>+268 7604 3539</strong><br>Reference: <span id="paymentRef"></span></div>
-        <button class="btn-primary" onclick="submitDeposit()">Confirm Payment</button>
-        <button class="btn-primary" onclick="closeModal('depositModal')" style="background:#ccc; margin-top:10px;">Cancel</button>
-    </div>
-</div>
-
-<div id="claimModal" class="modal" style="display: none;">
-    <div class="modal-content"><h2>Apply for Support</h2>
-        <div class="form-group"><select id="claimCategory"><option value="business">Business</option><option value="education">Education</option><option value="funeral">Funeral</option></select></div>
-        <div class="form-group"><textarea id="claimDescription" rows="3" placeholder="Describe how you'll use support"></textarea></div>
-        <button class="btn-primary" onclick="submitClaim()">Submit</button>
-        <button class="btn-primary" onclick="closeModal('claimModal')" style="background:#ccc; margin-top:10px;">Cancel</button>
-    </div>
-</div>
-
-<!-- About Us Page -->
-<div id="aboutPage" class="page-section" style="display: none;">
-    <div class="about-hero">
-        <div class="about-hero-content">
-            <h1>About Prayer Dome</h1>
-            <p>Faith-Driven • Community-Powered • Transforming Lives</p>
-        </div>
-    </div>
+<!-- Horizontal Moving Words Header -->
+<div style="background: linear-gradient(135deg, var(--accent-green), #166534); padding: 15px 20px;">
+  <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px;">
     
-    <div class="about-container">
-        <!-- Founder Section -->
-        <div class="founder-section">
-            <div class="founder-image">
-                <img src="https://i.ibb.co/RTbNh1hB/founder-2.jpg" alt="Seedwell Khayalethu Masuku">
-                <div class="founder-social">
-                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                </div>
-            </div>
-            <div class="founder-info">
-                <h2>Seedwell Khayalethu Masuku</h2>
-                <p class="founder-title">Founder & Senior Pastor</p>
-                <p class="founder-quote">"A House of Prayer for All Nations – Matthew 21:13"</p>
-                <p>With over 7 years of dedicated service, Seedwell Khayalethu Masuku founded Prayer Dome with a divine vision to create a community where faith meets practical support. His leadership has transformed thousands of lives through structured saving programs, business empowerment, education funding, and dignified funeral support.</p>
-                <div class="founder-stats">
-                    <div><span>7+</span> Years Serving</div>
-                    <div><span>500+</span> Members</div>
-                    <div><span>2</span> Countries</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Mission & Vision -->
-        <div class="mission-vision">
-            <div class="mission-card">
-                <div class="icon"><i class="fas fa-bullseye"></i></div>
-                <h3>Our Mission</h3>
-                <p>To turn saving into a powerful tool for change by combining financial discipline with community support, helping individuals achieve their goals while building a culture of accountability and growth.</p>
-            </div>
-            <div class="vision-card">
-                <div class="icon"><i class="fas fa-eye"></i></div>
-                <h3>Our Vision</h3>
-                <p>To create a self-sustaining ecosystem where people can grow financially, socially, and spiritually through structured programs, responsibility, transparency, and long-term planning.</p>
-            </div>
-        </div>
-
-        <!-- Core Values -->
-        <div class="values-section">
-            <h2>Our Core Values</h2>
-            <div class="values-grid">
-                <div class="value-card">
-                    <i class="fas fa-hand-holding-heart"></i>
-                    <h4>Faith & Compassion</h4>
-                    <p>Rooted in spiritual values, we serve with love and empathy</p>
-                </div>
-                <div class="value-card">
-                    <i class="fas fa-chart-line"></i>
-                    <h4>Discipline & Growth</h4>
-                    <p>Small consistent actions lead to great outcomes</p>
-                </div>
-                <div class="value-card">
-                    <i class="fas fa-users"></i>
-                    <h4>Community & Unity</h4>
-                    <p>No member walks alone. We uplift each other</p>
-                </div>
-                <div class="value-card">
-                    <i class="fas fa-shield-alt"></i>
-                    <h4>Transparency & Trust</h4>
-                    <p>Building confidence through clear, honest systems</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Full About Content -->
-        <div class="about-full-content">
-            <p>Prayer Dome is a faith-driven community support platform dedicated to empowering individuals and transforming lives through structured saving, unity, and shared responsibility. Built on the foundation of trust, discipline, and spiritual values, Prayer Dome brings people together with a common purpose — to create financial stability while supporting one another in times of need.</p>
-            
-            <p>At Prayer Dome, we believe that small, consistent actions lead to great outcomes. Our system encourages members to save regularly over a period of time, creating a strong financial base that unlocks access to meaningful support. Whether it is starting or expanding a business, funding education, or preparing for life's unexpected moments such as funerals, Prayer Dome ensures that no member walks alone.</p>
-            
-            <p>Our mission is to turn saving into a powerful tool for change. By combining financial discipline with community support, we help individuals achieve their goals while building a culture of accountability and growth. Members are not just participants; they are part of a supportive network that uplifts, encourages, and contributes to each other's success.</p>
-            
-            <p>Prayer Dome operates with a vision of creating a self-sustaining ecosystem where people can grow financially, socially, and spiritually. Through our structured programs, we promote responsibility, transparency, and long-term planning. Every contribution made is a step toward a more secure and empowered future.</p>
-            
-            <p>We also recognize the importance of compassion and dignity. In times of loss, our funeral support ensures that families are cared for. In times of ambition, our business support fuels entrepreneurship. In times of growth, our education support opens doors to knowledge and opportunity. All these pillars are built upon the discipline of saving, which remains the heart of our system.</p>
-            
-            <p>As a community, Prayer Dome is more than just a financial platform — it is a movement. A movement that inspires hope, builds resilience, and creates opportunities for individuals and families to thrive. With every member who joins, the network becomes stronger, more impactful, and more capable of changing lives.</p>
-            
-            <p class="closing-quote">At Prayer Dome, we don't just save — we build futures, strengthen communities, and turn faith into action.</p>
+    <!-- Back Button -->
+    <button onclick="window.location.href='index.html'" class="back-button">
+      <i class="fas fa-arrow-left"></i> Back to Prayer Dome
+    </button>
+    
+    <!-- Horizontal Moving Words -->
+    <div class="moving-words-container">
+      <div class="moving-words">
+        
+        <!-- Word 1 -->
+        <div class="moving-word-item">
+          <i class="fas fa-bible"></i>
+          <span>💪 I CAN DO ALL THINGS THROUGH CHRIST</span>
+          <span class="verse-ref">Philippians 4:13</span>
         </div>
         
-        <!-- Stats Section -->
-        <div class="about-stats">
-            <div class="stat-item">
-                <i class="fas fa-calendar-alt"></i>
-                <div class="stat-number">2018</div>
-                <div class="stat-label">Year Founded</div>
-            </div>
-            <div class="stat-item">
-                <i class="fas fa-users"></i>
-                <div class="stat-number">500+</div>
-                <div class="stat-label">Active Members</div>
-            </div>
-            <div class="stat-item">
-                <i class="fas fa-dollar-sign"></i>
-                <div class="stat-number">$45K+</div>
-                <div class="stat-label">Support Disbursed</div>
-            </div>
-            <div class="stat-item">
-                <i class="fas fa-smile"></i>
-                <div class="stat-number">98%</div>
-                <div class="stat-label">Satisfaction Rate</div>
-            </div>
+        <!-- Word 2 -->
+        <div class="moving-word-item">
+          <i class="fas fa-hand-holding-heart"></i>
+          <span>📖 GIVE AND IT SHALL BE GIVEN TO YOU</span>
+          <span class="verse-ref">Luke 6:38</span>
         </div>
+        
+        <!-- Word 3 -->
+        <div class="moving-word-item">
+          <i class="fas fa-users"></i>
+          <span>🙌 WHERE TWO OR THREE GATHER IN MY NAME</span>
+          <span class="verse-ref">Matthew 18:20</span>
+        </div>
+        
+        <!-- Word 4 -->
+        <div class="moving-word-item">
+          <i class="fas fa-church"></i>
+          <span>💰 THE LORD WILL OPEN THE HEAVENS</span>
+          <span class="verse-ref">Deuteronomy 28:12</span>
+        </div>
+        
+        <!-- Word 5 -->
+        <div class="moving-word-item">
+          <i class="fas fa-pray"></i>
+          <span>🏠 A HOUSE OF PRAYER FOR ALL NATIONS</span>
+          <span class="verse-ref">Isaiah 56:7</span>
+        </div>
+        
+        <!-- Duplicate for seamless loop -->
+        <div class="moving-word-item">
+          <i class="fas fa-bible"></i>
+          <span>💪 I CAN DO ALL THINGS THROUGH CHRIST</span>
+          <span class="verse-ref">Philippians 4:13</span>
+        </div>
+        
+        <div class="moving-word-item">
+          <i class="fas fa-hand-holding-heart"></i>
+          <span>📖 GIVE AND IT SHALL BE GIVEN TO YOU</span>
+          <span class="verse-ref">Luke 6:38</span>
+        </div>
+        
+      </div>
     </div>
+    
+  </div>
 </div>
 
-<div id="toastContainer" class="toast-container"></div>
+<div class="toast-container" id="toastContainer"></div>
 
-<footer>
-    <p>🙏 "A House of Prayer for All Nations" - Matthew 21:13</p>
-    <p>MTN Mobile Money: <strong>+268 7604 3539</strong> | Reference: Your Membership Number</p>
-    <p>© 2024 Prayer Dome Ministry | Community Support Program</p>
+<!-- Navigation Tabs -->
+<div class="nav-tabs">
+  <button class="nav-tab active" onclick="showSection('community')"><i class="fas fa-home"></i> Community</button>
+  <button class="nav-tab" onclick="showSection('business')"><i class="fas fa-briefcase"></i> Business</button>
+  <button class="nav-tab" onclick="showSection('savings')"><i class="fas fa-piggy-bank"></i> Savings</button>
+  <button class="nav-tab" onclick="showSection('funeral')"><i class="fas fa-hand-holding-heart"></i> Funeral Cover</button>
+  <button class="nav-tab" onclick="showSection('documents')"><i class="fas fa-file-alt"></i> Documents</button>
+  <button class="nav-tab" onclick="showSection('wallet')"><i class="fas fa-wallet"></i> Wallet</button>
+</div>
+
+<div class="container" id="appContainer">
+  <!-- COMMUNITY SECTION -->
+  <div id="communitySection" class="section active">
+    <!-- Hero Slider -->
+    <div class="hero-slider" id="heroSlider">
+      <div class="slide active" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://i.ibb.co/JWYjXgnN/together-we-can.jpg')">
+        <div class="slide-content">
+          <i class="fas fa-hand-holding-heart" style="font-size: 4rem; margin-bottom: 20px;"></i>
+          <h1>Together We Rise</h1>
+          <p>Together we build. No one should struggle alone. This is a community of support, growth, and financial empowerment.</p>
+          <button class="btn btn-primary" style="margin-top: 25px;" onclick="showSection('business')">Join Now <i class="fas fa-arrow-right"></i></button>
+        </div>
+      </div>
+      <div class="slide" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://i.ibb.co/gFVb6Rvv/hands-together.jpg')">
+        <div class="slide-content">
+          <i class="fas fa-users" style="font-size: 4rem; margin-bottom: 20px;"></i>
+          <h1>Don't Be Frustrated with Debt</h1>
+          <p>Together we create financial stability and support for all.</p>
+          <button class="btn btn-primary" style="margin-top: 25px;" onclick="showSection('business')">Start Your Journey</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title"><i class="fas fa-quote-left"></i> Our Promise</div>
+      <p style="font-size: 1.2rem; line-height: 1.8;">This system is built on trust, discipline, and community. Every member contributes, and every member benefits. Together, we create financial stability and support for all.</p>
+    </div>
+
+    <div class="card">
+      <div class="section-title"><i class="fas fa-chart-line"></i> Why Join Us?</div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 20px;">
+        <div><i class="fas fa-shield-alt" style="color: var(--accent-green); font-size: 2rem;"></i><h3>Secure</h3><p>Your savings are protected</p></div>
+        <div><i class="fas fa-hand-holding-usd" style="color: var(--accent-green); font-size: 2rem;"></i><h3>Support</h3><p>Emergency assistance when needed</p></div>
+        <div><i class="fas fa-chart-simple" style="color: var(--accent-green); font-size: 2rem;"></i><h3>Growth</h3><p>Earn interest on savings</p></div>
+        <div><i class="fas fa-heart" style="color: var(--accent-green); font-size: 2rem;"></i><h3>Community</h3><p>You're never alone</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BUSINESS SECTION -->
+  <div id="businessSection" class="section" style="display: none;">
+    <div class="card">
+      <img src="https://i.ibb.co/F4zpcDVC/grow-your-business-with-us.jpg" style="width: 100%; border-radius: 20px; margin-bottom: 20px;" alt="Grow Your Business">
+      <div class="section-title"><i class="fas fa-briefcase"></i> Business Support Plans</div>
+      <p>Build your future through consistent saving and receive financial support after qualification. Support can only be requested after 12 months of consistent saving. Members continue saving even after receiving support.</p>
+      
+      <div class="plans-grid" id="businessPlansGrid"></div>
+      
+      <div style="margin-top: 30px; text-align: center;">
+        <p style="background: var(--bg-primary); padding: 15px; border-radius: 16px; margin-bottom: 20px;">
+          <i class="fas fa-info-circle"></i> ⚠️ Support can only be requested after 12 months of consistent saving.
+        </p>
+        <button class="btn btn-secondary" onclick="openClaimSupportModal()"><i class="fas fa-hand-holding-heart"></i> Claim Support</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SAVINGS SECTION -->
+  <div id="savingsSection" class="section" style="display: none;">
+    <div class="card">
+      <img src="https://i.ibb.co/7dqQkR0t/choose-to-save-now.jpg" style="width: 100%; border-radius: 20px; margin-bottom: 20px;">
+      <div class="section-title"><i class="fas fa-piggy-bank"></i> Savings Account</div>
+      <p>Save consistently and grow your money with monthly interest of <strong>2.5% (0.025)</strong> on your savings balance.</p>
+      
+      <div class="plans-grid">
+        <div class="plan-card">
+          <h3>Flexible Saving</h3>
+          <div class="plan-amount">Any Amount</div>
+          <ul style="list-style: none;">
+            <li><i class="fas fa-check-circle" style="color: var(--accent-green);"></i> No plan restrictions</li>
+            <li><i class="fas fa-chart-line"></i> 2.5% monthly interest</li>
+            <li><i class="fas fa-clock"></i> Withdraw anytime</li>
+          </ul>
+          <button class="btn btn-primary" onclick="showSection('wallet')">Start Saving</button>
+        </div>
+        <div class="plan-card">
+          <img src="https://i.ibb.co/Tx8RBMh5/save-for-your-education.jpg" style="width: 100%; border-radius: 15px; margin-bottom: 15px;">
+          <h3>Save for Education</h3>
+          <p>Build your education fund with compound interest</p>
+          <button class="btn btn-secondary" onclick="showSection('wallet')">Save Now</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FUNERAL COVER SECTION -->
+  <div id="funeralSection" class="section" style="display: none;">
+    <div class="card">
+      <img src="https://i.ibb.co/mVSd2KLW/funeral-cover.jpg" style="width: 100%; border-radius: 20px; margin-bottom: 20px;">
+      <div class="section-title"><i class="fas fa-hand-holding-heart"></i> Funeral Cover</div>
+      <p>As a Prayer Dome member, your family receives financial and spiritual support during times of loss. We believe in bearing one another's burdens (Galatians 6:2).</p>
+
+<div style="background: var(--bg-primary); padding: 20px; border-radius: 20px; margin: 20px 0;">
+  <p><i class="fas fa-clock"></i> ⚠️ Must save consistently for 12 months before claiming</p>
+  <p><i class="fas fa-hand-holding-heart"></i> <strong>Funeral Support Amount:</strong> Up to E5,000 (SZL) / ZK10,000 (ZMW)</p>
+  <p><i class="fas fa-file-alt"></i> <strong>Required Documents:</strong></p>
+  <ul style="margin-left: 30px; margin-top: 8px;">
+    <li>Death Certificate</li>
+    <li>Member ID / NRC</li>
+    <li>Next of Kin Details</li>
+    <li>Proof of Relationship</li>
+    <li>Church Leadership Approval</li>
+  </ul>
+</div>
+      
+      <div style="background: var(--bg-primary); padding: 20px; border-radius: 20px; margin: 20px 0;">
+        <p><i class="fas fa-clock"></i> ⚠️ Must save for 12 months before claiming</p>
+        <p><i class="fas fa-file-alt"></i> Required: Death Certificate, Member ID, Next of Kin Details, Proof of relationship</p>
+      </div>
+      
+      <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+        <button class="btn btn-primary" onclick="showSection('wallet'); showToast('Start saving to activate funeral cover', 'info')">Register Cover</button>
+        <button class="btn btn-secondary" onclick="openFuneralClaimModal()">Claim Funeral Support</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DOCUMENTS SECTION -->
+  <div id="documentsSection" class="section" style="display: none;">
+    <div class="card">
+      <div class="section-title"><i class="fas fa-file-alt"></i> Document Submission</div>
+      <p>Upload required documents for verification and support applications.</p>
+      
+      <form id="documentForm" onsubmit="event.preventDefault(); submitDocuments()">
+        <h3 style="margin: 20px 0 15px;">Personal Information</h3>
+        <input type="text" id="docFullName" placeholder="Full Name" class="search-input" style="width:100%; padding: 14px; margin-bottom: 12px; border: 2px solid var(--border-color); border-radius: 16px; background: var(--bg-primary);">
+        <input type="text" id="docPhone" placeholder="Phone Number" class="search-input" style="width:100%; padding: 14px; margin-bottom: 12px; border: 2px solid var(--border-color); border-radius: 16px;">
+        <input type="text" id="docNRC" placeholder="NRC / ID Number" class="search-input" style="width:100%; padding: 14px; margin-bottom: 12px; border: 2px solid var(--border-color); border-radius: 16px;">
+        <input type="text" id="docAddress" placeholder="Address" class="search-input" style="width:100%; padding: 14px; margin-bottom: 12px; border: 2px solid var(--border-color); border-radius: 16px;">
+        
+        <h3>Next of Kin</h3>
+        <input type="text" id="nextKinName" placeholder="Next of Kin Name" style="width:100%; padding: 14px; margin-bottom: 12px; border: 2px solid var(--border-color); border-radius: 16px; background: var(--bg-primary);">
+        <input type="text" id="nextKinPhone" placeholder="Next of Kin Phone" style="width:100%; padding: 14px; margin-bottom: 12px; border: 2px solid var(--border-color); border-radius: 16px;">
+        <input type="text" id="nextKinRelation" placeholder="Relationship" style="width:100%; padding: 14px; margin-bottom: 12px; border: 2px solid var(--border-color); border-radius: 16px;">
+        
+        <h3>Required Documents for Verification</h3>
+<p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 15px;">All members must submit these documents for verification before receiving support</p>
+
+<div class="upload-area" onclick="document.getElementById('idUpload').click()">
+  <i class="fas fa-id-card" style="font-size: 2rem;"></i>
+  <p>Upload NRC / Passport / National ID</p>
+  <small style="color: var(--text-secondary);">Required for all members</small>
+  <input type="file" id="idUpload" style="display: none;" accept="image/*,application/pdf">
+</div>
+
+<div class="upload-area" onclick="document.getElementById('proofUpload').click()" style="margin-top: 15px;">
+  <i class="fas fa-file-invoice-dollar" style="font-size: 2rem;"></i>
+  <p>Upload Proof of Income / Business Registration (if applicable)</p>
+  <small style="color: var(--text-secondary);">For business support applications</small>
+  <input type="file" id="proofUpload" style="display: none;" accept="image/*,application/pdf">
+</div>
+
+<div class="upload-area" onclick="document.getElementById('nextKinUpload').click()" style="margin-top: 15px;">
+  <i class="fas fa-users" style="font-size: 2rem;"></i>
+  <p>Upload Next of Kin Document</p>
+  <small style="color: var(--text-secondary);">For funeral cover registration</small>
+  <input type="file" id="nextKinUpload" style="display: none;" accept="image/*,application/pdf">
+</div>
+        <div class="upload-area" onclick="document.getElementById('schoolUpload').click()">
+          <i class="fas fa-graduation-cap" style="font-size: 2rem;"></i>
+          <p>Upload School Documents / Acceptance Letter</p>
+          <input type="file" id="schoolUpload" style="display: none;" accept="image/*,application/pdf">
+        </div>
+        
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 25px;">Submit Documents</button>
+      </form>
+    </div>
+  </div>
+
+<!-- ==================== WALLET SECTION - SECURE WITH REAL CURRENCY ==================== -->
+<div id="walletSection" class="section" style="display: none;">
+  
+  <!-- Security Notice & PIN Status -->
+  <div class="card" style="background: linear-gradient(135deg, var(--accent-green), #166534); color: white; text-align: center;">
+    <div class="security-badge" style="background: rgba(255,255,255,0.2); display: inline-flex; padding: 8px 20px; border-radius: 40px; margin-bottom: 15px;">
+      <i class="fas fa-shield-alt"></i> <span id="pinStatusText">PIN Protected</span>
+    </div>
+    <p style="font-size: 14px; opacity: 0.9;">Your wallet is secured with a 4-digit PIN. Never share your PIN with anyone.</p>
+    <button onclick="changeWalletPIN()" class="btn btn-small" style="background: rgba(255,255,255,0.2); color: white; margin-top: 10px;">
+      <i class="fas fa-key"></i> Change PIN
+    </button>
+  </div>
+  
+  <!-- Wallet Balance Card -->
+  <div class="card wallet-card" style="background: linear-gradient(135deg, #1e293b, #0f172a);">
+    <div class="wallet-balance" style="text-align: center; padding: 20px;">
+      <h3><i class="fas fa-wallet"></i> My Wallet Balance</h3>
+      <div class="amount" id="walletBalance" style="font-size: 3rem; font-weight: 800; margin: 10px 0;">E0.00</div>
+      <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+        <span>💰 Total Deposits: <strong id="totalDeposits">E0</strong></span>
+        <span>⏳ Pending: <strong id="pendingDeposits">E0</strong></span>
+        <span>📈 Interest Earned: <strong id="interestEarned">E0</strong></span>
+      </div>
+      <div style="margin-top: 15px;">
+        <span class="team-badge" style="background: rgba(255,255,255,0.2);">🇸🇿 Eswatini (SZL)</span>
+        <span class="team-badge" style="background: rgba(255,255,255,0.2);">🇿🇲 Zambia (ZMW)</span>
+      </div>
+    </div>
+  </div>
+  
+  <!-- REAL CURRENCY EXCHANGE CALCULATOR -->
+  <div class="card">
+    <div class="section-title">
+      <i class="fas fa-exchange-alt"></i> Live Currency Converter
+    </div>
+    <p style="font-size: 13px; margin-bottom: 15px; color: var(--text-secondary);">
+      <i class="fas fa-globe"></i> Real exchange rates updated daily • <span id="rateUpdateTime">Loading rates...</span>
+    </p>
+    
+    <!-- Exchange Rate Status -->
+    <div id="exchangeRateStatus" style="margin-bottom: 15px; padding: 10px; border-radius: 12px; text-align: center; font-size: 12px; background: var(--bg-primary);">
+      <i class="fas fa-spinner fa-spin"></i> Loading latest exchange rates...
+    </div>
+    
+    <!-- Main Converter -->
+    <div style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 15px; align-items: center; margin-bottom: 20px;">
+      <!-- From Currency -->
+      <div>
+        <label style="font-size: 12px; display: block; margin-bottom: 5px;">From</label>
+        <select id="fromCurrency" class="search-input" style="width: 100%; margin-bottom: 10px;" onchange="convertCurrency()">
+          <option value="SZL">🇸🇿 SZL - Lilangeni</option>
+          <option value="ZMW">🇿🇲 ZMW - Kwacha</option>
+          <option value="USD" selected>🇺🇸 USD - Dollar</option>
+          <option value="EUR">🇪🇺 EUR - Euro</option>
+          <option value="GBP">🇬🇧 GBP - Pound</option>
+          <option value="ZAR">🇿🇦 ZAR - Rand</option>
+        </select>
+        <input type="number" id="fromAmount" placeholder="Enter amount" class="search-input" style="width: 100%;" value="100" oninput="convertCurrency()">
+      </div>
+      
+      <!-- Swap Button -->
+      <div style="text-align: center;">
+        <button onclick="swapCurrencies()" style="background: var(--accent-green); color: white; border: none; width: 50px; height: 50px; border-radius: 50%; cursor: pointer; transition: all 0.3s;">
+          <i class="fas fa-exchange-alt"></i>
+        </button>
+      </div>
+      
+      <!-- To Currency -->
+      <div>
+        <label style="font-size: 12px; display: block; margin-bottom: 5px;">To</label>
+        <select id="toCurrency" class="search-input" style="width: 100%; margin-bottom: 10px;" onchange="convertCurrency()">
+          <option value="SZL">🇸🇿 SZL - Lilangeni</option>
+          <option value="ZMW" selected>🇿🇲 ZMW - Kwacha</option>
+          <option value="USD">🇺🇸 USD - Dollar</option>
+          <option value="EUR">🇪🇺 EUR - Euro</option>
+          <option value="GBP">🇬🇧 GBP - Pound</option>
+          <option value="ZAR">🇿🇦 ZAR - Rand</option>
+        </select>
+        <input type="text" id="toAmount" placeholder="Converted amount" class="search-input" style="width: 100%; background: var(--bg-primary);" readonly>
+      </div>
+    </div>
+    
+    <!-- Quick Conversion Buttons -->
+    <div style="margin-bottom: 20px;">
+      <p style="font-size: 12px; margin-bottom: 8px;">Quick amounts:</p>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+        <button class="btn btn-outline btn-small" onclick="setQuickAmount(10)">E10</button>
+        <button class="btn btn-outline btn-small" onclick="setQuickAmount(50)">E50</button>
+        <button class="btn btn-outline btn-small" onclick="setQuickAmount(100)">E100</button>
+        <button class="btn btn-outline btn-small" onclick="setQuickAmount(500)">E500</button>
+        <button class="btn btn-outline btn-small" onclick="setQuickAmount(1000)">E1000</button>
+      </div>
+    </div>
+    
+    <!-- Live Rates Display -->
+    <div id="liveRatesDisplay" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 15px; background: var(--bg-primary); border-radius: 16px; font-size: 12px;">
+      <div>🇺🇸 USD: <span id="usdRate">-</span></div>
+      <div>🇪🇺 EUR: <span id="eurRate">-</span></div>
+      <div>🇬🇧 GBP: <span id="gbpRate">-</span></div>
+      <div>🇿🇦 ZAR: <span id="zarRate">-</span></div>
+      <div>🇿🇲 ZMW: <span id="zmwRate">-</span></div>
+      <div>🇸🇿 SZL: <span id="szlRate">-</span></div>
+    </div>
+  </div>
+  
+  <!-- Make a Deposit Card -->
+  <div class="card">
+    <div class="section-title"><i class="fas fa-plus-circle"></i> Make a Deposit</div>
+    
+    <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 20px;">
+      <select id="depositCurrency" class="search-input" style="padding: 12px; border-radius: 40px; flex: 1;">
+        <option value="SZL">🇸🇿 SZL - Eswatini Lilangeni (E)</option>
+        <option value="ZMW">🇿🇲 ZMW - Zambian Kwacha (ZK)</option>
+        <option value="USD">🇺🇸 USD - US Dollar ($)</option>
+        <option value="EUR">🇪🇺 EUR - Euro (€)</option>
+        <option value="GBP">🇬🇧 GBP - British Pound (£)</option>
+        <option value="ZAR">🇿🇦 ZAR - South African Rand (R)</option>
+      </select>
+      <input type="number" id="depositAmount" placeholder="Amount" style="flex:1; padding: 12px; border-radius: 40px; border: 2px solid var(--border-color); background: var(--bg-primary);">
+    </div>
+    
+    <!-- Bank Details -->
+    <div style="background: var(--bg-primary); padding: 20px; border-radius: 20px; margin: 20px 0;">
+      <h4 style="color: var(--accent-green); margin-bottom: 15px;"><i class="fas fa-university"></i> Official Bank Details</h4>
+      <p><strong>Account Name:</strong> Seedwel Investment Limited</p>
+      <p><strong>Bank:</strong> Standard Bank Eswatini</p>
+      <p><strong>Account Number:</strong> 64010012345</p>
+      <p><strong>Branch Code:</strong> 6600</p>
+      <p><strong>SWIFT Code:</strong> SBICSZMX</p>
+      <div class="upload-area" onclick="document.getElementById('proofUpload').click()" style="margin-top: 15px; cursor: pointer;">
+        <i class="fas fa-image"></i> Upload Payment Proof (Required)
+        <input type="file" id="proofUpload" style="display: none;" accept="image/*,application/pdf">
+      </div>
+      <div id="proofPreview" style="margin-top: 10px;"></div>
+    </div>
+    
+    <button class="btn btn-primary" onclick="submitSecureDeposit()" style="width: 100%;" id="depositBtn">
+      <i class="fas fa-check-circle"></i> Submit Deposit for Verification
+    </button>
+    <p style="font-size: 12px; color: var(--text-secondary); margin-top: 10px; text-align: center;">
+      <i class="fas fa-clock"></i> Deposits verified within 24-48 hours
+    </p>
+  </div>
+  
+  <!-- Transaction History -->
+  <div class="card">
+    <div class="section-title"><i class="fas fa-history"></i> Transaction History</div>
+    <div id="transactionHistory" style="max-height: 400px; overflow-y: auto;"></div>
+  </div>
+  
+  <!-- Withdrawal Section -->
+  <div class="card">
+    <div class="section-title"><i class="fas fa-hand-holding-usd"></i> Request Withdrawal</div>
+    <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+      <input type="number" id="withdrawAmount" placeholder="Amount to withdraw" style="flex:2; padding: 12px; border-radius: 40px; border: 2px solid var(--border-color); background: var(--bg-primary);">
+      <button class="btn btn-secondary" onclick="requestWithdrawal()" style="flex:1;">
+        <i class="fas fa-arrow-up"></i> Request Withdrawal
+      </button>
+    </div>
+    <p style="font-size: 12px; color: var(--text-secondary); margin-top: 10px;">
+      <i class="fas fa-info-circle"></i> Minimum E100 / ZK200. Withdrawals processed within 3-5 business days.
+    </p>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="support-footer">
+  <div class="footer-container">
+    <div class="footer-grid">
+      
+      <!-- About Section -->
+      <div class="footer-section">
+        <h3>Prayer Dome</h3>
+        <p><i class="fas fa-church"></i> A House of Prayer for All Nations</p>
+        <p><i class="fas fa-map-marker-alt"></i> Eswatini & Zambia</p>
+        <p><i class="fas fa-phone"></i> +268 7658 1804</p>
+        <p><i class="fas fa-phone"></i> +268 7604 4401</p>
+        <p><i class="fas fa-envelope"></i> info@prayerdome.net</p>
+        <div class="social-links">
+          <a href="https://wa.me/message/YB7G7PE2O26GI1" target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+          <a href="https://www.facebook.com/profile.php?id=61583956144114" target="_blank" title="Facebook Zambia"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://www.facebook.com/profile.php?id=100086119165608" target="_blank" title="Facebook Eswatini"><i class="fab fa-facebook-f"></i></a>
+        </div>
+      </div>
+      
+      <!-- Leadership Section -->
+      <div class="footer-section">
+        <h3>Leadership</h3>
+        <p><strong>Pastor Seedwell K. Masuku</strong></p>
+        <p><i class="fas fa-crown"></i> Founder & Senior Pastor</p>
+        <p><i class="fab fa-whatsapp"></i> +268 7658 1804</p>
+        <p><i class="fas fa-envelope"></i> seedwell@prayerdome.net</p>
+        <p style="margin-top: 15px;"><i class="fas fa-calendar-alt"></i> Established 2018</p>
+      </div>
+      
+      <!-- Service Times Section -->
+      <div class="footer-section">
+        <h3>Service Times</h3>
+        <p><i class="fas fa-clock"></i> Sunday: 9:00 AM & 1:00 PM</p>
+        <p><i class="fas fa-clock"></i> Wednesday Prayer: 6:00 PM</p>
+        <p><i class="fas fa-clock"></i> Friday Healing: 5:00 PM</p>
+        <p><i class="fas fa-globe"></i> CAT (Central African Time)</p>
+        <p style="margin-top: 10px;"><i class="fas fa-video"></i> Live streams available on Facebook</p>
+      </div>
+      
+      <!-- Quick Links Section -->
+      <div class="footer-section">
+        <h3>Quick Links</h3>
+        <p><a href="index.html" onclick="trackFooterClick('Back to Prayer Dome')"><i class="fas fa-home"></i> Prayer Dome Main</a></p>
+        <p><a href="#" onclick="showSection('business'); trackFooterClick('Business Support')"><i class="fas fa-briefcase"></i> Business Support</a></p>
+        <p><a href="#" onclick="showSection('savings'); trackFooterClick('Savings')"><i class="fas fa-piggy-bank"></i> Savings Account</a></p>
+        <p><a href="#" onclick="showSection('funeral'); trackFooterClick('Funeral Cover')"><i class="fas fa-hand-holding-heart"></i> Funeral Cover</a></p>
+        <p><a href="#" onclick="showSection('documents'); trackFooterClick('Documents')"><i class="fas fa-file-alt"></i> Submit Documents</a></p>
+      </div>
+    </div>
+    
+    <div class="footer-bottom">
+      <p>© <span class="current-year">2018</span> Prayer Dome Ministry. All Rights Reserved.</p>
+      <p>Seedwel Investment Limited</p>
+      <p class="scripture">"A House of Prayer for All Nations" - Matthew 21:13</p>
+    </div>
+  </div>
 </footer>
 
 <script>
-    // ==================== DATA MANAGEMENT ====================
-    let currentUser = null;
-    let currentCurrency = 'US';
-    const rates = { ZM: 25, ZA: 19, SZ: 19, US: 1, GB: 0.8, EU: 0.92 };
-    const symbols = { ZM: 'ZK', ZA: 'R', SZ: 'E', US: '$', GB: '£', EU: '€' };
+  // ==================== DATA STORAGE ====================
+  let currentUser = JSON.parse(localStorage.getItem('support_user')) || null;
+  let walletData = JSON.parse(localStorage.getItem('support_wallet')) || { balance: 0, deposits: [], withdrawals: [], pendingDeposits: [] };
+  let savingsData = JSON.parse(localStorage.getItem('support_savings')) || { monthsPaid: 0, startDate: new Date().toISOString(), plan: null };
+  let documents = JSON.parse(localStorage.getItem('support_documents')) || [];
+
+  // Business plans
+  const businessPlans = [
+  { 
+    name: "Starter Plan", 
+    range: "E50 – E500 (SZL) / ZK100 – ZK1,000 (ZMW)", 
+    benefit: "Business support up to E2,500 / ZK5,000",
+    description: "For small business owners and entrepreneurs",
+    min: 50, 
+    max: 500,
+    currency: "SZL/ZMW"
+  },
+  { 
+    name: "Growth Plan", 
+    range: "E500 – E2,000 (SZL) / ZK1,000 – ZK4,000 (ZMW)", 
+    benefit: "Business funding up to E10,000 / ZK20,000",
+    description: "For established businesses looking to expand",
+    min: 500, 
+    max: 2000 
+  },
+  { 
+    name: "Advanced Plan", 
+    range: "E2,000 – E5,000 (SZL) / ZK4,000 – ZK10,000 (ZMW)", 
+    benefit: "Business capital up to E25,000 / ZK50,000",
+    description: "For serious entrepreneurs and business owners",
+    min: 2000, 
+    max: 5000 
+  },
+  { 
+    name: "Premium Plan", 
+    range: "E5,000 – E10,000 (SZL) / ZK10,000 – ZK20,000 (ZMW)", 
+    benefit: "High-level investment support up to E50,000 / ZK100,000",
+    description: "For established businesses and large expansion",
+    min: 5000, 
+    max: 10000 
+  }
+];
+
+  // Helper functions
+  function showToast(msg, type = 'success') {
+    const container = document.getElementById('toastContainer');
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${msg}`;
+    container.appendChild(toast);
+    setTimeout(() => toast.remove(), 3500);
+  }
+
+  function showSection(section) {
+    document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
+    document.getElementById(`${section}Section`).style.display = 'block';
+    document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
+    event.target.classList.add('active');
     
-    let members = JSON.parse(localStorage.getItem('prayer_members') || '[]');
-    let deposits = JSON.parse(localStorage.getItem('prayer_deposits') || '[]');
-    let claims = JSON.parse(localStorage.getItem('prayer_claims') || '[]');
+    if (section === 'wallet') updateWalletUI();
+    if (section === 'business') renderBusinessPlans();
+  }
+
+  function renderBusinessPlans() {
+    const grid = document.getElementById('businessPlansGrid');
+    grid.innerHTML = businessPlans.map(plan => `
+      <div class="plan-card" onclick="selectPlan('${plan.name}')">
+        <h3>${plan.name}</h3>
+        <div class="plan-amount">${plan.range}<span style="font-size:1rem;">/month</span></div>
+        <p>${plan.description}</p>
+        <ul style="margin: 15px 0; list-style: none;">
+          <li><i class="fas fa-check-circle" style="color: var(--accent-green);"></i> ${plan.benefit}</li>
+          <li><i class="fas fa-clock"></i> After 12 months qualify</li>
+        </ul>
+        <button class="btn btn-primary" onclick="event.stopPropagation(); joinPlan('${plan.name}', ${plan.min}, ${plan.max})">Join Plan</button>
+      </div>
+    `).join('');
+  }
+
+  window.selectPlan = (name) => {
+    document.querySelectorAll('.plan-card').forEach(card => card.classList.remove('selected'));
+    event.currentTarget.classList.add('selected');
+    showToast(`${name} selected`, 'info');
+  };
+
+  window.joinPlan = (name, min, max) => {
+    if (!currentUser) {
+      const userName = prompt('Enter your full name to join:');
+      if (!userName) return;
+      const phone = prompt('Phone number:');
+      currentUser = { id: 'USER' + Date.now(), name: userName, phone: phone, joinedAt: new Date().toISOString() };
+      localStorage.setItem('support_user', JSON.stringify(currentUser));
+      savingsData.plan = { name, min, max };
+      localStorage.setItem('support_savings', JSON.stringify(savingsData));
+      showToast(`Welcome ${userName}! You've joined the ${name}.`, 'success');
+      confetti({ particleCount: 100, spread: 70 });
+    } else {
+      savingsData.plan = { name, min, max };
+      localStorage.setItem('support_savings', JSON.stringify(savingsData));
+      showToast(`You've switched to ${name} plan`, 'success');
+    }
+    showSection('wallet');
+  };
+
+  function updateWalletUI() {
+    document.getElementById('walletBalance').innerText = `$${walletData.balance.toFixed(2)}`;
+    const totalDeposits = walletData.deposits.filter(d => d.status === 'approved').reduce((sum, d) => sum + d.amount, 0);
+    const pendingTotal = walletData.pendingDeposits.reduce((sum, d) => sum + d.amount, 0);
+    document.getElementById('totalDeposits').innerText = `$${totalDeposits.toFixed(2)}`;
+    document.getElementById('pendingDeposits').innerText = `$${pendingTotal.toFixed(2)}`;
     
-    const plans = {
-        starter: { name: 'Starter', range: '$5 - $50', min: 5, max: 50, color: 'starter' },
-        standard: { name: 'Standard', range: '$60 - $100', min: 60, max: 100, color: 'standard' },
-        premium: { name: 'Premium', range: '$100 - $500', min: 100, max: 500, color: 'premium' },
-        elite: { name: 'Elite', range: '$500 - $1,000', min: 500, max: 1000, color: 'elite' }
+    const historyDiv = document.getElementById('transactionHistory');
+    const allTx = [...walletData.deposits, ...walletData.withdrawals].sort((a,b) => new Date(b.date) - new Date(a.date));
+    historyDiv.innerHTML = allTx.slice(0, 10).map(tx => `
+      <div style="display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid var(--border-color);">
+        <span><i class="fas ${tx.type === 'deposit' ? 'fa-arrow-down' : 'fa-arrow-up'}"></i> ${tx.type === 'deposit' ? 'Deposit' : 'Withdrawal'}</span>
+        <span>$${tx.amount}</span>
+        <span style="font-size:12px;">${moment(tx.date).format('MMM D')}</span>
+        <span class="badge ${tx.status === 'approved' ? 'badge-approved' : 'badge-pending'}">${tx.status}</span>
+      </div>
+    `).join('');
+    if (allTx.length === 0) historyDiv.innerHTML = '<p style="text-align:center;">No transactions yet</p>';
+  }
+
+  window.submitDeposit = () => {
+    if (!currentUser) { showToast('Please join a plan first', 'error'); showSection('business'); return; }
+    const amount = parseFloat(document.getElementById('depositAmount').value);
+    if (!amount || amount <= 0) { showToast('Enter valid amount', 'error'); return; }
+    const currency = document.getElementById('currencySelect').value;
+    
+    const deposit = {
+      id: 'DEP' + Date.now(),
+      userId: currentUser.id,
+      amount: amount,
+      currency: currency,
+      date: new Date().toISOString(),
+      status: 'pending',
+      type: 'deposit'
     };
     
-    function formatMoney(usd) { return `${symbols[currentCurrency]}${Math.floor(usd * rates[currentCurrency])}`; }
-    function saveData() { localStorage.setItem('prayer_members', JSON.stringify(members)); localStorage.setItem('prayer_deposits', JSON.stringify(deposits)); localStorage.setItem('prayer_claims', JSON.stringify(claims)); }
+    walletData.pendingDeposits.push(deposit);
+    localStorage.setItem('support_wallet', JSON.stringify(walletData));
+    showToast(`Deposit of ${currency} ${amount} submitted for approval. Admin will verify.`, 'success');
+    document.getElementById('depositAmount').value = '';
+    document.getElementById('proofPreview').innerHTML = '';
+    updateWalletUI();
     
-    function showToast(msg, type='success') {
-        let toast = document.createElement('div'); toast.className = 'toast'; toast.innerHTML = msg;
-        document.getElementById('toastContainer').appendChild(toast);
-        setTimeout(() => toast.remove(), 4000);
-    }
-    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-    function showJoinModal() { document.getElementById('joinModal').style.display = 'flex'; }
-    function showLoginModal() { document.getElementById('loginModal').style.display = 'flex'; }
-    function toggleMenu() { document.getElementById('leftMenu').classList.toggle('open'); document.getElementById('menuOverlay').classList.toggle('active'); }
-    
-    // Render Programs
-    function renderPrograms() {
-        const programs = [
-            { name: 'Business Support', icon: 'fas fa-chart-line', badge: 'Up to $2,500', desc: 'Start or expand your business with cash or goods support.', range: 'Support: 1.33x - 2.5x savings', img: 'https://i.ibb.co/x8PNY95g/0c32230d12f1d7a059b2e0e1e83c15fe-1.jpg' },
-            { name: 'Education Support', icon: 'fas fa-graduation-cap', badge: 'Up to $2,500', desc: 'Pay school fees, buy books, fund your education.', range: 'Support: 1.33x - 2.5x savings', img: 'https://i.ibb.co/wZ9DZMN6/a264d1175a007a4ee1f68cf8d68e5a67-1.jpg' },
-            { name: 'Funeral Cover', icon: 'fas fa-heart', badge: 'Up to $3,000', desc: 'Secure your family\'s future with dignified funeral support.', range: 'Support: 1.33x - 2.5x savings', img: 'https://i.ibb.co/xKkvj3gL/cdcd3492d59b2a9d9cbeedb25ac9f79e-1.jpg' },
-            { name: 'Saving Plans', icon: 'fas fa-piggy-bank', badge: '4 Plans Available', desc: 'Choose from Starter, Standard, Premium, or Elite plans.', range: 'Save $5 - $1,000 monthly', img: 'https://i.ibb.co/8nJ2KZZ3/3f99fa7b8e7095d1f3d3ce8dacdc4514-1.jpg' }
-        ];
-        document.getElementById('programsGrid').innerHTML = programs.map(p => `
-            <div class="program-card" onclick="showPage('${p.name.toLowerCase().replace(' ', '')}')">
-                <div class="card-image"><img src="${p.img}" alt="${p.name}"></div>
-                <div class="card-content">
-                    <span class="card-badge"><i class="${p.icon}"></i> ${p.badge}</span>
-                    <h3>${p.name}</h3>
-                    <p>${p.desc}</p>
-                    <div class="support-range">${p.range}</div>
-                    <button class="btn-card">Learn More →</button>
-                </div>
-            </div>
-        `).join('');
-    }
-    
-    // Auto-scrolling Reviews
-    const reviews = [
-        { text: "I saved $10 monthly for 12 months. After completing, I received $180 support which I used to buy stock for my shop. My business has grown 3x!", name: "Grace M.", location: "Lusaka, Zambia", stars: 5 },
-        { text: "Prayer Dome helped me pay for my daughter's university fees. The support came at the perfect time. God is faithful!", name: "Peter K.", location: "Manzini, Eswatini", stars: 5 },
-        { text: "I joined for the funeral cover. It gives me peace knowing my family will be taken care of. Best decision ever.", name: "Thandi N.", location: "Johannesburg, SA", stars: 5 },
-        { text: "The savings calculator helped me plan. After 12 months I received $900 support for my business. Highly recommend!", name: "John D.", location: "Cape Town, SA", stars: 5 },
-        { text: "Education support changed my life. I completed my degree with their help. Thank you Prayer Dome!", name: "Mary S.", location: "Lusaka, Zambia", stars: 5 }
-    ];
-    
-    function renderReviews() {
-        let html = '';
-        for (let i = 0; i < 6; i++) {
-            let r = reviews[i % reviews.length];
-            html += `<div class="review-card"><div class="review-stars">${'★'.repeat(r.stars)}${'☆'.repeat(5-r.stars)}</div><div class="review-text">"${r.text}"</div><div class="review-author">${r.name}</div><div class="review-location">${r.location}</div></div>`;
-        }
-        document.getElementById('reviewsTrack').innerHTML = html + html;
-    }
-    
-    // Page Navigation
-    function showPage(page) {
-        document.getElementById('joinSection').style.display = page === 'home' && !currentUser ? 'block' : 'none';
-        document.getElementById('dashboardSection').style.display = page === 'home' && currentUser ? 'block' : 'none';
-        document.querySelector('.programs-section').style.display = page === 'home' ? 'block' : 'none';
-        document.querySelector('.reviews-section').style.display = page === 'home' ? 'block' : 'none';
-        document.querySelector('.hero-section').style.display = page === 'home' ? 'block' : 'none';
-        document.querySelector('.moving-words').style.display = page === 'home' ? 'block' : 'none';
+    // Auto-approve simulation (admin would do this)
+    setTimeout(() => {
+      const pending = walletData.pendingDeposits.find(d => d.id === deposit.id);
+      if (pending) {
+        pending.status = 'approved';
+        walletData.balance += amount;
+        walletData.deposits.push(pending);
+        walletData.pendingDeposits = walletData.pendingDeposits.filter(d => d.id !== deposit.id);
+        localStorage.setItem('support_wallet', JSON.stringify(walletData));
         
-        if (page === 'home') window.scrollTo(0, 0);
-        if (page === 'wallet' && currentUser) showWallet();
+        // Update savings months
+        const totalApproved = walletData.deposits.filter(d => d.status === 'approved').length;
+        savingsData.monthsPaid = totalApproved;
+        localStorage.setItem('support_savings', JSON.stringify(savingsData));
+        
+        updateWalletUI();
+        showToast(`Deposit approved! Balance: $${walletData.balance.toFixed(2)}`, 'success');
+        confetti({ particleCount: 80, spread: 60 });
+      }
+    }, 2000);
+  };
+
+  window.openClaimSupportModal = () => {
+    if (!currentUser) { showToast('Join a plan first', 'error'); return; }
+    const monthsPaid = savingsData.monthsPaid || 0;
+    if (monthsPaid < 12) {
+      showToast(`You need ${12 - monthsPaid} more months of savings before claiming support.`, 'error');
+      return;
+    }
+    const reason = prompt('Describe your business/education need:');
+    if (!reason) return;
+    showToast('Support request submitted! Admin will review within 48 hours.', 'success');
+    confetti({ particleCount: 100, spread: 70 });
+  };
+
+  window.openFuneralClaimModal = () => {
+    if (!currentUser) { showToast('Join first', 'error'); return; }
+    const monthsPaid = savingsData.monthsPaid || 0;
+    if (monthsPaid < 12) { showToast('Must save for 12 months first', 'error'); return; }
+    showToast('Funeral claim submitted. Please upload death certificate in Documents section.', 'info');
+    showSection('documents');
+  };
+
+  function submitDocuments() {
+    const docData = {
+      fullName: document.getElementById('docFullName').value,
+      phone: document.getElementById('docPhone').value,
+      nrc: document.getElementById('docNRC').value,
+      address: document.getElementById('docAddress').value,
+      nextKinName: document.getElementById('nextKinName').value,
+      nextKinPhone: document.getElementById('nextKinPhone').value,
+      nextKinRelation: document.getElementById('nextKinRelation').value,
+      submittedAt: new Date().toISOString()
+    };
+    documents.push(docData);
+    localStorage.setItem('support_documents', JSON.stringify(documents));
+    showToast('Documents submitted successfully!', 'success');
+    confetti({ particleCount: 80, spread: 60 });
+    
+    // Reset form
+    document.getElementById('documentForm').reset();
+  }
+
+  // File preview
+  document.getElementById('proofUpload').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        document.getElementById('proofPreview').innerHTML = `<img src="${ev.target.result}" style="max-width: 100px; border-radius: 8px;">`;
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  // Auto slide for hero
+  let currentSlide = 0;
+  const slides = document.querySelectorAll('.slide');
+  if (slides.length) {
+    setInterval(() => {
+      slides[currentSlide].classList.remove('active');
+      currentSlide = (currentSlide + 1) % slides.length;
+      slides[currentSlide].classList.add('active');
+    }, 5000);
+  }
+
+  // Initialize
+  renderBusinessPlans();
+  updateWalletUI();
+  
+  // Create a default demo user if none exists
+  if (!currentUser) {
+    // Don't auto-create, just show prompts
+  }
+  
+  // Sync dark mode with main app
+if (localStorage.getItem('prayerDome_theme') === 'dark') {
+  document.body.classList.add('dark-mode');
+}
+
+// Add theme toggle button to support.html (optional)
+const themeBtn = document.createElement('button');
+themeBtn.innerHTML = '<i class="fas fa-moon"></i>';
+themeBtn.style.cssText = 'position: fixed; bottom: 20px; left: 20px; width: 45px; height: 45px; border-radius: 50%; background: var(--accent-green); color: white; border: none; cursor: pointer; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.2);';
+themeBtn.onclick = () => {
+  document.body.classList.toggle('dark-mode');
+  localStorage.setItem('prayerDome_theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+};
+document.body.appendChild(themeBtn);
+
+// Check if user is logged in from main app via localStorage
+const mainAppUser = localStorage.getItem('prayerDome_user');
+if (mainAppUser) {
+  try {
+    const user = JSON.parse(mainAppUser);
+    // Pre-fill forms with user data
+    if (document.getElementById('docFullName')) {
+      document.getElementById('docFullName').value = user.name || '';
+      document.getElementById('docPhone').value = user.phone || '';
+    }
+  } catch(e) {}
+}
+
+// ==================== FOOTER FUNCTIONALITY ====================
+
+// Add dynamic footer with current year
+function updateFooterYear() {
+  const yearElements = document.querySelectorAll('.current-year');
+  const currentYear = new Date().getFullYear();
+  yearElements.forEach(el => {
+    el.textContent = currentYear;
+  });
+}
+
+// Get current service times based on location detection (if available)
+function getCurrentServiceTimes() {
+  // Try to get from main app's location detection
+  const savedLocation = localStorage.getItem('prayerDome_location');
+  let location = null;
+  
+  try {
+    if (savedLocation) {
+      location = JSON.parse(savedLocation);
+    }
+  } catch(e) {}
+  
+  // Default service times for Eswatini and Zambia
+  const serviceTimes = {
+    sunday: '9:00 AM & 1:00 PM',
+    wednesday: '6:00 PM',
+    friday: '5:00 PM',
+    timezone: 'CAT (Central African Time)'
+  };
+  
+  // If location detected, customize message
+  if (location && location.country) {
+    return {
+      ...serviceTimes,
+      locationNote: `All times are in ${location.country} local time (${serviceTimes.timezone})`
+    };
+  }
+  
+  return serviceTimes;
+}
+
+// Update footer with dynamic content
+function updateFooterContent() {
+  const footer = document.querySelector('.support-footer');
+  if (!footer) return;
+  
+  const serviceTimes = getCurrentServiceTimes();
+  
+  // Update service times section if it exists
+  const serviceSection = footer.querySelector('.footer-section:nth-child(3)');
+  if (serviceSection) {
+    const timesHtml = `
+      <p><i class="fas fa-clock"></i> Sunday: ${serviceTimes.sunday}</p>
+      <p><i class="fas fa-clock"></i> Wednesday Prayer: ${serviceTimes.wednesday}</p>
+      <p><i class="fas fa-clock"></i> Friday Healing: ${serviceTimes.friday}</p>
+      <p style="font-size: 12px; margin-top: 10px;"><i class="fas fa-globe"></i> ${serviceTimes.timezone}</p>
+    `;
+    
+    // Only update if content changed
+    const currentHtml = serviceSection.innerHTML;
+    if (!currentHtml.includes(serviceTimes.sunday)) {
+      const h3 = serviceSection.querySelector('h3');
+      if (h3) {
+        serviceSection.innerHTML = h3.outerHTML + timesHtml;
+      }
+    }
+  }
+}
+
+// Track footer clicks for analytics
+function trackFooterClick(linkName) {
+  console.log(`Footer link clicked: ${linkName}`);
+  
+  // Save to localStorage for analytics
+  const clicks = JSON.parse(localStorage.getItem('footer_clicks') || '[]');
+  clicks.push({
+    link: linkName,
+    timestamp: new Date().toISOString(),
+    page: 'support'
+  });
+  
+  // Keep only last 100 clicks
+  if (clicks.length > 100) clicks.shift();
+  localStorage.setItem('footer_clicks', JSON.stringify(clicks));
+}
+
+// Add click tracking to all footer links
+function initFooterTracking() {
+  const footerLinks = document.querySelectorAll('.support-footer a');
+  footerLinks.forEach(link => {
+    link.addEventListener('click', function() {
+      const linkText = this.innerText.trim() || this.href;
+      trackFooterClick(linkText);
+    });
+  });
+}
+
+// Back to top button for footer
+function addBackToTopButton() {
+  const backToTop = document.createElement('button');
+  backToTop.id = 'footerBackToTop';
+  backToTop.innerHTML = '<i class="fas fa-arrow-up"></i>';
+  backToTop.style.cssText = `
+    position: fixed;
+    bottom: 100px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent-green), #16a34a);
+    color: white;
+    border: none;
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    z-index: 99;
+    box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
+    transition: all 0.3s ease;
+  `;
+  
+  backToTop.onclick = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+  
+  document.body.appendChild(backToTop);
+  
+  // Show/hide based on scroll
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 300) {
+      backToTop.style.display = 'flex';
+    } else {
+      backToTop.style.display = 'none';
+    }
+  });
+}
+
+// Initialize footer on page load
+document.addEventListener('DOMContentLoaded', function() {
+  updateFooterYear();
+  updateFooterContent();
+  initFooterTracking();
+  addBackToTopButton();
+  
+  // Update footer when location changes (if main app updates)
+  window.addEventListener('storage', function(e) {
+    if (e.key === 'prayerDome_location') {
+      updateFooterContent();
+    }
+  });
+});
+
+// Export functions for use in other scripts
+window.updateFooterYear = updateFooterYear;
+window.updateFooterContent = updateFooterContent;
+window.trackFooterClick = trackFooterClick;
+
+// ==================== SECURE WALLET SYSTEM ====================
+
+// PIN Management
+let walletPIN = localStorage.getItem('wallet_pin');
+let isWalletUnlocked = false;
+let currentExchangeRates = {};
+
+// Exchange rates cache
+const EXCHANGE_API_URL = 'https://api.exchangerate-api.com/v4/latest/USD';
+
+// ==================== EXCHANGE RATE FUNCTIONS ====================
+
+// Fetch live exchange rates
+async function fetchExchangeRates() {
+  try {
+    const statusDiv = document.getElementById('exchangeRateStatus');
+    statusDiv.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Fetching live rates...';
+    
+    // Try primary API
+    let response = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+    
+    if (!response.ok) {
+      // Fallback to secondary API
+      response = await fetch('https://api.frankfurter.app/latest?from=USD');
     }
     
-    function showUserMenu() { currentUser ? showPage('home') : showLoginModal(); }
-    function showDashboard() { showPage('home'); updateDashboard(); }
+    const data = await response.json();
     
-    function updateDashboard() {
-        if(currentUser){
-            let total = deposits.filter(d=>d.userId===currentUser.id&&d.status==='approved').reduce((s,d)=>s+d.amountUSD,0);
-            let months = deposits.filter(d=>d.userId===currentUser.id&&d.status==='approved').length;
-            let support = { min: Math.floor(total * 1.33), max: Math.floor(total * 2.5) };
-            document.getElementById('dashboardStats').innerHTML = `<div class="stat-box"><div class="stat-number">${formatMoney(total)}</div><div>Savings</div></div><div class="stat-box"><div class="stat-number">${months}/12</div><div>Months</div></div><div class="stat-box"><div class="stat-number">${formatMoney(support.min)} - ${formatMoney(support.max)}</div><div>Support</div></div>`;
-            document.getElementById('savingsProgress').style.width = `${(months/12)*100}%`;
-            document.getElementById('monthsProgressText').innerHTML = `${months} of 12 months completed.`;
-            let trans = deposits.filter(d=>d.userId===currentUser.id).sort((a,b)=>new Date(b.date)-new Date(a.date));
-            document.getElementById('transactionHistory').innerHTML = trans.map(d=>`<div style="padding:12px; border-bottom:1px solid #eee;"><span>${moment(d.date).format('MMM D')}</span> <strong>${formatMoney(d.amountUSD)}</strong> <span style="color:${d.status==='approved'?'green':'orange'}">${d.status}</span></div>`).join('') || '<p>No deposits yet</p>';
+    // Store rates (base USD)
+    currentExchangeRates = {
+      USD: 1,
+      EUR: data.rates?.EUR || 0.92,
+      GBP: data.rates?.GBP || 0.79,
+      ZAR: data.rates?.ZAR || 18.5,
+      SZL: data.rates?.SZL || 18.5, // SZL pegged to ZAR
+      ZMW: data.rates?.ZMW || 24.5
+    };
+    
+    // Update display
+    updateRatesDisplay();
+    
+    statusDiv.innerHTML = '<i class="fas fa-check-circle"></i> Rates updated successfully';
+    setTimeout(() => {
+      statusDiv.innerHTML = '<i class="fas fa-chart-line"></i> Live rates ready';
+    }, 2000);
+    
+    // Save to localStorage
+    localStorage.setItem('exchange_rates', JSON.stringify({
+      rates: currentExchangeRates,
+      timestamp: Date.now()
+    }));
+    
+    convertCurrency(); // Update conversion
+    
+  } catch (error) {
+    console.error('Error fetching rates:', error);
+    
+    // Load cached rates
+    const cached = localStorage.getItem('exchange_rates');
+    if (cached) {
+      const cache = JSON.parse(cached);
+      if (Date.now() - cache.timestamp < 86400000) { // 24 hours
+        currentExchangeRates = cache.rates;
+        updateRatesDisplay();
+        document.getElementById('exchangeRateStatus').innerHTML = '<i class="fas fa-database"></i> Using cached rates (updated within 24h)';
+        convertCurrency();
+        return;
+      }
+    }
+    
+    // Fallback rates
+    currentExchangeRates = {
+      USD: 1, EUR: 0.92, GBP: 0.79, ZAR: 18.5, SZL: 18.5, ZMW: 24.5
+    };
+    updateRatesDisplay();
+    document.getElementById('exchangeRateStatus').innerHTML = '<i class="fas fa-exclamation-triangle"></i> Using estimated rates. Please check connection.';
+    convertCurrency();
+  }
+}
+
+// Update rates display
+function updateRatesDisplay() {
+  document.getElementById('usdRate').textContent = `1 USD = 1.00 USD`;
+  document.getElementById('eurRate').textContent = `1 EUR = ${(1 / currentExchangeRates.EUR).toFixed(2)} USD`;
+  document.getElementById('gbpRate').textContent = `1 GBP = ${(1 / currentExchangeRates.GBP).toFixed(2)} USD`;
+  document.getElementById('zarRate').textContent = `1 ZAR = ${(1 / currentExchangeRates.ZAR).toFixed(2)} USD`;
+  document.getElementById('zmwRate').textContent = `1 ZMW = ${(1 / currentExchangeRates.ZMW).toFixed(2)} USD`;
+  document.getElementById('szlRate').textContent = `1 SZL = ${(1 / currentExchangeRates.SZL).toFixed(2)} USD`;
+  
+  document.getElementById('rateUpdateTime').textContent = `Updated: ${new Date().toLocaleTimeString()}`;
+}
+
+// Convert currency
+function convertCurrency() {
+  const from = document.getElementById('fromCurrency').value;
+  const to = document.getElementById('toCurrency').value;
+  const amount = parseFloat(document.getElementById('fromAmount').value);
+  
+  if (isNaN(amount) || amount <= 0) {
+    document.getElementById('toAmount').value = '';
+    return;
+  }
+  
+  // Convert to USD first, then to target currency
+  const inUSD = amount / currentExchangeRates[from];
+  const result = inUSD * currentExchangeRates[to];
+  
+  document.getElementById('toAmount').value = `${result.toFixed(2)} ${to}`;
+}
+
+// Swap currencies
+function swapCurrencies() {
+  const fromSelect = document.getElementById('fromCurrency');
+  const toSelect = document.getElementById('toCurrency');
+  const fromVal = fromSelect.value;
+  const toVal = toSelect.value;
+  const amount = document.getElementById('fromAmount').value;
+  
+  fromSelect.value = toVal;
+  toSelect.value = fromVal;
+  document.getElementById('toAmount').value = '';
+  convertCurrency();
+}
+
+// Set quick amount
+function setQuickAmount(amount) {
+  document.getElementById('fromAmount').value = amount;
+  convertCurrency();
+}
+
+// ==================== PIN SECURITY FUNCTIONS ====================
+
+// Setup PIN
+function setupWalletPIN() {
+  if (!currentUser) return false;
+  
+  return new Promise((resolve) => {
+    const pin = prompt('🔐 Set a 4-digit PIN to secure your wallet:\n(Example: 1234)');
+    
+    if (pin && /^\d{4}$/.test(pin)) {
+      const hashedPin = btoa(pin + currentUser.uid);
+      localStorage.setItem('wallet_pin', hashedPin);
+      walletPIN = hashedPin;
+      showToast('✅ PIN set successfully! Your wallet is now secure.', 'success');
+      document.getElementById('pinStatusText').textContent = 'PIN Active 🔒';
+      resolve(true);
+    } else if (pin) {
+      showToast('PIN must be exactly 4 digits', 'error');
+      resolve(false);
+    } else {
+      resolve(false);
+    }
+  });
+}
+
+// Change PIN
+function changeWalletPIN() {
+  if (!currentUser) {
+    showToast('Please login first', 'error');
+    return;
+  }
+  
+  const currentPin = prompt('Enter your current PIN:');
+  if (!currentPin) return;
+  
+  const storedPin = atob(walletPIN).replace(currentUser.uid, '');
+  if (currentPin !== storedPin) {
+    showToast('❌ Incorrect current PIN', 'error');
+    return;
+  }
+  
+  const newPin = prompt('Enter new 4-digit PIN:');
+  if (newPin && /^\d{4}$/.test(newPin)) {
+    const newHashedPin = btoa(newPin + currentUser.uid);
+    localStorage.setItem('wallet_pin', newHashedPin);
+    walletPIN = newHashedPin;
+    showToast('✅ PIN changed successfully!', 'success');
+  } else if (newPin) {
+    showToast('PIN must be 4 digits', 'error');
+  }
+}
+
+// Verify PIN before wallet access
+async function verifyWalletPIN() {
+  if (isWalletUnlocked) return true;
+  
+  if (!walletPIN && currentUser) {
+    return await setupWalletPIN();
+  }
+  
+  if (!walletPIN) {
+    showToast('Please login to access wallet', 'error');
+    return false;
+  }
+  
+  return new Promise((resolve) => {
+    const modal = document.createElement('div');
+    modal.className = 'pin-modal';
+    modal.innerHTML = `
+      <div class="pin-box" style="background: var(--bg-card); border-radius: 32px; padding: 30px; max-width: 350px; width: 90%; text-align: center;">
+        <i class="fas fa-lock" style="font-size: 48px; color: var(--accent-green); margin-bottom: 20px;"></i>
+        <h3>Enter Wallet PIN</h3>
+        <p style="font-size: 14px; margin-bottom: 20px;">Enter your 4-digit PIN to access wallet</p>
+        <div class="pin-input" style="display: flex; gap: 12px; justify-content: center; margin: 25px 0;">
+          <input type="password" maxlength="1" class="pin-digit" id="pin1" style="width: 50px; height: 60px; text-align: center; font-size: 24px; border: 2px solid var(--border-color); border-radius: 12px; background: var(--bg-primary);">
+          <input type="password" maxlength="1" class="pin-digit" id="pin2" style="width: 50px; height: 60px; text-align: center; font-size: 24px; border: 2px solid var(--border-color); border-radius: 12px; background: var(--bg-primary);">
+          <input type="password" maxlength="1" class="pin-digit" id="pin3" style="width: 50px; height: 60px; text-align: center; font-size: 24px; border: 2px solid var(--border-color); border-radius: 12px; background: var(--bg-primary);">
+          <input type="password" maxlength="1" class="pin-digit" id="pin4" style="width: 50px; height: 60px; text-align: center; font-size: 24px; border: 2px solid var(--border-color); border-radius: 12px; background: var(--bg-primary);">
+        </div>
+        <div style="display: flex; gap: 10px;">
+          <button class="btn btn-primary" id="verifyPinBtn" style="flex: 1;">Verify</button>
+          <button class="btn btn-outline" id="cancelPinBtn" style="flex: 1;">Cancel</button>
+        </div>
+        <p style="margin-top: 15px; font-size: 12px;">
+          <a href="#" onclick="forgotPIN()">Forgot PIN? Contact Admin</a>
+        </p>
+      </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    const inputs = ['pin1', 'pin2', 'pin3', 'pin4'];
+    inputs.forEach((id, index) => {
+      const input = document.getElementById(id);
+      input.addEventListener('input', (e) => {
+        if (e.target.value.length === 1 && index < 3) {
+          document.getElementById(inputs[index + 1]).focus();
         }
-    }
+      });
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && !e.target.value && index > 0) {
+          document.getElementById(inputs[index - 1]).focus();
+        }
+      });
+    });
     
-    function submitJoin() {
-        let name=document.getElementById('joinName').value, phone=document.getElementById('joinPhone').value, plan=document.getElementById('joinPlan').value;
-        if(!name||!phone){showToast('Fill all fields','error');return;}
-        let newId=`PD${Math.floor(Math.random()*10000)}`;
-        members.push({id:newId,name,phone,plan,savings:0,joinedAt:new Date().toISOString()});
-        saveData(); currentUser=members[members.length-1];
-        showToast(`Welcome ${name}! ID: ${newId}`,'success');
-        closeModal('joinModal'); showDashboard();
-        confetti({particleCount:150,spread:80});
-    }
+    document.getElementById('verifyPinBtn').onclick = () => {
+      const enteredPin = inputs.map(id => document.getElementById(id).value).join('');
+      const storedPin = atob(walletPIN).replace(currentUser?.uid || '', '');
+      
+      if (enteredPin === storedPin) {
+        isWalletUnlocked = true;
+        modal.remove();
+        showToast('✅ Wallet unlocked!', 'success');
+        resolve(true);
+      } else {
+        showToast('❌ Incorrect PIN', 'error');
+        inputs.forEach(id => {
+          document.getElementById(id).value = '';
+        });
+        document.getElementById('pin1').focus();
+        resolve(false);
+      }
+    };
     
-    function loginUser() {
-        let login=document.getElementById('loginPhone').value;
-        let user=members.find(m=>m.phone===login||m.id===login);
-        if(user){currentUser=user; showToast(`Welcome back ${user.name}!`,'success'); closeModal('loginModal'); showDashboard();}
-        else showToast('Member not found','error');
-    }
+    document.getElementById('cancelPinBtn').onclick = () => {
+      modal.remove();
+      resolve(false);
+    };
+  });
+}
+
+// Forgot PIN handler
+function forgotPIN() {
+  showToast('Contact admin at admin@prayerdome.net to reset your PIN', 'info');
+}
+
+// ==================== DEPOSIT FUNCTIONS ====================
+
+// Submit secure deposit
+async function submitSecureDeposit() {
+  if (!currentUser) {
+    showToast('Please login first', 'error');
+    showLoginModal();
+    return;
+  }
+  
+  const isVerified = await verifyWalletPIN();
+  if (!isVerified) {
+    showToast('Wallet access denied. PIN verification failed.', 'error');
+    return;
+  }
+  
+  const amount = parseFloat(document.getElementById('depositAmount').value);
+  const currency = document.getElementById('depositCurrency').value;
+  const proofFile = document.getElementById('proofUpload').files[0];
+  
+  if (!amount || amount <= 0) {
+    showToast('Please enter a valid amount', 'error');
+    return;
+  }
+  
+  if (!proofFile) {
+    showToast('Please upload payment proof (screenshot or receipt)', 'error');
+    return;
+  }
+  
+  // Check minimum amount
+  const minAmounts = { SZL: 50, ZMW: 100, USD: 5, EUR: 5, GBP: 5, ZAR: 50 };
+  if (amount < minAmounts[currency]) {
+    showToast(`Minimum deposit is ${minAmounts[currency]} ${currency}`, 'error');
+    return;
+  }
+  
+  showSpinner();
+  
+  try {
+    // Upload proof to Firebase Storage
+    const timestamp = Date.now();
+    const fileName = `deposit_proof_${currentUser.uid}_${timestamp}_${proofFile.name}`;
+    const storageRef = ref(storage, `deposit_proofs/${fileName}`);
+    await uploadBytes(storageRef, proofFile);
+    const proofURL = await getDownloadURL(storageRef);
     
-    function showDepositModal(){ if(!currentUser){showLoginModal();return;} document.getElementById('paymentRef').innerText=currentUser.id; document.getElementById('depositModal').style.display='flex'; }
+    // Calculate amount in SZL for record
+    const amountInSZL = amount / (currentExchangeRates[currency] || 1) * currentExchangeRates.SZL;
     
-    function submitDeposit(){
-        let amt=parseFloat(document.getElementById('depositAmount').value);
-        if(!amt||amt<1){showToast('Enter valid amount','error');return;}
-        let amtUSD=amt/rates[currentCurrency];
-        deposits.push({id:Date.now(),userId:currentUser.id,amountUSD:amtUSD,amountLocal:amt,currency:currentCurrency,status:'pending',date:new Date().toISOString()});
-        saveData(); showToast(`Deposit of ${formatMoney(amtUSD)} submitted!`,'success');
-        closeModal('depositModal'); updateDashboard(); confetti({particleCount:80});
-    }
+    // Create deposit record
+    const depositData = {
+      userId: currentUser.uid,
+      userEmail: currentUser.email,
+      userName: currentUser.displayName || currentUser.email,
+      amount: amount,
+      currency: currency,
+      amountInSZL: amountInSZL,
+      proofURL: proofURL,
+      proofFileName: proofFile.name,
+      status: 'pending',
+      submittedAt: Timestamp.now(),
+      reference: `DEP_${timestamp}_${currentUser.uid.slice(-6)}`
+    };
     
-    function showClaimModal(){
-        if(!currentUser){showLoginModal();return;}
-        let months=deposits.filter(d=>d.userId===currentUser.id&&d.status==='approved').length;
-        if(months<12){showToast(`Complete ${12-months} more months first`,'warning');return;}
-        document.getElementById('claimModal').style.display='flex';
-    }
+    await addDoc(collection(db, "deposits"), depositData);
     
-    function submitClaim(){
-        let desc=document.getElementById('claimDescription').value;
-        if(!desc){showToast('Describe your need','error');return;}
-        let total=deposits.filter(d=>d.userId===currentUser.id&&d.status==='approved').reduce((s,d)=>s+d.amountUSD,0);
-        claims.push({id:Date.now(),userId:currentUser.id,userName:currentUser.name,description:desc,supportAmount:total*1.8,status:'pending',date:new Date().toISOString()});
-        saveData(); showToast('Claim submitted! Admin will review.','success');
-        closeModal('claimModal'); confetti({particleCount:100});
-    }
+    // Update local wallet
+    let walletData = JSON.parse(localStorage.getItem('support_wallet')) || { 
+      balance: 0, 
+      deposits: [], 
+      withdrawals: [], 
+      pendingDeposits: [] 
+    };
     
-    function showWallet(){ if(currentUser){ let total=deposits.filter(d=>d.userId===currentUser.id&&d.status==='approved').reduce((s,d)=>s+d.amountUSD,0); let months=deposits.filter(d=>d.userId===currentUser.id&&d.status==='approved').length; document.getElementById('walletContent').innerHTML = `<div class="stats-grid"><div class="stat-box"><div class="stat-number">${formatMoney(total)}</div><div>Savings</div></div><div class="stat-box"><div class="stat-number">${months}/12</div><div>Months</div></div></div>`; } }
-    function updateCurrency(){ currentCurrency=document.getElementById('currencySelect').value; renderPrograms(); if(currentUser) updateDashboard(); }
+    walletData.pendingDeposits.push({
+      id: depositData.reference,
+      amount: amount,
+      currency: currency,
+      amountInSZL: amountInSZL,
+      date: new Date().toISOString(),
+      status: 'pending'
+    });
     
-    // Initialize
-    renderPrograms(); renderReviews(); updateCurrency();
+    localStorage.setItem('support_wallet', JSON.stringify(walletData));
     
-    window.showPage=showPage; window.showUserMenu=showUserMenu; window.showJoinModal=showJoinModal; window.showLoginModal=showLoginModal;
-    window.submitJoin=submitJoin; window.loginUser=loginUser; window.showDepositModal=showDepositModal; window.submitDeposit=submitDeposit;
-    window.showClaimModal=showClaimModal; window.submitClaim=submitClaim; window.closeModal=closeModal; window.toggleMenu=toggleMenu;
-    window.updateCurrency=updateCurrency;
+    showToast(`✅ Deposit of ${currency} ${amount} submitted for verification!`, 'success');
+    confetti({ particleCount: 80, spread: 60 });
+    
+    // Reset form
+    document.getElementById('depositAmount').value = '';
+    document.getElementById('proofPreview').innerHTML = '';
+    document.getElementById('proofUpload').value = '';
+    updateWalletUI();
+    
+  } catch (error) {
+    console.error('Deposit error:', error);
+    showToast('Error submitting deposit: ' + error.message, 'error');
+  } finally {
+    hideSpinner();
+  }
+}
+
+// ==================== WITHDRAWAL FUNCTIONS ====================
+
+async function requestWithdrawal() {
+  if (!currentUser) {
+    showToast('Please login first', 'error');
+    showLoginModal();
+    return;
+  }
+  
+  const isVerified = await verifyWalletPIN();
+  if (!isVerified) {
+    showToast('Wallet access denied.', 'error');
+    return;
+  }
+  
+  const amount = parseFloat(document.getElementById('withdrawAmount').value);
+  const walletData = JSON.parse(localStorage.getItem('support_wallet')) || { balance: 0 };
+  
+  if (!amount || amount <= 0) {
+    showToast('Please enter a valid amount', 'error');
+    return;
+  }
+  
+  if (amount > walletData.balance) {
+    showToast(`Insufficient balance. Available: E${walletData.balance.toFixed(2)}`, 'error');
+    return;
+  }
+  
+  if (amount < 100) {
+    showToast('Minimum withdrawal amount is E100', 'error');
+    return;
+  }
+  
+  showSpinner();
+  
+  try {
+    const withdrawalData = {
+      userId: currentUser.uid,
+      userEmail: currentUser.email,
+      userName: currentUser.displayName || currentUser.email,
+      amount: amount,
+      currency: 'SZL',
+      status: 'pending',
+      requestedAt: Timestamp.now(),
+      reference: `WTH_${Date.now()}_${currentUser.uid.slice(-6)}`
+    };
+    
+    await addDoc(collection(db, "withdrawals"), withdrawalData);
+    
+    walletData.withdrawals = walletData.withdrawals || [];
+    walletData.withdrawals.push({
+      id: withdrawalData.reference,
+      amount: amount,
+      date: new Date().toISOString(),
+      status: 'pending'
+    });
+    localStorage.setItem('support_wallet', JSON.stringify(walletData));
+    
+    showToast(`✅ Withdrawal request of E${amount} submitted!`, 'success');
+    document.getElementById('withdrawAmount').value = '';
+    updateWalletUI();
+    
+  } catch (error) {
+    showToast('Error: ' + error.message, 'error');
+  } finally {
+    hideSpinner();
+  }
+}
+
+// ==================== WALLET UI UPDATE ====================
+
+function updateWalletUI() {
+  const walletData = JSON.parse(localStorage.getItem('support_wallet')) || { 
+    balance: 0, 
+    deposits: [], 
+    withdrawals: [], 
+    pendingDeposits: [] 
+  };
+  
+  // Calculate totals
+  const approvedDeposits = walletData.deposits.filter(d => d.status === 'approved');
+  const totalDeposits = approvedDeposits.reduce((sum, d) => sum + (d.amountInSZL || d.amount), 0);
+  const pendingTotal = walletData.pendingDeposits.reduce((sum, d) => sum + (d.amountInSZL || d.amount), 0);
+  
+  // Calculate interest earned (simple 2.5% of balance per month simulation)
+  const monthsActive = Math.floor((Date.now() - new Date(walletData.startDate || Date.now())) / (1000 * 60 * 60 * 24 * 30));
+  const interestEarned = walletData.balance * 0.025 * Math.min(monthsActive, 12);
+  
+  document.getElementById('walletBalance').innerHTML = `E${walletData.balance.toFixed(2)}<br><span style="font-size: 14px;">ZK${(walletData.balance * 18).toFixed(2)}</span>`;
+  document.getElementById('totalDeposits').innerHTML = `E${totalDeposits.toFixed(2)}`;
+  document.getElementById('pendingDeposits').innerHTML = `E${pendingTotal.toFixed(2)}`;
+  document.getElementById('interestEarned').innerHTML = `E${interestEarned.toFixed(2)}`;
+  
+  // Update transaction history
+  const historyDiv = document.getElementById('transactionHistory');
+  const allTx = [
+    ...(walletData.deposits || []).map(d => ({ ...d, type: 'deposit' })),
+    ...(walletData.withdrawals || []).map(w => ({ ...w, type: 'withdrawal' })),
+    ...(walletData.pendingDeposits || []).map(p => ({ ...p, type: 'pending' }))
+  ].sort((a, b) => new Date(b.date) - new Date(a.date));
+  
+  if (allTx.length === 0) {
+    historyDiv.innerHTML = '<p style="text-align:center; padding: 40px;">No transactions yet</p>';
+  } else {
+    historyDiv.innerHTML = allTx.slice(0, 20).map(tx => {
+      let statusClass = '';
+      let statusText = '';
+      let icon = '';
+      let amountColor = '';
+      
+      if (tx.type === 'deposit' && tx.status === 'approved') {
+        statusClass = 'status-active';
+        statusText = 'Completed';
+        icon = 'fa-arrow-down';
+        amountColor = 'var(--accent-green)';
+      } else if (tx.type === 'deposit' && tx.status === 'pending') {
+        statusClass = 'status-pending';
+        statusText = 'Pending';
+        icon = 'fa-clock';
+        amountColor = 'var(--accent-gold)';
+      } else if (tx.type === 'withdrawal') {
+        statusClass = tx.status === 'approved' ? 'status-active' : 'status-pending';
+        statusText = tx.status === 'approved' ? 'Processed' : 'Pending';
+        icon = 'fa-arrow-up';
+        amountColor = 'var(--accent-red)';
+      } else {
+        statusClass = 'status-pending';
+        statusText = 'Pending';
+        icon = 'fa-clock';
+        amountColor = 'var(--accent-gold)';
+      }
+      
+      const amount = tx.amountInSZL || tx.amount;
+      
+      return `
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid var(--border-color);">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="width: 35px; height: 35px; border-radius: 50%; background: ${tx.type === 'deposit' ? 'rgba(34,197,94,0.1)' : 'rgba(239,68,68,0.1)'}; display: flex; align-items: center; justify-content: center;">
+              <i class="fas ${icon}" style="color: ${amountColor}"></i>
+            </div>
+            <div>
+              <strong>${tx.type === 'deposit' ? 'Deposit' : tx.type === 'withdrawal' ? 'Withdrawal' : 'Pending Deposit'}</strong>
+              <div style="font-size: 11px; color: var(--text-secondary);">${moment(tx.date).format('MMM D, YYYY h:mm A')}</div>
+              ${tx.reference ? `<div style="font-size: 10px;">Ref: ${tx.reference}</div>` : ''}
+            </div>
+          </div>
+          <div style="text-align: right;">
+            <strong style="color: ${amountColor}">
+              ${tx.type === 'deposit' ? '+' : '-'} E${typeof amount === 'number' ? amount.toFixed(2) : amount}
+            </strong>
+            <div><span class="status-badge ${statusClass}" style="font-size: 10px;">${statusText}</span></div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+}
+
+// ==================== INITIALIZATION ====================
+
+// Initialize wallet on page load
+document.addEventListener('DOMContentLoaded', function() {
+  fetchExchangeRates();
+  updateWalletUI();
+  
+  // Auto-refresh rates every hour
+  setInterval(fetchExchangeRates, 3600000);
+  
+  // Check PIN status
+  if (walletPIN) {
+    document.getElementById('pinStatusText').textContent = 'PIN Active 🔒';
+  } else if (currentUser) {
+    document.getElementById('pinStatusText').textContent = 'PIN Not Set ⚠️';
+  }
+});
+
+// File preview for deposit proof
+document.getElementById('proofUpload')?.addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      document.getElementById('proofPreview').innerHTML = `
+        <div style="margin-top: 10px; padding: 10px; background: var(--bg-card); border-radius: 8px;">
+          <i class="fas fa-check-circle" style="color: var(--accent-green);"></i>
+          ${file.name}
+          <img src="${ev.target.result}" style="max-width: 100px; margin-top: 5px; border-radius: 8px;">
+        </div>
+      `;
+    };
+    reader.readAsDataURL(file);
+  }
+});
+
+// Make functions globally available
+window.convertCurrency = convertCurrency;
+window.swapCurrencies = swapCurrencies;
+window.setQuickAmount = setQuickAmount;
+window.submitSecureDeposit = submitSecureDeposit;
+window.requestWithdrawal = requestWithdrawal;
+window.changeWalletPIN = changeWalletPIN;
+window.verifyWalletPIN = verifyWalletPIN;
+window.updateWalletUI = updateWalletUI;
 </script>
 </body>
 </html>
