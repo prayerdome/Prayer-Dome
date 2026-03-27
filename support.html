@@ -943,16 +943,19 @@ footer, .support-footer {
   <!-- All wallet content here -->
 </div>
   
-  <!-- Security Notice & PIN Status -->
-  <div class="card" style="background: linear-gradient(135deg, var(--accent-green), #166534); color: white; text-align: center;">
+<!-- Security Notice & PIN Status -->
+<div class="card" style="background: linear-gradient(135deg, var(--accent-green), #166534); color: white; text-align: center;">
     <div class="security-badge" style="background: rgba(255,255,255,0.2); display: inline-flex; padding: 8px 20px; border-radius: 40px; margin-bottom: 15px;">
-      <i class="fas fa-shield-alt"></i> <span id="pinStatusText">PIN Protected</span>
+        <i class="fas fa-shield-alt"></i> <span id="pinStatusText">PIN Not Set</span>
     </div>
-    <p style="font-size: 14px; opacity: 0.9;">Your wallet is secured with a 4-digit PIN. Never share your PIN with anyone.</p>
-    <button onclick="changeWalletPIN()" class="btn btn-small" style="background: rgba(255,255,255,0.2); color: white; margin-top: 10px;">
-      <i class="fas fa-key"></i> Change PIN
+    <p style="font-size: 14px; opacity: 0.9;">Your wallet is secured with a 4-digit PIN. Set your PIN to access wallet features.</p>
+    <button onclick="setupWalletPIN()" class="btn btn-small" style="background: rgba(255,255,255,0.2); color: white; margin-top: 10px;" id="setupPinBtn">
+        <i class="fas fa-key"></i> Set Up PIN
     </button>
-  </div>
+    <button onclick="changeWalletPIN()" class="btn btn-small" style="background: rgba(255,255,255,0.2); color: white; margin-top: 10px; display: none;" id="changePinBtn">
+        <i class="fas fa-sync-alt"></i> Change PIN
+    </button>
+</div>
   
 <!-- Wallet Balance Card -->
 <div class="card wallet-card" style="background: linear-gradient(135deg, #1e293b, #0f172a);">
@@ -1487,43 +1490,262 @@ footer, .support-footer {
     }
 
     // ==================== PIN SECURITY ====================
-    async function verifyWalletPIN() {
-        if (isWalletUnlocked) return true;
-        if (!walletPIN && currentUser) {
-            const pin = prompt('Set a 4-digit PIN for your wallet:');
-            if (pin && /^\d{4}$/.test(pin)) {
-                walletPIN = btoa(pin);
+    // ==================== PIN SETUP FUNCTIONS ====================
+async function setupWalletPIN() {
+    if (!currentUser) {
+        showToast('Please login first', 'error');
+        window.location.href = 'account.html';
+        return;
+    }
+    
+    // Check if PIN already exists
+    if (walletPIN) {
+        showToast('PIN already set. Use Change PIN to update.', 'info');
+        return;
+    }
+    
+    return new Promise((resolve) => {
+        // Create PIN setup modal
+        const modal = document.createElement('div');
+        modal.className = 'pin-modal';
+        modal.innerHTML = `
+            <div class="pin-box">
+                <i class="fas fa-lock" style="font-size: 48px; color: var(--accent-green);"></i>
+                <h3 style="margin: 15px 0;">Set Your Wallet PIN</h3>
+                <p style="font-size: 12px; margin-bottom: 15px;">Create a 4-digit PIN to secure your wallet</p>
+                <div class="pin-input">
+                    <input type="password" maxlength="1" class="pin-digit" id="pin1" autofocus>
+                    <input type="password" maxlength="1" class="pin-digit" id="pin2">
+                    <input type="password" maxlength="1" class="pin-digit" id="pin3">
+                    <input type="password" maxlength="1" class="pin-digit" id="pin4">
+                </div>
+                <button class="btn btn-primary" id="setPinBtn" style="width: 100%; margin-bottom: 10px;">Set PIN</button>
+                <button class="btn btn-outline" id="cancelPinBtn" style="width: 100%;">Cancel</button>
+            </div>
+        `;
+        document.body.appendChild(modal);
+        
+        const inputs = ['pin1', 'pin2', 'pin3', 'pin4'];
+        
+        // Auto-focus next input
+        inputs.forEach((id, i) => {
+            document.getElementById(id).addEventListener('input', (e) => {
+                if (e.target.value.length === 1 && i < 3) {
+                    document.getElementById(inputs[i+1]).focus();
+                }
+            });
+        });
+        
+        document.getElementById('setPinBtn').onclick = () => {
+            const enteredPin = inputs.map(id => document.getElementById(id).value).join('');
+            if (enteredPin.length === 4 && /^\d{4}$/.test(enteredPin)) {
+                // Store PIN (in real app, you'd hash this)
+                walletPIN = btoa(enteredPin);
                 localStorage.setItem('wallet_pin', walletPIN);
                 isWalletUnlocked = true;
-                return true;
-            }
-            return false;
-        }
-        return new Promise((resolve) => {
-            const pin = prompt('Enter your 4-digit wallet PIN:');
-            if (pin && atob(walletPIN) === pin) {
-                isWalletUnlocked = true;
+                
+                // Update UI
+                document.getElementById('pinStatusText').textContent = 'PIN Active 🔒';
+                document.getElementById('setupPinBtn').style.display = 'none';
+                document.getElementById('changePinBtn').style.display = 'inline-flex';
+                
+                modal.remove();
+                showToast('✅ PIN set successfully!', 'success');
                 resolve(true);
             } else {
-                showToast('Incorrect PIN', 'error');
+                showToast('Please enter a 4-digit PIN', 'error');
+                inputs.forEach(id => document.getElementById(id).value = '');
+                document.getElementById('pin1').focus();
                 resolve(false);
             }
-        });
-    }
+        };
+        
+        document.getElementById('cancelPinBtn').onclick = () => {
+            modal.remove();
+            resolve(false);
+        };
+    });
+}
 
-    function changeWalletPIN() {
-        const currentPin = prompt('Enter current PIN:');
-        if (currentPin && atob(walletPIN) === currentPin) {
-            const newPin = prompt('Enter new 4-digit PIN:');
-            if (newPin && /^\d{4}$/.test(newPin)) {
-                walletPIN = btoa(newPin);
-                localStorage.setItem('wallet_pin', walletPIN);
-                showToast('PIN changed successfully!', 'success');
-            }
-        } else {
-            showToast('Incorrect PIN', 'error');
-        }
+async function verifyWalletPIN() {
+    // If already unlocked, return true
+    if (isWalletUnlocked) return true;
+    
+    // If no PIN is set, prompt to set one
+    if (!walletPIN && currentUser) {
+        const setResult = await setupWalletPIN();
+        return setResult;
     }
+    
+    // If still no PIN (user cancelled), return false
+    if (!walletPIN) {
+        showToast('Please set up your wallet PIN first', 'error');
+        return false;
+    }
+    
+    // Verify existing PIN
+    return new Promise((resolve) => {
+        const modal = document.createElement('div');
+        modal.className = 'pin-modal';
+        modal.innerHTML = `
+            <div class="pin-box">
+                <i class="fas fa-lock" style="font-size: 48px; color: var(--accent-green);"></i>
+                <h3>Enter Wallet PIN</h3>
+                <div class="pin-input">
+                    <input type="password" maxlength="1" class="pin-digit" id="pin1" autofocus>
+                    <input type="password" maxlength="1" class="pin-digit" id="pin2">
+                    <input type="password" maxlength="1" class="pin-digit" id="pin3">
+                    <input type="password" maxlength="1" class="pin-digit" id="pin4">
+                </div>
+                <button class="btn btn-primary" id="verifyPinBtn" style="width: 100%; margin-bottom: 10px;">Verify</button>
+                <button class="btn btn-outline" id="cancelPinBtn" style="width: 100%;">Cancel</button>
+                <p style="margin-top: 10px;"><a href="#" onclick="forgotPIN()" style="color: var(--accent-green); font-size: 12px;">Forgot PIN? Contact Admin</a></p>
+            </div>
+        `;
+        document.body.appendChild(modal);
+        
+        const inputs = ['pin1', 'pin2', 'pin3', 'pin4'];
+        
+        inputs.forEach((id, i) => {
+            document.getElementById(id).addEventListener('input', (e) => {
+                if (e.target.value.length === 1 && i < 3) {
+                    document.getElementById(inputs[i+1]).focus();
+                }
+            });
+        });
+        
+        document.getElementById('verifyPinBtn').onclick = () => {
+            const enteredPin = inputs.map(id => document.getElementById(id).value).join('');
+            const storedPin = atob(walletPIN);
+            
+            if (enteredPin === storedPin) {
+                isWalletUnlocked = true;
+                modal.remove();
+                showToast('✅ Wallet unlocked!', 'success');
+                resolve(true);
+            } else {
+                showToast('❌ Incorrect PIN', 'error');
+                inputs.forEach(id => document.getElementById(id).value = '');
+                document.getElementById('pin1').focus();
+                resolve(false);
+            }
+        };
+        
+        document.getElementById('cancelPinBtn').onclick = () => {
+            modal.remove();
+            resolve(false);
+        };
+    });
+}
+
+function changeWalletPIN() {
+    if (!currentUser) {
+        showToast('Please login first', 'error');
+        return;
+    }
+    
+    if (!walletPIN) {
+        setupWalletPIN();
+        return;
+    }
+    
+    // First verify current PIN
+    const modal = document.createElement('div');
+    modal.className = 'pin-modal';
+    modal.innerHTML = `
+        <div class="pin-box">
+            <i class="fas fa-key" style="font-size: 48px; color: var(--accent-green);"></i>
+            <h3>Verify Current PIN</h3>
+            <div class="pin-input">
+                <input type="password" maxlength="1" class="pin-digit" id="pin1" autofocus>
+                <input type="password" maxlength="1" class="pin-digit" id="pin2">
+                <input type="password" maxlength="1" class="pin-digit" id="pin3">
+                <input type="password" maxlength="1" class="pin-digit" id="pin4">
+            </div>
+            <button class="btn btn-primary" id="verifyOldPinBtn" style="width: 100%; margin-bottom: 10px;">Verify</button>
+            <button class="btn btn-outline" id="cancelPinBtn" style="width: 100%;">Cancel</button>
+        </div>
+    `;
+    document.body.appendChild(modal);
+    
+    const inputs = ['pin1', 'pin2', 'pin3', 'pin4'];
+    
+    inputs.forEach((id, i) => {
+        document.getElementById(id).addEventListener('input', (e) => {
+            if (e.target.value.length === 1 && i < 3) {
+                document.getElementById(inputs[i+1]).focus();
+            }
+        });
+    });
+    
+    document.getElementById('verifyOldPinBtn').onclick = () => {
+        const enteredPin = inputs.map(id => document.getElementById(id).value).join('');
+        const storedPin = atob(walletPIN);
+        
+        if (enteredPin === storedPin) {
+            modal.remove();
+            // Now set new PIN
+            const newPinModal = document.createElement('div');
+            newPinModal.className = 'pin-modal';
+            newPinModal.innerHTML = `
+                <div class="pin-box">
+                    <i class="fas fa-key" style="font-size: 48px; color: var(--accent-green);"></i>
+                    <h3>Set New PIN</h3>
+                    <div class="pin-input">
+                        <input type="password" maxlength="1" class="pin-digit" id="newpin1" autofocus>
+                        <input type="password" maxlength="1" class="pin-digit" id="newpin2">
+                        <input type="password" maxlength="1" class="pin-digit" id="newpin3">
+                        <input type="password" maxlength="1" class="pin-digit" id="newpin4">
+                    </div>
+                    <button class="btn btn-primary" id="setNewPinBtn" style="width: 100%; margin-bottom: 10px;">Set New PIN</button>
+                    <button class="btn btn-outline" id="cancelNewPinBtn" style="width: 100%;">Cancel</button>
+                </div>
+            `;
+            document.body.appendChild(newPinModal);
+            
+            const newInputs = ['newpin1', 'newpin2', 'newpin3', 'newpin4'];
+            
+            newInputs.forEach((id, i) => {
+                document.getElementById(id).addEventListener('input', (e) => {
+                    if (e.target.value.length === 1 && i < 3) {
+                        document.getElementById(newInputs[i+1]).focus();
+                    }
+                });
+            });
+            
+            document.getElementById('setNewPinBtn').onclick = () => {
+                const newPin = newInputs.map(id => document.getElementById(id).value).join('');
+                if (newPin.length === 4 && /^\d{4}$/.test(newPin)) {
+                    walletPIN = btoa(newPin);
+                    localStorage.setItem('wallet_pin', walletPIN);
+                    newPinModal.remove();
+                    showToast('✅ PIN changed successfully!', 'success');
+                } else {
+                    showToast('Please enter a 4-digit PIN', 'error');
+                    newInputs.forEach(id => document.getElementById(id).value = '');
+                    document.getElementById('newpin1').focus();
+                }
+            };
+            
+            document.getElementById('cancelNewPinBtn').onclick = () => {
+                newPinModal.remove();
+            };
+            
+        } else {
+            showToast('❌ Incorrect PIN', 'error');
+            inputs.forEach(id => document.getElementById(id).value = '');
+            document.getElementById('pin1').focus();
+        }
+    };
+    
+    document.getElementById('cancelPinBtn').onclick = () => {
+        modal.remove();
+    };
+}
+
+function forgotPIN() {
+    showToast('Contact admin at info@prayerdome.net to reset your PIN', 'info');
+}
 
     // ==================== DOCUMENTS ====================
     function submitDocuments() {
@@ -1554,27 +1776,27 @@ footer, .support-footer {
 
     // ==================== AUTH ====================
     onAuthStateChanged(auth, (user) => {
-        currentUser = user;
-        if (user) {
-            document.getElementById('loginBtn').style.display = 'none';
-            document.getElementById('logoutBtn').style.display = 'inline-flex';
-            loadWalletData();
+    currentUser = user;
+    if (user) {
+        document.getElementById('loginBtn').style.display = 'none';
+        document.getElementById('logoutBtn').style.display = 'inline-flex';
+        loadWalletData();
+        
+        // Update PIN status display
+        if (walletPIN) {
+            document.getElementById('pinStatusText').textContent = 'PIN Active 🔒';
+            document.getElementById('setupPinBtn').style.display = 'none';
+            document.getElementById('changePinBtn').style.display = 'inline-flex';
         } else {
-            document.getElementById('loginBtn').style.display = 'inline-flex';
-            document.getElementById('logoutBtn').style.display = 'none';
+            document.getElementById('pinStatusText').textContent = 'PIN Not Set ⚠️';
+            document.getElementById('setupPinBtn').style.display = 'inline-flex';
+            document.getElementById('changePinBtn').style.display = 'none';
         }
-    });
-
-    function showLoginModal() {
-        window.location.href = 'account.html';
+    } else {
+        document.getElementById('loginBtn').style.display = 'inline-flex';
+        document.getElementById('logoutBtn').style.display = 'none';
     }
-
-    function firebaseLogout() {
-        signOut(auth).then(() => {
-            localStorage.removeItem('prayerDomeUser');
-            window.location.href = 'index.html';
-        });
-    }
+});
 
     // ==================== INITIALIZATION ====================
     document.addEventListener('DOMContentLoaded', function() {
@@ -1586,17 +1808,18 @@ footer, .support-footer {
     });
 
     // Expose global functions
-    window.showSection = showSection;
-    window.joinPlan = joinPlan;
-    window.convertCurrency = convertCurrency;
-    window.swapCurrencies = swapCurrencies;
-    window.setQuickAmount = setQuickAmount;
-    window.submitSecureDeposit = submitSecureDeposit;
-    window.changeWalletPIN = changeWalletPIN;
-    window.verifyWalletPIN = verifyWalletPIN;
-    window.submitDocuments = submitDocuments;
-    window.showLoginModal = showLoginModal;
-    window.firebaseLogout = firebaseLogout;
+window.showSection = showSection;
+window.joinPlan = joinPlan;
+window.convertCurrency = convertCurrency;
+window.swapCurrencies = swapCurrencies;
+window.setQuickAmount = setQuickAmount;
+window.submitSecureDeposit = submitSecureDeposit;
+window.setupWalletPIN = setupWalletPIN;  // ADD THIS
+window.changeWalletPIN = changeWalletPIN;
+window.verifyWalletPIN = verifyWalletPIN;
+window.submitDocuments = submitDocuments;
+window.showLoginModal = showLoginModal;
+window.firebaseLogout = firebaseLogout;
 </script>
 </body>
 </html>

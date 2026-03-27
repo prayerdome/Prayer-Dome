@@ -389,6 +389,7 @@
             <button class="tab-btn" onclick="showTab('testimonies')">✨ Testimonies</button>
             <button class="tab-btn" onclick="showTab('events')">📅 Events</button>
             <button class="tab-btn" onclick="showTab('stats')">📊 Statistics</button>
+            <button class="tab-btn" onclick="showTab('notifications')">📢 Notifications</button>
         </div>
 
         <!-- Deposits Tab -->
@@ -454,6 +455,46 @@
                 </table>
             </div>
         </div>
+        
+        <!-- Notifications Tab Content -->
+<div id="notificationsTab" class="tab-content" style="display: none;">
+    <div class="card" style="background: var(--bg-card); border-radius: 28px; padding: 24px; margin-bottom: 24px;">
+        <h3><i class="fas fa-bell"></i> Send Notification to All Users</h3>
+        <div class="form-group" style="margin: 15px 0;">
+            <label>Notification Title *</label>
+            <input type="text" id="notifTitle" placeholder="e.g., Prayer Meeting Tonight" style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border-color);">
+        </div>
+        <div class="form-group" style="margin: 15px 0;">
+            <label>Notification Message *</label>
+            <textarea id="notifMessage" rows="3" placeholder="Enter the notification message..." style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border-color);"></textarea>
+        </div>
+        <div class="form-group" style="margin: 15px 0;">
+            <label>Notification Type</label>
+            <select id="notifType" style="width: 100%; padding: 12px; border-radius: 12px;">
+                <option value="general">📢 General Announcement</option>
+                <option value="event">📅 Event Reminder</option>
+                <option value="prayer">🙏 Prayer Request</option>
+                <option value="urgent">⚠️ Urgent</option>
+                <option value="service">⛪ Service Update</option>
+            </select>
+        </div>
+        <div class="form-group" style="margin: 15px 0;">
+            <label>Link (Optional)</label>
+            <input type="text" id="notifLink" placeholder="https://..." style="width: 100%; padding: 12px; border-radius: 12px;">
+        </div>
+        <button class="btn btn-success" onclick="sendNotification()" style="width: 100%;">
+            <i class="fas fa-paper-plane"></i> Send Notification
+        </button>
+    </div>
+    
+    <!-- Notification History -->
+    <div class="card" style="background: var(--bg-card); border-radius: 28px; padding: 24px;">
+        <h3><i class="fas fa-history"></i> Sent Notifications</h3>
+        <div id="notificationHistory" style="max-height: 400px; overflow-y: auto;">
+            <div class="spinner"></div>
+        </div>
+    </div>
+</div>
 
         <!-- Events Tab -->
         <div id="eventsTab" class="tab-content" style="display: none;">
@@ -534,14 +575,39 @@
     </div>
 
     <div class="toast-container" id="toastContainer"></div>
+    
+    <!-- Login Modal -->
+<div id="loginModal" class="modal" style="display: none;">
+    <div class="modal-content" style="max-width: 400px;">
+        <h2><i class="fas fa-sign-in-alt"></i> Admin Login</h2>
+        <div class="form-group" style="margin: 15px 0;">
+            <label>Email</label>
+            <input type="email" id="adminLoginEmail" placeholder="your@email.com" style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-primary);">
+        </div>
+        <div class="form-group" style="margin: 15px 0;">
+            <label>Password</label>
+            <input type="password" id="adminLoginPassword" placeholder="Enter your password" style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-primary);">
+        </div>
+        <div style="display: flex; gap: 12px; margin-top: 20px;">
+            <button class="btn btn-success" style="flex: 1;" onclick="adminLogin()">Sign In</button>
+            <button class="btn btn-outline" style="flex: 1;" onclick="closeLoginModal()">Cancel</button>
+        </div>
+        <div style="text-align: center; margin-top: 15px;">
+            <button class="btn btn-outline" style="width: 100%;" onclick="adminGoogleLogin()"><i class="fab fa-google"></i> Continue with Google</button>
+        </div>
+        <div style="text-align: center; margin-top: 15px;">
+            <a href="account.html" style="color: var(--accent-green);">Don't have an account? Register here</a>
+        </div>
+    </div>
+</div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { 
-            getFirestore, collection, getDocs, getDoc, doc, updateDoc, deleteDoc,
-            query, where, orderBy, Timestamp, addDoc, serverTimestamp
-        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { 
+    getFirestore, collection, getDocs, getDoc, doc, setDoc, updateDoc, deleteDoc,
+    query, where, orderBy, Timestamp, addDoc, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getAuth, onAuthStateChanged, signOut, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCxvql0r_aeerphxTA0UUedRppdBxGf7wo",
@@ -560,40 +626,67 @@
         let isAdmin = false;
 
         // Check admin access
-        onAuthStateChanged(auth, async (user) => {
-            if (!user) {
-                window.location.href = 'account.html';
-                return;
-            }
-            
-            currentUser = user;
-            
-            // Check if user is admin
-            const memberDoc = await getDoc(doc(db, "memberships", user.uid));
-            const memberData = memberDoc.data();
-            
-            if (memberData?.role !== 'admin' && user.email !== 'info@prayerdome.net') {
-                showToast('Access denied. Admin only.', 'error');
-                setTimeout(() => window.location.href = 'index.html', 2000);
-                return;
-            }
-            
-            isAdmin = true;
-            loadAllData();
-        });
+onAuthStateChanged(auth, async (user) => {
+    if (!user) {
+        // Not logged in - show login modal instead of redirect
+        showLoginModal();
+        return;
+    }
+    
+    currentUser = user;
+    
+    // Check if user is admin
+    try {
+        const memberDoc = await getDoc(doc(db, "memberships", user.uid));
+        const memberData = memberDoc.data();
+        
+        // Admin check: role is admin OR email matches
+        if (memberData?.role !== 'admin' && user.email !== 'info@prayerdome.net') {
+            showToast('Access denied. Admin only.', 'error');
+            setTimeout(() => {
+                window.location.href = 'user.html';
+            }, 2000);
+            return;
+        }
+        
+        isAdmin = true;
+        loadAllData();
+        
+    } catch (error) {
+        console.error('Error checking admin:', error);
+        showToast('Error verifying admin access', 'error');
+    }
+});
 
         async function loadAllData() {
-            await Promise.all([
-                loadStats(),
-                loadDeposits(),
-                loadWithdrawals(),
-                loadMembers(),
-                loadGalleryPending(),
-                loadPrayers(),
-                loadTestimonies(),
-                loadEvents()
-            ]);
-        }
+    showLoading();
+    try {
+        await Promise.all([
+            loadStats(),
+            loadDeposits(),
+            loadWithdrawals(),
+            loadMembers(),
+            loadGalleryPending(),
+            loadPrayers(),
+            loadTestimonies(),
+            loadEvents(),
+            loadNotificationHistory()
+        ]);
+    } catch (error) {
+        console.error('Error loading data:', error);
+        showToast('Error loading some data', 'error');
+    } finally {
+        hideLoading();
+    }
+}
+
+      function showLoading() {
+    document.getElementById('loadingOverlay').style.display = 'flex';
+}
+
+function hideLoading() {
+    document.getElementById('loadingOverlay').style.display = 'none';
+}
 
         async function loadStats() {
             try {
@@ -1208,6 +1301,181 @@
                 window.location.href = 'index.html';
             });
         }
+        
+        // ==================== NOTIFICATION FUNCTIONS ====================
+async function sendNotification() {
+    const title = document.getElementById('notifTitle').value.trim();
+    const message = document.getElementById('notifMessage').value.trim();
+    const type = document.getElementById('notifType').value;
+    const link = document.getElementById('notifLink').value.trim();
+    
+    if (!title || !message) {
+        showToast('Please enter both title and message', 'error');
+        return;
+    }
+    
+    try {
+        await addDoc(collection(db, "notifications"), {
+            title: title,
+            message: message,
+            type: type,
+            link: link || null,
+            active: true,
+            createdBy: currentUser.uid,
+            createdByName: currentUser.displayName || 'Admin',
+            createdAt: serverTimestamp(),
+            expiresAt: null
+        });
+        
+        showToast('✅ Notification sent successfully!', 'success');
+        confetti({ particleCount: 80, spread: 60 });
+        
+        // Clear form
+        document.getElementById('notifTitle').value = '';
+        document.getElementById('notifMessage').value = '';
+        document.getElementById('notifLink').value = '';
+        
+        // Refresh history
+        loadNotificationHistory();
+        
+    } catch (error) {
+        showToast('Error: ' + error.message, 'error');
+    }
+}
+
+async function loadNotificationHistory() {
+    const container = document.getElementById('notificationHistory');
+    try {
+        const q = query(collection(db, "notifications"), orderBy("createdAt", "desc"), limit(20));
+        const snapshot = await getDocs(q);
+        
+        if (snapshot.empty) {
+            container.innerHTML = '<div style="text-align: center; padding: 40px;">No notifications sent yet</div>';
+            return;
+        }
+        
+        container.innerHTML = '';
+        snapshot.forEach(doc => {
+            const notif = doc.data();
+            const date = notif.createdAt?.toDate() || new Date();
+            const typeIcon = {
+                general: '📢',
+                event: '📅',
+                prayer: '🙏',
+                urgent: '⚠️',
+                service: '⛪'
+            }[notif.type] || '📢';
+            
+            container.innerHTML += `
+                <div style="padding: 15px; border-bottom: 1px solid var(--border-color);">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <strong>${typeIcon} ${escapeHtml(notif.title)}</strong>
+                        <span style="font-size: 11px; color: var(--text-secondary);">${moment(date).format('MMM D, YYYY h:mm A')}</span>
+                    </div>
+                    <div style="font-size: 13px; margin-top: 5px;">${escapeHtml(notif.message)}</div>
+                    <div style="font-size: 11px; color: var(--text-secondary); margin-top: 5px;">
+                        By: ${escapeHtml(notif.createdByName || 'Admin')}
+                        <button class="btn btn-outline btn-sm" style="margin-left: 10px;" onclick="deleteNotification('${doc.id}')">Delete</button>
+                    </div>
+                </div>
+            `;
+        });
+        
+    } catch (error) {
+        console.error('Error loading notification history:', error);
+        container.innerHTML = '<div style="text-align: center; padding: 40px;">Error loading history</div>';
+    }
+}
+
+async function deleteNotification(notifId) {
+    if (!confirm('Delete this notification?')) return;
+    try {
+        await deleteDoc(doc(db, "notifications", notifId));
+        showToast('Notification deleted', 'info');
+        loadNotificationHistory();
+    } catch (error) {
+        showToast(error.message, 'error');
+    }
+}
+
+// ==================== LOGIN FUNCTIONS ====================
+function showLoginModal() {
+    document.getElementById('loginModal').style.display = 'flex';
+}
+
+function closeLoginModal() {
+    document.getElementById('loginModal').style.display = 'none';
+}
+
+async function adminLogin() {
+    const email = document.getElementById('adminLoginEmail').value;
+    const password = document.getElementById('adminLoginPassword').value;
+    
+    if (!email || !password) {
+        showToast('Please enter email and password', 'error');
+        return;
+    }
+    
+    showToast('Logging in...', 'info');
+    
+    try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+        
+        // Check if user is admin
+        const memberDoc = await getDoc(doc(db, "memberships", user.uid));
+        const memberData = memberDoc.data();
+        
+        if (memberData?.role !== 'admin' && user.email !== 'info@prayerdome.net') {
+            await signOut(auth);
+            showToast('Access denied. Admin privileges required.', 'error');
+            return;
+        }
+        
+        closeLoginModal();
+        showToast('Login successful!', 'success');
+        
+        // Reload page to refresh admin state
+        window.location.reload();
+        
+    } catch (error) {
+        console.error('Login error:', error);
+        if (error.code === 'auth/user-not-found') {
+            showToast('No account found with this email', 'error');
+        } else if (error.code === 'auth/wrong-password') {
+            showToast('Incorrect password', 'error');
+        } else {
+            showToast(error.message, 'error');
+        }
+    }
+}
+
+async function adminGoogleLogin() {
+    const provider = new GoogleAuthProvider();
+    
+    try {
+        const result = await signInWithPopup(auth, provider);
+        const user = result.user;
+        
+        // Check if user is admin
+        const memberDoc = await getDoc(doc(db, "memberships", user.uid));
+        const memberData = memberDoc.data();
+        
+        if (memberData?.role !== 'admin' && user.email !== 'info@prayerdome.net') {
+            await signOut(auth);
+            showToast('Access denied. Admin privileges required.', 'error');
+            return;
+        }
+        
+        closeLoginModal();
+        showToast('Login successful!', 'success');
+        window.location.reload();
+        
+    } catch (error) {
+        console.error('Google login error:', error);
+        showToast(error.message, 'error');
+    }
+}
 
         // Expose functions globally
         window.showTab = showTab;
@@ -1228,6 +1496,13 @@
         window.createEvent = createEvent;
         window.toggleDarkMode = toggleDarkMode;
         window.logout = logout;
+        // Add these to the existing window exports
+window.sendNotification = sendNotification;
+window.deleteNotification = deleteNotification;
+window.adminLogin = adminLogin;
+window.adminGoogleLogin = adminGoogleLogin;
+window.showLoginModal = showLoginModal;
+window.closeLoginModal = closeLoginModal;
     </script>
 </body>
 </html>
