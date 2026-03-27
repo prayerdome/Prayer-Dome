@@ -811,8 +811,7 @@ footer {
         </a>
         <button class="notification-btn" onclick="showNotifications()">
             <i class="fas fa-bell"></i>
-            <span class="notification-badge" id="notificationBadge">3</span>
-        </button>
+            <span class="notification-badge" id="notificationBadge">0</span>
         <button class="theme-toggle" onclick="toggleDarkMode()">
             <i class="fas fa-moon"></i>
         </button>
@@ -826,7 +825,7 @@ footer {
     </div>
 
     <div class="main-container">
-        <!-- Live Stream Card - Now links to videos.html -->
+        <!-- Live Stream Card - Now links to video.html -->
         <div class="live-stream-card" onclick="window.location.href='video.html'">
             <div class="live-indicator">
                 <span class="live-dot"></span>
@@ -956,11 +955,11 @@ footer {
         <i class="fas fa-question-circle"></i>
         <span>QUIZ</span>
     </a>
-    <a href="testimonies.html" class="nav-item" data-page="testimonies">
+    <a href="testimony.html" class="nav-item" data-page="testimonies">
         <i class="fas fa-star"></i>
         <span>STORIES</span>
     </a>
-    <a href="videos.html" class="nav-item" data-page="videos">
+    <a href="video.html" class="nav-item" data-page="videos">
         <i class="fas fa-video"></i>
         <span>VIDEOS</span>
     </a>
@@ -972,7 +971,7 @@ footer {
         <i class="fas fa-images"></i>
         <span>GALLERY</span>
     </a>
-    <a href="events.html" class="nav-item" data-page="events">
+    <a href="event.html" class="nav-item" data-page="events">
         <i class="fas fa-calendar"></i>
         <span>EVENTS</span>
     </a>
@@ -999,7 +998,7 @@ footer {
     <script type="module">
     // Add this at the very beginning of the script section
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc, collection, getDocs, query, where, orderBy, limit, addDoc, setDoc, updateDoc, Timestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
 const firebaseConfig = {
@@ -1168,55 +1167,139 @@ const auth = getAuth(app);
             `).join('');
         }
 
-        // ==================== LOAD PREVIEW DATA ====================
-        function loadPrayerPreview() {
-            const container = document.getElementById('prayerPreview');
+        async function loadPrayerPreview() {
+    const container = document.getElementById('prayerPreview');
+    container.innerHTML = '<div style="text-align: center; padding: 20px;"><i class="fas fa-spinner fa-spin"></i> Loading prayers...</div>';
+    
+    try {
+        const q = query(collection(db, "prayers"), where("isPublic", "==", true), orderBy("timestamp", "desc"), limit(3));
+        const snapshot = await getDocs(q);
+        
+        if (snapshot.empty) {
             container.innerHTML = `
-                <div class="prayer-item">
-                    <div class="prayer-avatar"><i class="fas fa-pray"></i></div>
-                    <div class="prayer-content">
-                        <div class="prayer-name">Prayer Dome Family</div>
-                        <div class="prayer-text">"Lord, we pray for healing and breakthrough in our communities."</div>
-                    </div>
+                <div style="text-align: center; padding: 40px;">
+                    <i class="fas fa-pray" style="font-size: 48px; opacity: 0.3;"></i>
+                    <p>No prayer requests yet. Be the first to share!</p>
+                    <a href="prayer.html" class="btn btn-primary" style="margin-top: 10px; display: inline-block;">Submit a Prayer</a>
                 </div>
+            `;
+            return;
+        }
+        
+        container.innerHTML = '';
+        snapshot.forEach(doc => {
+            const prayer = doc.data();
+            const name = prayer.name || 'Anonymous';
+            const text = prayer.text || '';
+            const initial = name.charAt(0).toUpperCase();
+            
+            container.innerHTML += `
                 <div class="prayer-item">
-                    <div class="prayer-avatar"><i class="fas fa-heart"></i></div>
+                    <div class="prayer-avatar">${initial}</div>
                     <div class="prayer-content">
-                        <div class="prayer-name">Anonymous</div>
-                        <div class="prayer-text">"Pray for my family's provision and protection."</div>
-                    </div>
-                </div>
-                <div class="prayer-item">
-                    <div class="prayer-avatar"><i class="fas fa-hands"></i></div>
-                    <div class="prayer-content">
-                        <div class="prayer-name">Sarah M.</div>
-                        <div class="prayer-text">"Thank You Lord for healing! I'm completely restored."</div>
+                        <div class="prayer-name">${escapeHtml(name)}</div>
+                        <div class="prayer-text">"${escapeHtml(text.substring(0, 100))}${text.length > 100 ? '...' : ''}"</div>
+                        <div style="font-size: 11px; color: var(--text-secondary); margin-top: 5px;">
+                            <i class="fas fa-pray"></i> ${prayer.prayedCount || 0} prayers
+                        </div>
                     </div>
                 </div>
             `;
-        }
-
-        function loadTestimonyPreview() {
-            const container = document.getElementById('testimonyPreview');
-            container.innerHTML = `
-                <div class="testimony-item">
-                    <div class="testimony-text">"God answered my prayer for a job after 6 months of waiting!"</div>
-                    <div class="testimony-author">- John D., Zambia</div>
-                </div>
-                <div class="testimony-item">
-                    <div class="testimony-text">"My daughter was healed from a chronic illness. Prayer works!"</div>
-                    <div class="testimony-author">- Mary K., Eswatini</div>
-                </div>
-                <div class="testimony-item">
-                    <div class="testimony-text">"I received financial breakthrough just when I needed it most."</div>
-                    <div class="testimony-author">- Peter M., South Africa</div>
+        });
+        
+        if (snapshot.size > 0) {
+            container.innerHTML += `
+                <div style="text-align: center; margin-top: 15px;">
+                    <a href="prayer.html" class="btn btn-outline" style="font-size: 12px;">View All Prayers →</a>
                 </div>
             `;
         }
+        
+    } catch (error) {
+        console.error('Error loading prayers:', error);
+        container.innerHTML = '<div style="text-align: center; padding: 20px;">Unable to load prayers</div>';
+    }
+}
 
-        function showNotifications() {
-            showToast('📢 You have 3 new notifications: New prayer requests and upcoming events!', 'info');
+        async function loadTestimonyPreview() {
+    const container = document.getElementById('testimonyPreview');
+    container.innerHTML = '<div style="text-align: center; padding: 20px;"><i class="fas fa-spinner fa-spin"></i> Loading testimonies...</div>';
+    
+    try {
+        const q = query(collection(db, "testimonies"), orderBy("timestamp", "desc"), limit(3));
+        const snapshot = await getDocs(q);
+        
+        if (snapshot.empty) {
+            container.innerHTML = `
+                <div style="text-align: center; padding: 40px;">
+                    <i class="fas fa-star" style="font-size: 48px; opacity: 0.3;"></i>
+                    <p>No testimonies yet. Share what God has done!</p>
+                    <a href="testimony.html" class="btn btn-primary" style="margin-top: 10px; display: inline-block;">Share Your Story</a>
+                </div>
+            `;
+            return;
         }
+        
+        container.innerHTML = '';
+        snapshot.forEach(doc => {
+            const testimony = doc.data();
+            const author = testimony.author || 'Anonymous';
+            const content = testimony.content || '';
+            
+            container.innerHTML += `
+                <div class="testimony-item">
+                    <div class="testimony-text">"${escapeHtml(content.substring(0, 120))}${content.length > 120 ? '...' : ''}"</div>
+                    <div class="testimony-author">- ${escapeHtml(author)}</div>
+                    <div style="font-size: 11px; color: var(--text-secondary); margin-top: 5px;">
+                        <i class="fas fa-heart"></i> ${testimony.likes || 0} prayers
+                    </div>
+                </div>
+            `;
+        });
+        
+        if (snapshot.size > 0) {
+            container.innerHTML += `
+                <div style="text-align: center; margin-top: 15px;">
+                    <a href="testimony.html" class="btn btn-outline" style="font-size: 12px;">Read More Testimonies →</a>
+                </div>
+            `;
+        }
+        
+    } catch (error) {
+        console.error('Error loading testimonies:', error);
+        container.innerHTML = '<div style="text-align: center; padding: 20px;">Unable to load testimonies</div>';
+    }
+}
+
+        async function showNotifications() {
+    // Get notifications from Firebase
+    try {
+        const q = query(collection(db, "notifications"), where("active", "==", true), orderBy("createdAt", "desc"), limit(5));
+        const snapshot = await getDocs(q);
+        
+        if (snapshot.empty) {
+            showToast('📢 No new notifications at this time.', 'info');
+            return;
+        }
+        
+        // Build notification list
+        let notificationList = '📢 NOTIFICATIONS:\n\n';
+        snapshot.forEach((doc, index) => {
+            const notif = doc.data();
+            notificationList += `${index + 1}. ${notif.title}\n   ${notif.message}\n   📅 ${moment(notif.createdAt?.toDate()).format('MMM D, YYYY')}\n\n`;
+        });
+        
+        // Show in alert or custom modal
+        alert(notificationList);
+        
+        // Update badge count
+        document.getElementById('notificationBadge').textContent = snapshot.size;
+        
+    } catch (error) {
+        console.error('Error loading notifications:', error);
+        showToast('Unable to load notifications', 'error');
+    }
+}
 
         // ==================== UTILITIES ====================
         function showToast(message, type = 'success') {
@@ -1285,21 +1368,26 @@ async function checkUserStatus() {
 }
 
         // ==================== INITIALIZATION ====================
-        function init() {
-            initVerseTicker();
-            updateDevotional();
-            renderQuickLinks();
-            loadPrayerPreview();
-            loadTestimonyPreview();
-            detectLocation();
-            
-            setInterval(updateDevotional, 3600000);
-            
-            if (localStorage.getItem('prayerDome_theme') === 'dark') {
-                document.body.classList.add('dark-mode');
-                document.querySelector('.theme-toggle').innerHTML = '<i class="fas fa-sun"></i>';
-            }
-        }
+async function init() {
+    initVerseTicker();
+    updateDevotional();
+    renderQuickLinks();
+    await loadPrayerPreview();
+    await loadTestimonyPreview();
+    detectLocation();
+    checkUserStatus();
+    await loadNotificationCount();  // ADD THIS
+    
+    setInterval(updateDevotional, 3600000);
+    setInterval(loadPrayerPreview, 60000);
+    setInterval(loadTestimonyPreview, 60000);
+    setInterval(loadNotificationCount, 30000);  // Check every 30 seconds
+    
+    if (localStorage.getItem('prayerDome_theme') === 'dark') {
+        document.body.classList.add('dark-mode');
+        document.querySelector('.theme-toggle').innerHTML = '<i class="fas fa-sun"></i>';
+    }
+}
 
         // Make functions globally available
         window.refreshDevotional = refreshDevotional;
@@ -1310,6 +1398,13 @@ async function checkUserStatus() {
         
         // Start
         init();
+        
+        function escapeHtml(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
     </script>
 </body>
 </html>
