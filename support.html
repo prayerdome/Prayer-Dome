@@ -8,6 +8,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
+  
+  <!-- Cloudinary SDK -->
+<script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
+
+<!-- Cloudinary Widget SDK -->
+<script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
   <style>
     * {
       margin: 0;
@@ -739,8 +745,9 @@ footer, .support-footer {
 <div class="nav-tabs">
   <button class="nav-tab active" onclick="showSection('community')"><i class="fas fa-home"></i> Community</button>
   <button class="nav-tab" onclick="showSection('business')"><i class="fas fa-briefcase"></i> Business</button>
+  <button class="nav-tab" onclick="showSection('education')"><i class="fas fa-graduation-cap"></i> Education</button>
   <button class="nav-tab" onclick="showSection('savings')"><i class="fas fa-piggy-bank"></i> Savings</button>
-  <button class="nav-tab" onclick="showSection('funeral')"><i class="fas fa-hand-holding-heart"></i> Funeral Cover</button>
+  <button class="nav-tab" onclick="showSection('funeral')"><i class="fas fa-hand-holding-heart"></i> Funeral</button>
   <button class="nav-tab" onclick="showSection('documents')"><i class="fas fa-file-alt"></i> Documents</button>
   <button class="nav-tab" onclick="showSection('wallet')"><i class="fas fa-wallet"></i> Wallet</button>
 </div>
@@ -820,47 +827,58 @@ footer, .support-footer {
           </ul>
           <button class="btn btn-primary" onclick="showSection('wallet')">Start Saving</button>
         </div>
-        <div class="plan-card">
-          <img src="https://i.ibb.co/Tx8RBMh5/save-for-your-education.jpg" style="width: 100%; border-radius: 15px; margin-bottom: 15px;">
-          <h3>Save for Education</h3>
-          <p>Build your education fund with compound interest</p>
-          <button class="btn btn-secondary" onclick="showSection('wallet')">Save Now</button>
-        </div>
       </div>
     </div>
   </div>
 
-  <!-- FUNERAL COVER SECTION -->
-  <div id="funeralSection" class="section" style="display: none;">
-    <div class="card">
-      <img src="https://i.ibb.co/mVSd2KLW/funeral-cover.jpg" style="width: 100%; border-radius: 20px; margin-bottom: 20px;">
-      <div class="section-title"><i class="fas fa-hand-holding-heart"></i> Funeral Cover</div>
-      <p>As a Prayer Dome member, your family receives financial and spiritual support during times of loss. We believe in bearing one another's burdens (Galatians 6:2).</p>
-
-<div style="background: var(--bg-primary); padding: 20px; border-radius: 20px; margin: 20px 0;">
-  <p><i class="fas fa-clock"></i> ⚠️ Must save consistently for 12 months before claiming</p>
-  <p><i class="fas fa-hand-holding-heart"></i> <strong>Funeral Support Amount:</strong> Up to E5,000 (SZL) / ZK10,000 (ZMW)</p>
-  <p><i class="fas fa-file-alt"></i> <strong>Required Documents:</strong></p>
-  <ul style="margin-left: 30px; margin-top: 8px;">
-    <li>Death Certificate</li>
-    <li>Member ID / NRC</li>
-    <li>Next of Kin Details</li>
-    <li>Proof of Relationship</li>
-    <li>Church Leadership Approval</li>
-  </ul>
+<!-- FUNERAL COVER SECTION -->
+<div id="funeralSection" class="section" style="display: none;">
+  <div class="card">
+    <img src="https://i.ibb.co/mVSd2KLW/funeral-cover.jpg" style="width: 100%; border-radius: 20px; margin-bottom: 20px;">
+    <div class="section-title"><i class="fas fa-hand-holding-heart"></i> Funeral Cover Plans</div>
+    <p>As a Prayer Dome member, your family receives financial and spiritual support during times of loss. We believe in bearing one another's burdens (Galatians 6:2).</p>
+    
+    <div class="plans-grid" id="funeralPlansGrid"></div>
+    
+    <div style="background: var(--bg-primary); padding: 20px; border-radius: 20px; margin: 20px 0;">
+      <p><i class="fas fa-clock"></i> ⚠️ Must save consistently for 12 months before claiming</p>
+      <p><i class="fas fa-hand-holding-heart"></i> <strong>Funeral Support Amount:</strong> Up to $5,000 USD (E85,000 / ZK95,000)</p>
+      <p><i class="fas fa-file-alt"></i> <strong>Required Documents:</strong></p>
+      <ul style="margin-left: 30px; margin-top: 8px;">
+        <li>Death Certificate</li>
+        <li>Member ID / NRC</li>
+        <li>Next of Kin Details</li>
+        <li>Proof of Relationship</li>
+        <li>Church Leadership Approval</li>
+      </ul>
+    </div>
+    
+    <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+      <button class="btn btn-primary" onclick="showSection('wallet'); showToast('Start saving to activate funeral cover', 'info')">Register Cover</button>
+      <button class="btn btn-secondary" onclick="openFuneralClaimModal()">Claim Funeral Support</button>
+    </div>
+  </div>
 </div>
-      
-      <div style="background: var(--bg-primary); padding: 20px; border-radius: 20px; margin: 20px 0;">
-        <p><i class="fas fa-clock"></i> ⚠️ Must save for 12 months before claiming</p>
-        <p><i class="fas fa-file-alt"></i> Required: Death Certificate, Member ID, Next of Kin Details, Proof of relationship</p>
-      </div>
-      
-      <div style="display: flex; gap: 15px; flex-wrap: wrap;">
-        <button class="btn btn-primary" onclick="showSection('wallet'); showToast('Start saving to activate funeral cover', 'info')">Register Cover</button>
-        <button class="btn btn-secondary" onclick="openFuneralClaimModal()">Claim Funeral Support</button>
-      </div>
+  
+  <!-- EDUCATION SECTION -->
+<div id="educationSection" class="section" style="display: none;">
+  <div class="card">
+    <img src="https://i.ibb.co/Tx8RBMh5/save-for-your-education.jpg" style="width: 100%; border-radius: 20px; margin-bottom: 20px;">
+    <div class="section-title"><i class="fas fa-graduation-cap"></i> Education Savings Plans</div>
+    <p>Save for your children's education or your own further studies. Withdraw funds after 12 months for tuition, books, or school fees.</p>
+    
+    <div class="plans-grid" id="educationPlansGrid"></div>
+    
+    <div style="margin-top: 30px; text-align: center;">
+      <p style="background: var(--bg-primary); padding: 15px; border-radius: 16px; margin-bottom: 20px;">
+        <i class="fas fa-info-circle"></i> ⚠️ Education support available after 12 months of consistent saving
+      </p>
+      <button class="btn btn-secondary" onclick="openEducationClaimModal()">
+        <i class="fas fa-graduation-cap"></i> Request Education Support
+      </button>
     </div>
   </div>
+</div>
 
   <!-- DOCUMENTS SECTION -->
   <div id="documentsSection" class="section" style="display: none;">
@@ -917,6 +935,14 @@ footer, .support-footer {
 <!-- ==================== WALLET SECTION - SECURE WITH REAL CURRENCY ==================== -->
 <div id="walletSection" class="section" style="display: none;">
   
+  <div id="loadingWallet" style="text-align: center; padding: 40px;">
+  <div class="spinner" style="width: 40px; height: 40px; margin: 0 auto 15px;"></div>
+  <p>Loading your wallet data...</p>
+</div>
+<div id="walletContent" style="display: none;">
+  <!-- All wallet content here -->
+</div>
+  
   <!-- Security Notice & PIN Status -->
   <div class="card" style="background: linear-gradient(135deg, var(--accent-green), #166534); color: white; text-align: center;">
     <div class="security-badge" style="background: rgba(255,255,255,0.2); display: inline-flex; padding: 8px 20px; border-radius: 40px; margin-bottom: 15px;">
@@ -928,22 +954,22 @@ footer, .support-footer {
     </button>
   </div>
   
-  <!-- Wallet Balance Card -->
-  <div class="card wallet-card" style="background: linear-gradient(135deg, #1e293b, #0f172a);">
-    <div class="wallet-balance" style="text-align: center; padding: 20px;">
-      <h3><i class="fas fa-wallet"></i> My Wallet Balance</h3>
-      <div class="amount" id="walletBalance" style="font-size: 3rem; font-weight: 800; margin: 10px 0;">E0.00</div>
-      <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
-        <span>💰 Total Deposits: <strong id="totalDeposits">E0</strong></span>
-        <span>⏳ Pending: <strong id="pendingDeposits">E0</strong></span>
-        <span>📈 Interest Earned: <strong id="interestEarned">E0</strong></span>
-      </div>
-      <div style="margin-top: 15px;">
-        <span class="team-badge" style="background: rgba(255,255,255,0.2);">🇸🇿 Eswatini (SZL)</span>
-        <span class="team-badge" style="background: rgba(255,255,255,0.2);">🇿🇲 Zambia (ZMW)</span>
-      </div>
+<!-- Wallet Balance Card -->
+<div class="card wallet-card" style="background: linear-gradient(135deg, #1e293b, #0f172a);">
+  <div class="wallet-balance" style="text-align: center; padding: 20px;">
+    <h3><i class="fas fa-wallet"></i> My Wallet Balance</h3>
+    <div class="amount" id="walletBalance" style="font-size: 3rem; font-weight: 800; margin: 10px 0;">E0.00</div>
+    <div style="margin-top: 10px;">
+      <span class="team-badge" style="background: rgba(255,255,255,0.2);">🇸🇿 E0.00</span>
+      <span class="team-badge" style="background: rgba(255,255,255,0.2);">🇿🇲 ZK0.00</span>
+    </div>
+    <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-top: 15px;">
+      <span>💰 Total Deposits: <strong id="totalDeposits">E0</strong></span>
+      <span>⏳ Pending: <strong id="pendingDeposits">E0</strong></span>
+      <span>📈 Interest Earned: <strong id="interestEarned">E0</strong></span>
     </div>
   </div>
+</div>
   
   <!-- REAL CURRENCY EXCHANGE CALCULATOR -->
   <div class="card">
@@ -1039,11 +1065,9 @@ footer, .support-footer {
     <!-- Bank Details -->
     <div style="background: var(--bg-primary); padding: 20px; border-radius: 20px; margin: 20px 0;">
       <h4 style="color: var(--accent-green); margin-bottom: 15px;"><i class="fas fa-university"></i> Official Bank Details</h4>
-      <p><strong>Account Name:</strong> Seedwel Investment Limited</p>
-      <p><strong>Bank:</strong> Standard Bank Eswatini</p>
-      <p><strong>Account Number:</strong> 64010012345</p>
-      <p><strong>Branch Code:</strong> 6600</p>
-      <p><strong>SWIFT Code:</strong> SBICSZMX</p>
+      <p><strong>Account Name:</strong> PRAYER DOME GROUP</p>
+      <p><strong>Bank:</strong> MTN MOMO</p>
+      <p><strong>Account Number:</strong> 76043539</p>
       <div class="upload-area" onclick="document.getElementById('proofUpload').click()" style="margin-top: 15px; cursor: pointer;">
         <i class="fas fa-image"></i> Upload Payment Proof (Required)
         <input type="file" id="proofUpload" style="display: none;" accept="image/*,application/pdf">
@@ -1078,6 +1102,16 @@ footer, .support-footer {
       <i class="fas fa-info-circle"></i> Minimum E100 / ZK200. Withdrawals processed within 3-5 business days.
     </p>
   </div>
+  
+  <!-- Login/Logout Buttons -->
+<div id="authButtons" style="display: flex; gap: 10px; margin-bottom: 20px;">
+  <button onclick="showLoginModal()" class="btn btn-outline" id="loginBtn">
+    <i class="fas fa-sign-in-alt"></i> Login
+  </button>
+  <button onclick="firebaseLogout()" class="btn btn-outline" id="logoutBtn" style="display: none;">
+    <i class="fas fa-sign-out-alt"></i> Logout
+  </button>
+</div>
 </div>
 
 <!-- Footer -->
@@ -1106,7 +1140,7 @@ footer, .support-footer {
         <p><strong>Pastor Seedwell K. Masuku</strong></p>
         <p><i class="fas fa-crown"></i> Founder & Senior Pastor</p>
         <p><i class="fab fa-whatsapp"></i> +268 7658 1804</p>
-        <p><i class="fas fa-envelope"></i> seedwell@prayerdome.net</p>
+        <p><i class="fas fa-envelope"></i> info@prayerdome.net</p>
         <p style="margin-top: 15px;"><i class="fas fa-calendar-alt"></i> Established 2018</p>
       </div>
       
@@ -1139,1009 +1173,430 @@ footer, .support-footer {
   </div>
 </footer>
 
-<script>
-  // ==================== DATA STORAGE ====================
-  let currentUser = JSON.parse(localStorage.getItem('support_user')) || null;
-  let walletData = JSON.parse(localStorage.getItem('support_wallet')) || { balance: 0, deposits: [], withdrawals: [], pendingDeposits: [] };
-  let savingsData = JSON.parse(localStorage.getItem('support_savings')) || { monthsPaid: 0, startDate: new Date().toISOString(), plan: null };
-  let documents = JSON.parse(localStorage.getItem('support_documents')) || [];
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { 
+        getFirestore, collection, addDoc, getDocs, getDoc, doc, setDoc,
+        updateDoc, query, where, orderBy, Timestamp, serverTimestamp, arrayUnion
+    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-  // Business plans
-  const businessPlans = [
-  { 
-    name: "Starter Plan", 
-    range: "E50 – E500 (SZL) / ZK100 – ZK1,000 (ZMW)", 
-    benefit: "Business support up to E2,500 / ZK5,000",
-    description: "For small business owners and entrepreneurs",
-    min: 50, 
-    max: 500,
-    currency: "SZL/ZMW"
-  },
-  { 
-    name: "Growth Plan", 
-    range: "E500 – E2,000 (SZL) / ZK1,000 – ZK4,000 (ZMW)", 
-    benefit: "Business funding up to E10,000 / ZK20,000",
-    description: "For established businesses looking to expand",
-    min: 500, 
-    max: 2000 
-  },
-  { 
-    name: "Advanced Plan", 
-    range: "E2,000 – E5,000 (SZL) / ZK4,000 – ZK10,000 (ZMW)", 
-    benefit: "Business capital up to E25,000 / ZK50,000",
-    description: "For serious entrepreneurs and business owners",
-    min: 2000, 
-    max: 5000 
-  },
-  { 
-    name: "Premium Plan", 
-    range: "E5,000 – E10,000 (SZL) / ZK10,000 – ZK20,000 (ZMW)", 
-    benefit: "High-level investment support up to E50,000 / ZK100,000",
-    description: "For established businesses and large expansion",
-    min: 5000, 
-    max: 10000 
-  }
-];
-
-  // Helper functions
-  function showToast(msg, type = 'success') {
-    const container = document.getElementById('toastContainer');
-    const toast = document.createElement('div');
-    toast.className = 'toast';
-    toast.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${msg}`;
-    container.appendChild(toast);
-    setTimeout(() => toast.remove(), 3500);
-  }
-
-  function showSection(section) {
-    document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
-    document.getElementById(`${section}Section`).style.display = 'block';
-    document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
-    event.target.classList.add('active');
-    
-    if (section === 'wallet') updateWalletUI();
-    if (section === 'business') renderBusinessPlans();
-  }
-
-  function renderBusinessPlans() {
-    const grid = document.getElementById('businessPlansGrid');
-    grid.innerHTML = businessPlans.map(plan => `
-      <div class="plan-card" onclick="selectPlan('${plan.name}')">
-        <h3>${plan.name}</h3>
-        <div class="plan-amount">${plan.range}<span style="font-size:1rem;">/month</span></div>
-        <p>${plan.description}</p>
-        <ul style="margin: 15px 0; list-style: none;">
-          <li><i class="fas fa-check-circle" style="color: var(--accent-green);"></i> ${plan.benefit}</li>
-          <li><i class="fas fa-clock"></i> After 12 months qualify</li>
-        </ul>
-        <button class="btn btn-primary" onclick="event.stopPropagation(); joinPlan('${plan.name}', ${plan.min}, ${plan.max})">Join Plan</button>
-      </div>
-    `).join('');
-  }
-
-  window.selectPlan = (name) => {
-    document.querySelectorAll('.plan-card').forEach(card => card.classList.remove('selected'));
-    event.currentTarget.classList.add('selected');
-    showToast(`${name} selected`, 'info');
-  };
-
-  window.joinPlan = (name, min, max) => {
-    if (!currentUser) {
-      const userName = prompt('Enter your full name to join:');
-      if (!userName) return;
-      const phone = prompt('Phone number:');
-      currentUser = { id: 'USER' + Date.now(), name: userName, phone: phone, joinedAt: new Date().toISOString() };
-      localStorage.setItem('support_user', JSON.stringify(currentUser));
-      savingsData.plan = { name, min, max };
-      localStorage.setItem('support_savings', JSON.stringify(savingsData));
-      showToast(`Welcome ${userName}! You've joined the ${name}.`, 'success');
-      confetti({ particleCount: 100, spread: 70 });
-    } else {
-      savingsData.plan = { name, min, max };
-      localStorage.setItem('support_savings', JSON.stringify(savingsData));
-      showToast(`You've switched to ${name} plan`, 'success');
-    }
-    showSection('wallet');
-  };
-
-  function updateWalletUI() {
-    document.getElementById('walletBalance').innerText = `$${walletData.balance.toFixed(2)}`;
-    const totalDeposits = walletData.deposits.filter(d => d.status === 'approved').reduce((sum, d) => sum + d.amount, 0);
-    const pendingTotal = walletData.pendingDeposits.reduce((sum, d) => sum + d.amount, 0);
-    document.getElementById('totalDeposits').innerText = `$${totalDeposits.toFixed(2)}`;
-    document.getElementById('pendingDeposits').innerText = `$${pendingTotal.toFixed(2)}`;
-    
-    const historyDiv = document.getElementById('transactionHistory');
-    const allTx = [...walletData.deposits, ...walletData.withdrawals].sort((a,b) => new Date(b.date) - new Date(a.date));
-    historyDiv.innerHTML = allTx.slice(0, 10).map(tx => `
-      <div style="display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid var(--border-color);">
-        <span><i class="fas ${tx.type === 'deposit' ? 'fa-arrow-down' : 'fa-arrow-up'}"></i> ${tx.type === 'deposit' ? 'Deposit' : 'Withdrawal'}</span>
-        <span>$${tx.amount}</span>
-        <span style="font-size:12px;">${moment(tx.date).format('MMM D')}</span>
-        <span class="badge ${tx.status === 'approved' ? 'badge-approved' : 'badge-pending'}">${tx.status}</span>
-      </div>
-    `).join('');
-    if (allTx.length === 0) historyDiv.innerHTML = '<p style="text-align:center;">No transactions yet</p>';
-  }
-
-  window.submitDeposit = () => {
-    if (!currentUser) { showToast('Please join a plan first', 'error'); showSection('business'); return; }
-    const amount = parseFloat(document.getElementById('depositAmount').value);
-    if (!amount || amount <= 0) { showToast('Enter valid amount', 'error'); return; }
-    const currency = document.getElementById('currencySelect').value;
-    
-    const deposit = {
-      id: 'DEP' + Date.now(),
-      userId: currentUser.id,
-      amount: amount,
-      currency: currency,
-      date: new Date().toISOString(),
-      status: 'pending',
-      type: 'deposit'
+    const firebaseConfig = {
+        apiKey: "AIzaSyCxvql0r_aeerphxTA0UUedRppdBxGf7wo",
+        authDomain: "prayer-dome.firebaseapp.com",
+        projectId: "prayer-dome",
+        storageBucket: "prayer-dome.firebasestorage.app",
+        messagingSenderId: "198295153196",
+        appId: "1:198295153196:web:1222b31948d7974ba3bf89"
     };
-    
-    walletData.pendingDeposits.push(deposit);
-    localStorage.setItem('support_wallet', JSON.stringify(walletData));
-    showToast(`Deposit of ${currency} ${amount} submitted for approval. Admin will verify.`, 'success');
-    document.getElementById('depositAmount').value = '';
-    document.getElementById('proofPreview').innerHTML = '';
-    updateWalletUI();
-    
-    // Auto-approve simulation (admin would do this)
-    setTimeout(() => {
-      const pending = walletData.pendingDeposits.find(d => d.id === deposit.id);
-      if (pending) {
-        pending.status = 'approved';
-        walletData.balance += amount;
-        walletData.deposits.push(pending);
-        walletData.pendingDeposits = walletData.pendingDeposits.filter(d => d.id !== deposit.id);
-        localStorage.setItem('support_wallet', JSON.stringify(walletData));
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    let currentUser = null;
+    let currentExchangeRates = {
+        USD: 1, EUR: 0.92, GBP: 0.79, ZAR: 18.5, SZL: 18.5, ZMW: 24.5
+    };
+    let isWalletUnlocked = false;
+    let walletPIN = localStorage.getItem('wallet_pin');
+
+    // ==================== BUSINESS/FUNERAL/EDUCATION PLANS ====================
+    const businessPlans = [
+        { name: "Starter Plan", range: "$5 – $50 USD", localRange: "E85 – E850 / ZK95 – ZK950", minUSD: 5, maxUSD: 50, supportAmountUSD: 100 },
+        { name: "Growth Plan", range: "$50 – $100 USD", localRange: "E850 – E1,700 / ZK950 – ZK1,900", minUSD: 50, maxUSD: 100, supportAmountUSD: 500 },
+        { name: "Advanced Plan", range: "$100 – $500 USD", localRange: "E1,700 – E8,500 / ZK1,900 – ZK9,500", minUSD: 100, maxUSD: 500, supportAmountUSD: 1000 },
+        { name: "Premium Plan", range: "$500 – $1,000 USD", localRange: "E8,500 – E17,000 / ZK9,500 – ZK19,000", minUSD: 500, maxUSD: 1000, supportAmountUSD: 5000 }
+    ];
+
+    const funeralPlans = [
+        { name: "Funeral Starter", range: "$5 – $50 USD", localRange: "E85 – E850 / ZK95 – ZK950", minUSD: 5, maxUSD: 50, coverAmountUSD: 500 },
+        { name: "Funeral Family", range: "$50 – $100 USD", localRange: "E850 – E1,700 / ZK950 – ZK1,900", minUSD: 50, maxUSD: 100, coverAmountUSD: 1500 },
+        { name: "Funeral Extended", range: "$100 – $500 USD", localRange: "E1,700 – E8,500 / ZK1,900 – ZK9,500", minUSD: 100, maxUSD: 500, coverAmountUSD: 3000 },
+        { name: "Funeral Premium", range: "$500 – $1,000 USD", localRange: "E8,500 – E17,000 / ZK9,500 – ZK19,000", minUSD: 500, maxUSD: 1000, coverAmountUSD: 5000 }
+    ];
+
+    const educationPlans = [
+        { name: "Education Starter", range: "$5 – $50 USD", localRange: "E85 – E850 / ZK95 – ZK950", minUSD: 5, maxUSD: 50, supportAmountUSD: 100 },
+        { name: "Education Growth", range: "$50 – $100 USD", localRange: "E850 – E1,700 / ZK950 – ZK1,900", minUSD: 50, maxUSD: 100, supportAmountUSD: 500 },
+        { name: "Education Advanced", range: "$100 – $500 USD", localRange: "E1,700 – E8,500 / ZK1,900 – ZK9,500", minUSD: 100, maxUSD: 500, supportAmountUSD: 1000 },
+        { name: "Education Premium", range: "$500 – $1,000 USD", localRange: "E8,500 – E17,000 / ZK9,500 – ZK19,000", minUSD: 500, maxUSD: 1000, supportAmountUSD: 5000 }
+    ];
+
+    // ==================== HELPER FUNCTIONS ====================
+    function showToast(msg, type = 'success') {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${msg}`;
+        container.appendChild(toast);
+        setTimeout(() => toast.remove(), 3500);
+    }
+
+    // ==================== SECTION NAVIGATION ====================
+    function showSection(section) {
+        document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
+        const targetSection = document.getElementById(`${section}Section`);
+        if (targetSection) targetSection.style.display = 'block';
         
-        // Update savings months
-        const totalApproved = walletData.deposits.filter(d => d.status === 'approved').length;
-        savingsData.monthsPaid = totalApproved;
-        localStorage.setItem('support_savings', JSON.stringify(savingsData));
+        document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
+        if (event && event.target) event.target.classList.add('active');
         
-        updateWalletUI();
-        showToast(`Deposit approved! Balance: $${walletData.balance.toFixed(2)}`, 'success');
-        confetti({ particleCount: 80, spread: 60 });
-      }
-    }, 2000);
-  };
-
-  window.openClaimSupportModal = () => {
-    if (!currentUser) { showToast('Join a plan first', 'error'); return; }
-    const monthsPaid = savingsData.monthsPaid || 0;
-    if (monthsPaid < 12) {
-      showToast(`You need ${12 - monthsPaid} more months of savings before claiming support.`, 'error');
-      return;
+        if (section === 'wallet') loadWalletData();
+        if (section === 'business') renderBusinessPlans();
+        if (section === 'funeral') renderFuneralPlans();
+        if (section === 'education') renderEducationPlans();
     }
-    const reason = prompt('Describe your business/education need:');
-    if (!reason) return;
-    showToast('Support request submitted! Admin will review within 48 hours.', 'success');
-    confetti({ particleCount: 100, spread: 70 });
-  };
 
-  window.openFuneralClaimModal = () => {
-    if (!currentUser) { showToast('Join first', 'error'); return; }
-    const monthsPaid = savingsData.monthsPaid || 0;
-    if (monthsPaid < 12) { showToast('Must save for 12 months first', 'error'); return; }
-    showToast('Funeral claim submitted. Please upload death certificate in Documents section.', 'info');
-    showSection('documents');
-  };
-
-  function submitDocuments() {
-    const docData = {
-      fullName: document.getElementById('docFullName').value,
-      phone: document.getElementById('docPhone').value,
-      nrc: document.getElementById('docNRC').value,
-      address: document.getElementById('docAddress').value,
-      nextKinName: document.getElementById('nextKinName').value,
-      nextKinPhone: document.getElementById('nextKinPhone').value,
-      nextKinRelation: document.getElementById('nextKinRelation').value,
-      submittedAt: new Date().toISOString()
-    };
-    documents.push(docData);
-    localStorage.setItem('support_documents', JSON.stringify(documents));
-    showToast('Documents submitted successfully!', 'success');
-    confetti({ particleCount: 80, spread: 60 });
-    
-    // Reset form
-    document.getElementById('documentForm').reset();
-  }
-
-  // File preview
-  document.getElementById('proofUpload').addEventListener('change', (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (ev) => {
-        document.getElementById('proofPreview').innerHTML = `<img src="${ev.target.result}" style="max-width: 100px; border-radius: 8px;">`;
-      };
-      reader.readAsDataURL(file);
+    // ==================== RENDER PLANS ====================
+    function renderBusinessPlans() {
+        const grid = document.getElementById('businessPlansGrid');
+        if (!grid) return;
+        grid.innerHTML = businessPlans.map(plan => `
+            <div class="plan-card">
+                <div style="background: linear-gradient(135deg, var(--accent-green), #166534); color: white; padding: 8px 15px; border-radius: 30px; display: inline-block; margin-bottom: 15px;">${plan.range}</div>
+                <h3>${plan.name}</h3>
+                <div class="plan-amount">${plan.localRange}<span>/month</span></div>
+                <ul><li><i class="fas fa-hand-holding-usd"></i> Support: $${plan.supportAmountUSD} USD</li>
+                <li><i class="fas fa-clock"></i> After 12 months saving</li></ul>
+                <button class="btn btn-primary" onclick="joinPlan('business', '${plan.name}')">Join Plan</button>
+            </div>
+        `).join('');
     }
-  });
 
-  // Auto slide for hero
-  let currentSlide = 0;
-  const slides = document.querySelectorAll('.slide');
-  if (slides.length) {
-    setInterval(() => {
-      slides[currentSlide].classList.remove('active');
-      currentSlide = (currentSlide + 1) % slides.length;
-      slides[currentSlide].classList.add('active');
-    }, 5000);
-  }
-
-  // Initialize
-  renderBusinessPlans();
-  updateWalletUI();
-  
-  // Create a default demo user if none exists
-  if (!currentUser) {
-    // Don't auto-create, just show prompts
-  }
-  
-  // Sync dark mode with main app
-if (localStorage.getItem('prayerDome_theme') === 'dark') {
-  document.body.classList.add('dark-mode');
-}
-
-// Add theme toggle button to support.html (optional)
-const themeBtn = document.createElement('button');
-themeBtn.innerHTML = '<i class="fas fa-moon"></i>';
-themeBtn.style.cssText = 'position: fixed; bottom: 20px; left: 20px; width: 45px; height: 45px; border-radius: 50%; background: var(--accent-green); color: white; border: none; cursor: pointer; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.2);';
-themeBtn.onclick = () => {
-  document.body.classList.toggle('dark-mode');
-  localStorage.setItem('prayerDome_theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
-};
-document.body.appendChild(themeBtn);
-
-// Check if user is logged in from main app via localStorage
-const mainAppUser = localStorage.getItem('prayerDome_user');
-if (mainAppUser) {
-  try {
-    const user = JSON.parse(mainAppUser);
-    // Pre-fill forms with user data
-    if (document.getElementById('docFullName')) {
-      document.getElementById('docFullName').value = user.name || '';
-      document.getElementById('docPhone').value = user.phone || '';
+    function renderFuneralPlans() {
+        const grid = document.getElementById('funeralPlansGrid');
+        if (!grid) return;
+        grid.innerHTML = funeralPlans.map(plan => `
+            <div class="plan-card">
+                <div style="background: linear-gradient(135deg, #8b5cf6, #6d28d9); color: white; padding: 8px 15px; border-radius: 30px;">${plan.range}</div>
+                <h3>${plan.name}</h3>
+                <div class="plan-amount">${plan.localRange}<span>/month</span></div>
+                <ul><li><i class="fas fa-heart"></i> Cover: $${plan.coverAmountUSD} USD</li>
+                <li><i class="fas fa-clock"></i> After 12 months saving</li></ul>
+                <button class="btn btn-primary" onclick="joinPlan('funeral', '${plan.name}')">Join Plan</button>
+            </div>
+        `).join('');
     }
-  } catch(e) {}
-}
 
-// ==================== FOOTER FUNCTIONALITY ====================
-
-// Add dynamic footer with current year
-function updateFooterYear() {
-  const yearElements = document.querySelectorAll('.current-year');
-  const currentYear = new Date().getFullYear();
-  yearElements.forEach(el => {
-    el.textContent = currentYear;
-  });
-}
-
-// Get current service times based on location detection (if available)
-function getCurrentServiceTimes() {
-  // Try to get from main app's location detection
-  const savedLocation = localStorage.getItem('prayerDome_location');
-  let location = null;
-  
-  try {
-    if (savedLocation) {
-      location = JSON.parse(savedLocation);
+    function renderEducationPlans() {
+        const grid = document.getElementById('educationPlansGrid');
+        if (!grid) return;
+        grid.innerHTML = educationPlans.map(plan => `
+            <div class="plan-card">
+                <div style="background: linear-gradient(135deg, #3b82f6, #1e40af); color: white; padding: 8px 15px; border-radius: 30px;">${plan.range}</div>
+                <h3>${plan.name}</h3>
+                <div class="plan-amount">${plan.localRange}<span>/month</span></div>
+                <ul><li><i class="fas fa-graduation-cap"></i> Support: $${plan.supportAmountUSD} USD</li>
+                <li><i class="fas fa-clock"></i> After 12 months saving</li></ul>
+                <button class="btn btn-primary" onclick="joinPlan('education', '${plan.name}')">Join Plan</button>
+            </div>
+        `).join('');
     }
-  } catch(e) {}
-  
-  // Default service times for Eswatini and Zambia
-  const serviceTimes = {
-    sunday: '9:00 AM & 1:00 PM',
-    wednesday: '6:00 PM',
-    friday: '5:00 PM',
-    timezone: 'CAT (Central African Time)'
-  };
-  
-  // If location detected, customize message
-  if (location && location.country) {
-    return {
-      ...serviceTimes,
-      locationNote: `All times are in ${location.country} local time (${serviceTimes.timezone})`
-    };
-  }
-  
-  return serviceTimes;
-}
 
-// Update footer with dynamic content
-function updateFooterContent() {
-  const footer = document.querySelector('.support-footer');
-  if (!footer) return;
-  
-  const serviceTimes = getCurrentServiceTimes();
-  
-  // Update service times section if it exists
-  const serviceSection = footer.querySelector('.footer-section:nth-child(3)');
-  if (serviceSection) {
-    const timesHtml = `
-      <p><i class="fas fa-clock"></i> Sunday: ${serviceTimes.sunday}</p>
-      <p><i class="fas fa-clock"></i> Wednesday Prayer: ${serviceTimes.wednesday}</p>
-      <p><i class="fas fa-clock"></i> Friday Healing: ${serviceTimes.friday}</p>
-      <p style="font-size: 12px; margin-top: 10px;"><i class="fas fa-globe"></i> ${serviceTimes.timezone}</p>
-    `;
-    
-    // Only update if content changed
-    const currentHtml = serviceSection.innerHTML;
-    if (!currentHtml.includes(serviceTimes.sunday)) {
-      const h3 = serviceSection.querySelector('h3');
-      if (h3) {
-        serviceSection.innerHTML = h3.outerHTML + timesHtml;
-      }
+    async function joinPlan(type, planName) {
+        if (!currentUser) {
+            showToast('Please login first', 'error');
+            window.location.href = 'account.html';
+            return;
+        }
+        
+        try {
+            const userPlanRef = doc(db, "userPlans", currentUser.uid);
+            await setDoc(userPlanRef, {
+                userId: currentUser.uid,
+                type: type,
+                planName: planName,
+                joinedAt: serverTimestamp(),
+                monthsPaid: 0,
+                status: 'active'
+            });
+            showToast(`✅ Joined ${planName}!`, 'success');
+            confetti({ particleCount: 100, spread: 70 });
+            showSection('wallet');
+        } catch (error) {
+            showToast(error.message, 'error');
+        }
     }
-  }
-}
 
-// Track footer clicks for analytics
-function trackFooterClick(linkName) {
-  console.log(`Footer link clicked: ${linkName}`);
-  
-  // Save to localStorage for analytics
-  const clicks = JSON.parse(localStorage.getItem('footer_clicks') || '[]');
-  clicks.push({
-    link: linkName,
-    timestamp: new Date().toISOString(),
-    page: 'support'
-  });
-  
-  // Keep only last 100 clicks
-  if (clicks.length > 100) clicks.shift();
-  localStorage.setItem('footer_clicks', JSON.stringify(clicks));
-}
-
-// Add click tracking to all footer links
-function initFooterTracking() {
-  const footerLinks = document.querySelectorAll('.support-footer a');
-  footerLinks.forEach(link => {
-    link.addEventListener('click', function() {
-      const linkText = this.innerText.trim() || this.href;
-      trackFooterClick(linkText);
-    });
-  });
-}
-
-// Back to top button for footer
-function addBackToTopButton() {
-  const backToTop = document.createElement('button');
-  backToTop.id = 'footerBackToTop';
-  backToTop.innerHTML = '<i class="fas fa-arrow-up"></i>';
-  backToTop.style.cssText = `
-    position: fixed;
-    bottom: 100px;
-    right: 20px;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--accent-green), #16a34a);
-    color: white;
-    border: none;
-    cursor: pointer;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
-    z-index: 99;
-    box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
-    transition: all 0.3s ease;
-  `;
-  
-  backToTop.onclick = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-  
-  document.body.appendChild(backToTop);
-  
-  // Show/hide based on scroll
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 300) {
-      backToTop.style.display = 'flex';
-    } else {
-      backToTop.style.display = 'none';
+    // ==================== WALLET FUNCTIONS ====================
+    async function loadWalletData() {
+        if (!currentUser) {
+            document.getElementById('walletBalance').innerHTML = 'E0.00';
+            document.getElementById('totalDeposits').innerHTML = 'E0';
+            document.getElementById('pendingDeposits').innerHTML = 'E0';
+            return;
+        }
+        
+        try {
+            const walletDoc = await getDoc(doc(db, "wallets", currentUser.uid));
+            if (walletDoc.exists()) {
+                const data = walletDoc.data();
+                const balance = data.balance || 0;
+                const zmwRate = currentExchangeRates.ZMW || 24.5;
+                
+                document.getElementById('walletBalance').innerHTML = `
+                    <div style="font-size: 3rem;">E${balance.toFixed(2)}</div>
+                    <div>ZK${(balance * zmwRate).toFixed(2)}</div>
+                `;
+                
+                // Get approved deposits
+                const depositsSnap = await getDocs(query(collection(db, "deposits"), where("userId", "==", currentUser.uid), where("status", "==", "approved")));
+                const totalDeposits = depositsSnap.docs.reduce((sum, d) => sum + (d.data().amountInSZL || d.data().amount), 0);
+                document.getElementById('totalDeposits').innerHTML = `E${totalDeposits.toFixed(2)}`;
+                
+                const pendingSnap = await getDocs(query(collection(db, "deposits"), where("userId", "==", currentUser.uid), where("status", "==", "pending")));
+                const pendingTotal = pendingSnap.docs.reduce((sum, d) => sum + (d.data().amountInSZL || d.data().amount), 0);
+                document.getElementById('pendingDeposits').innerHTML = `E${pendingTotal.toFixed(2)}`;
+                
+                // Render transaction history
+                const allTx = [...depositsSnap.docs, ...pendingSnap.docs].sort((a, b) => b.data().createdAt?.toDate() - a.data().createdAt?.toDate());
+                const historyDiv = document.getElementById('transactionHistory');
+                if (historyDiv) {
+                    if (allTx.length === 0) {
+                        historyDiv.innerHTML = '<div style="text-align: center; padding: 40px;">No transactions yet</div>';
+                    } else {
+                        historyDiv.innerHTML = allTx.map(tx => {
+                            const data = tx.data();
+                            const isApproved = data.status === 'approved';
+                            const amount = data.amountInSZL || data.amount;
+                            return `
+                                <div style="display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid var(--border-color);">
+                                    <div>
+                                        <strong>Deposit</strong>
+                                        <div style="font-size: 11px;">${data.createdAt?.toDate().toLocaleDateString()}</div>
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <strong>+ E${amount?.toFixed(2)}</strong>
+                                        <div><span style="font-size: 10px;">${data.status}</span></div>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('');
+                    }
+                }
+            } else {
+                // Create new wallet
+                await setDoc(doc(db, "wallets", currentUser.uid), {
+                    userId: currentUser.uid,
+                    balance: 0,
+                    currency: "SZL",
+                    deposits: [],
+                    withdrawals: [],
+                    pendingDeposits: [],
+                    createdAt: serverTimestamp()
+                });
+                document.getElementById('walletBalance').innerHTML = 'E0.00';
+            }
+        } catch (error) {
+            console.error('Error loading wallet:', error);
+        }
     }
-  });
-}
 
-// Initialize footer on page load
-document.addEventListener('DOMContentLoaded', function() {
-  updateFooterYear();
-  updateFooterContent();
-  initFooterTracking();
-  addBackToTopButton();
-  
-  // Update footer when location changes (if main app updates)
-  window.addEventListener('storage', function(e) {
-    if (e.key === 'prayerDome_location') {
-      updateFooterContent();
+    async function submitSecureDeposit() {
+        if (!currentUser) {
+            showToast('Please login first', 'error');
+            window.location.href = 'account.html';
+            return;
+        }
+        
+        const amount = parseFloat(document.getElementById('depositAmount').value);
+        const currency = document.getElementById('depositCurrency').value;
+        const proofData = JSON.parse(localStorage.getItem('pending_proof'));
+        
+        if (!amount || amount <= 0) {
+            showToast('Enter valid amount', 'error');
+            return;
+        }
+        if (!proofData) {
+            showToast('Upload payment proof first', 'error');
+            return;
+        }
+        
+        const amountInUSD = amount / (currentExchangeRates[currency] || 1);
+        const amountInSZL = amountInUSD * currentExchangeRates.SZL;
+        
+        try {
+            await addDoc(collection(db, "deposits"), {
+                userId: currentUser.uid,
+                userEmail: currentUser.email,
+                amount: amount,
+                currency: currency,
+                amountInSZL: amountInSZL,
+                amountInUSD: amountInUSD,
+                proofUrl: proofData.url,
+                status: 'pending',
+                createdAt: serverTimestamp()
+            });
+            
+            localStorage.removeItem('pending_proof');
+            document.getElementById('proofPreview').innerHTML = '';
+            document.getElementById('depositAmount').value = '';
+            
+            showToast(`✅ Deposit of ${currency} ${amount} submitted!`, 'success');
+            confetti({ particleCount: 80, spread: 60 });
+            loadWalletData();
+        } catch (error) {
+            showToast('Error: ' + error.message, 'error');
+        }
     }
-  });
-});
 
-// Export functions for use in other scripts
-window.updateFooterYear = updateFooterYear;
-window.updateFooterContent = updateFooterContent;
-window.trackFooterClick = trackFooterClick;
-
-// ==================== SECURE WALLET SYSTEM ====================
-
-// PIN Management
-let walletPIN = localStorage.getItem('wallet_pin');
-let isWalletUnlocked = false;
-let currentExchangeRates = {};
-
-// Exchange rates cache
-const EXCHANGE_API_URL = 'https://api.exchangerate-api.com/v4/latest/USD';
-
-// ==================== EXCHANGE RATE FUNCTIONS ====================
-
-// Fetch live exchange rates
-async function fetchExchangeRates() {
-  try {
-    const statusDiv = document.getElementById('exchangeRateStatus');
-    statusDiv.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Fetching live rates...';
-    
-    // Try primary API
-    let response = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
-    
-    if (!response.ok) {
-      // Fallback to secondary API
-      response = await fetch('https://api.frankfurter.app/latest?from=USD');
+    // ==================== EXCHANGE RATES ====================
+    async function fetchExchangeRates() {
+        try {
+            const response = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+            const data = await response.json();
+            currentExchangeRates = {
+                USD: 1, EUR: data.rates.EUR || 0.92, GBP: data.rates.GBP || 0.79,
+                ZAR: data.rates.ZAR || 18.5, SZL: data.rates.SZL || 18.5, ZMW: data.rates.ZMW || 24.5
+            };
+            updateRatesDisplay();
+            convertCurrency();
+        } catch (error) {
+            console.error('Rate fetch error:', error);
+        }
     }
-    
-    const data = await response.json();
-    
-    // Store rates (base USD)
-    currentExchangeRates = {
-      USD: 1,
-      EUR: data.rates?.EUR || 0.92,
-      GBP: data.rates?.GBP || 0.79,
-      ZAR: data.rates?.ZAR || 18.5,
-      SZL: data.rates?.SZL || 18.5, // SZL pegged to ZAR
-      ZMW: data.rates?.ZMW || 24.5
-    };
-    
-    // Update display
-    updateRatesDisplay();
-    
-    statusDiv.innerHTML = '<i class="fas fa-check-circle"></i> Rates updated successfully';
-    setTimeout(() => {
-      statusDiv.innerHTML = '<i class="fas fa-chart-line"></i> Live rates ready';
-    }, 2000);
-    
-    // Save to localStorage
-    localStorage.setItem('exchange_rates', JSON.stringify({
-      rates: currentExchangeRates,
-      timestamp: Date.now()
-    }));
-    
-    convertCurrency(); // Update conversion
-    
-  } catch (error) {
-    console.error('Error fetching rates:', error);
-    
-    // Load cached rates
-    const cached = localStorage.getItem('exchange_rates');
-    if (cached) {
-      const cache = JSON.parse(cached);
-      if (Date.now() - cache.timestamp < 86400000) { // 24 hours
-        currentExchangeRates = cache.rates;
-        updateRatesDisplay();
-        document.getElementById('exchangeRateStatus').innerHTML = '<i class="fas fa-database"></i> Using cached rates (updated within 24h)';
+
+    function updateRatesDisplay() {
+        document.getElementById('usdRate').innerHTML = `1 USD = 1.00 USD`;
+        document.getElementById('zmwRate').innerHTML = `1 ZMW = ${(1 / currentExchangeRates.ZMW).toFixed(4)} USD`;
+        document.getElementById('szlRate').innerHTML = `1 SZL = ${(1 / currentExchangeRates.SZL).toFixed(4)} USD`;
+    }
+
+    function convertCurrency() {
+        const from = document.getElementById('fromCurrency').value;
+        const to = document.getElementById('toCurrency').value;
+        const amount = parseFloat(document.getElementById('fromAmount').value);
+        if (isNaN(amount)) return;
+        const result = amount * (currentExchangeRates[to] / currentExchangeRates[from]);
+        document.getElementById('toAmount').value = `${result.toFixed(2)} ${to}`;
+    }
+
+    function swapCurrencies() {
+        const from = document.getElementById('fromCurrency');
+        const to = document.getElementById('toCurrency');
+        const temp = from.value;
+        from.value = to.value;
+        to.value = temp;
         convertCurrency();
-        return;
-      }
     }
-    
-    // Fallback rates
-    currentExchangeRates = {
-      USD: 1, EUR: 0.92, GBP: 0.79, ZAR: 18.5, SZL: 18.5, ZMW: 24.5
-    };
-    updateRatesDisplay();
-    document.getElementById('exchangeRateStatus').innerHTML = '<i class="fas fa-exclamation-triangle"></i> Using estimated rates. Please check connection.';
-    convertCurrency();
-  }
-}
 
-// Update rates display
-function updateRatesDisplay() {
-  document.getElementById('usdRate').textContent = `1 USD = 1.00 USD`;
-  document.getElementById('eurRate').textContent = `1 EUR = ${(1 / currentExchangeRates.EUR).toFixed(2)} USD`;
-  document.getElementById('gbpRate').textContent = `1 GBP = ${(1 / currentExchangeRates.GBP).toFixed(2)} USD`;
-  document.getElementById('zarRate').textContent = `1 ZAR = ${(1 / currentExchangeRates.ZAR).toFixed(2)} USD`;
-  document.getElementById('zmwRate').textContent = `1 ZMW = ${(1 / currentExchangeRates.ZMW).toFixed(2)} USD`;
-  document.getElementById('szlRate').textContent = `1 SZL = ${(1 / currentExchangeRates.SZL).toFixed(2)} USD`;
-  
-  document.getElementById('rateUpdateTime').textContent = `Updated: ${new Date().toLocaleTimeString()}`;
-}
-
-// Convert currency
-function convertCurrency() {
-  const from = document.getElementById('fromCurrency').value;
-  const to = document.getElementById('toCurrency').value;
-  const amount = parseFloat(document.getElementById('fromAmount').value);
-  
-  if (isNaN(amount) || amount <= 0) {
-    document.getElementById('toAmount').value = '';
-    return;
-  }
-  
-  // Convert to USD first, then to target currency
-  const inUSD = amount / currentExchangeRates[from];
-  const result = inUSD * currentExchangeRates[to];
-  
-  document.getElementById('toAmount').value = `${result.toFixed(2)} ${to}`;
-}
-
-// Swap currencies
-function swapCurrencies() {
-  const fromSelect = document.getElementById('fromCurrency');
-  const toSelect = document.getElementById('toCurrency');
-  const fromVal = fromSelect.value;
-  const toVal = toSelect.value;
-  const amount = document.getElementById('fromAmount').value;
-  
-  fromSelect.value = toVal;
-  toSelect.value = fromVal;
-  document.getElementById('toAmount').value = '';
-  convertCurrency();
-}
-
-// Set quick amount
-function setQuickAmount(amount) {
-  document.getElementById('fromAmount').value = amount;
-  convertCurrency();
-}
-
-// ==================== PIN SECURITY FUNCTIONS ====================
-
-// Setup PIN
-function setupWalletPIN() {
-  if (!currentUser) return false;
-  
-  return new Promise((resolve) => {
-    const pin = prompt('🔐 Set a 4-digit PIN to secure your wallet:\n(Example: 1234)');
-    
-    if (pin && /^\d{4}$/.test(pin)) {
-      const hashedPin = btoa(pin + currentUser.uid);
-      localStorage.setItem('wallet_pin', hashedPin);
-      walletPIN = hashedPin;
-      showToast('✅ PIN set successfully! Your wallet is now secure.', 'success');
-      document.getElementById('pinStatusText').textContent = 'PIN Active 🔒';
-      resolve(true);
-    } else if (pin) {
-      showToast('PIN must be exactly 4 digits', 'error');
-      resolve(false);
-    } else {
-      resolve(false);
+    function setQuickAmount(amount) {
+        document.getElementById('fromAmount').value = amount;
+        convertCurrency();
     }
-  });
-}
 
-// Change PIN
-function changeWalletPIN() {
-  if (!currentUser) {
-    showToast('Please login first', 'error');
-    return;
-  }
-  
-  const currentPin = prompt('Enter your current PIN:');
-  if (!currentPin) return;
-  
-  const storedPin = atob(walletPIN).replace(currentUser.uid, '');
-  if (currentPin !== storedPin) {
-    showToast('❌ Incorrect current PIN', 'error');
-    return;
-  }
-  
-  const newPin = prompt('Enter new 4-digit PIN:');
-  if (newPin && /^\d{4}$/.test(newPin)) {
-    const newHashedPin = btoa(newPin + currentUser.uid);
-    localStorage.setItem('wallet_pin', newHashedPin);
-    walletPIN = newHashedPin;
-    showToast('✅ PIN changed successfully!', 'success');
-  } else if (newPin) {
-    showToast('PIN must be 4 digits', 'error');
-  }
-}
-
-// Verify PIN before wallet access
-async function verifyWalletPIN() {
-  if (isWalletUnlocked) return true;
-  
-  if (!walletPIN && currentUser) {
-    return await setupWalletPIN();
-  }
-  
-  if (!walletPIN) {
-    showToast('Please login to access wallet', 'error');
-    return false;
-  }
-  
-  return new Promise((resolve) => {
-    const modal = document.createElement('div');
-    modal.className = 'pin-modal';
-    modal.innerHTML = `
-      <div class="pin-box" style="background: var(--bg-card); border-radius: 32px; padding: 30px; max-width: 350px; width: 90%; text-align: center;">
-        <i class="fas fa-lock" style="font-size: 48px; color: var(--accent-green); margin-bottom: 20px;"></i>
-        <h3>Enter Wallet PIN</h3>
-        <p style="font-size: 14px; margin-bottom: 20px;">Enter your 4-digit PIN to access wallet</p>
-        <div class="pin-input" style="display: flex; gap: 12px; justify-content: center; margin: 25px 0;">
-          <input type="password" maxlength="1" class="pin-digit" id="pin1" style="width: 50px; height: 60px; text-align: center; font-size: 24px; border: 2px solid var(--border-color); border-radius: 12px; background: var(--bg-primary);">
-          <input type="password" maxlength="1" class="pin-digit" id="pin2" style="width: 50px; height: 60px; text-align: center; font-size: 24px; border: 2px solid var(--border-color); border-radius: 12px; background: var(--bg-primary);">
-          <input type="password" maxlength="1" class="pin-digit" id="pin3" style="width: 50px; height: 60px; text-align: center; font-size: 24px; border: 2px solid var(--border-color); border-radius: 12px; background: var(--bg-primary);">
-          <input type="password" maxlength="1" class="pin-digit" id="pin4" style="width: 50px; height: 60px; text-align: center; font-size: 24px; border: 2px solid var(--border-color); border-radius: 12px; background: var(--bg-primary);">
-        </div>
-        <div style="display: flex; gap: 10px;">
-          <button class="btn btn-primary" id="verifyPinBtn" style="flex: 1;">Verify</button>
-          <button class="btn btn-outline" id="cancelPinBtn" style="flex: 1;">Cancel</button>
-        </div>
-        <p style="margin-top: 15px; font-size: 12px;">
-          <a href="#" onclick="forgotPIN()">Forgot PIN? Contact Admin</a>
-        </p>
-      </div>
-    `;
-    
-    document.body.appendChild(modal);
-    
-    const inputs = ['pin1', 'pin2', 'pin3', 'pin4'];
-    inputs.forEach((id, index) => {
-      const input = document.getElementById(id);
-      input.addEventListener('input', (e) => {
-        if (e.target.value.length === 1 && index < 3) {
-          document.getElementById(inputs[index + 1]).focus();
+    // ==================== PIN SECURITY ====================
+    async function verifyWalletPIN() {
+        if (isWalletUnlocked) return true;
+        if (!walletPIN && currentUser) {
+            const pin = prompt('Set a 4-digit PIN for your wallet:');
+            if (pin && /^\d{4}$/.test(pin)) {
+                walletPIN = btoa(pin);
+                localStorage.setItem('wallet_pin', walletPIN);
+                isWalletUnlocked = true;
+                return true;
+            }
+            return false;
         }
-      });
-      input.addEventListener('keydown', (e) => {
-        if (e.key === 'Backspace' && !e.target.value && index > 0) {
-          document.getElementById(inputs[index - 1]).focus();
-        }
-      });
-    });
-    
-    document.getElementById('verifyPinBtn').onclick = () => {
-      const enteredPin = inputs.map(id => document.getElementById(id).value).join('');
-      const storedPin = atob(walletPIN).replace(currentUser?.uid || '', '');
-      
-      if (enteredPin === storedPin) {
-        isWalletUnlocked = true;
-        modal.remove();
-        showToast('✅ Wallet unlocked!', 'success');
-        resolve(true);
-      } else {
-        showToast('❌ Incorrect PIN', 'error');
-        inputs.forEach(id => {
-          document.getElementById(id).value = '';
+        return new Promise((resolve) => {
+            const pin = prompt('Enter your 4-digit wallet PIN:');
+            if (pin && atob(walletPIN) === pin) {
+                isWalletUnlocked = true;
+                resolve(true);
+            } else {
+                showToast('Incorrect PIN', 'error');
+                resolve(false);
+            }
         });
-        document.getElementById('pin1').focus();
-        resolve(false);
-      }
-    };
-    
-    document.getElementById('cancelPinBtn').onclick = () => {
-      modal.remove();
-      resolve(false);
-    };
-  });
-}
+    }
 
-// Forgot PIN handler
-function forgotPIN() {
-  showToast('Contact admin at admin@prayerdome.net to reset your PIN', 'info');
-}
+    function changeWalletPIN() {
+        const currentPin = prompt('Enter current PIN:');
+        if (currentPin && atob(walletPIN) === currentPin) {
+            const newPin = prompt('Enter new 4-digit PIN:');
+            if (newPin && /^\d{4}$/.test(newPin)) {
+                walletPIN = btoa(newPin);
+                localStorage.setItem('wallet_pin', walletPIN);
+                showToast('PIN changed successfully!', 'success');
+            }
+        } else {
+            showToast('Incorrect PIN', 'error');
+        }
+    }
 
-// ==================== DEPOSIT FUNCTIONS ====================
+    // ==================== DOCUMENTS ====================
+    function submitDocuments() {
+        if (!currentUser) {
+            showToast('Please login first', 'error');
+            return;
+        }
+        
+        const docData = {
+            userId: currentUser.uid,
+            fullName: document.getElementById('docFullName').value,
+            phone: document.getElementById('docPhone').value,
+            nrc: document.getElementById('docNRC').value,
+            address: document.getElementById('docAddress').value,
+            nextKinName: document.getElementById('nextKinName').value,
+            nextKinPhone: document.getElementById('nextKinPhone').value,
+            nextKinRelation: document.getElementById('nextKinRelation').value,
+            submittedAt: serverTimestamp()
+        };
+        
+        addDoc(collection(db, "userDocuments"), docData).then(() => {
+            showToast('Documents submitted!', 'success');
+            confetti({ particleCount: 80, spread: 60 });
+        }).catch(error => {
+            showToast(error.message, 'error');
+        });
+    }
 
-// Submit secure deposit
-async function submitSecureDeposit() {
-  if (!currentUser) {
-    showToast('Please login first', 'error');
-    showLoginModal();
-    return;
-  }
-  
-  const isVerified = await verifyWalletPIN();
-  if (!isVerified) {
-    showToast('Wallet access denied. PIN verification failed.', 'error');
-    return;
-  }
-  
-  const amount = parseFloat(document.getElementById('depositAmount').value);
-  const currency = document.getElementById('depositCurrency').value;
-  const proofFile = document.getElementById('proofUpload').files[0];
-  
-  if (!amount || amount <= 0) {
-    showToast('Please enter a valid amount', 'error');
-    return;
-  }
-  
-  if (!proofFile) {
-    showToast('Please upload payment proof (screenshot or receipt)', 'error');
-    return;
-  }
-  
-  // Check minimum amount
-  const minAmounts = { SZL: 50, ZMW: 100, USD: 5, EUR: 5, GBP: 5, ZAR: 50 };
-  if (amount < minAmounts[currency]) {
-    showToast(`Minimum deposit is ${minAmounts[currency]} ${currency}`, 'error');
-    return;
-  }
-  
-  showSpinner();
-  
-  try {
-    // Upload proof to Firebase Storage
-    const timestamp = Date.now();
-    const fileName = `deposit_proof_${currentUser.uid}_${timestamp}_${proofFile.name}`;
-    const storageRef = ref(storage, `deposit_proofs/${fileName}`);
-    await uploadBytes(storageRef, proofFile);
-    const proofURL = await getDownloadURL(storageRef);
-    
-    // Calculate amount in SZL for record
-    const amountInSZL = amount / (currentExchangeRates[currency] || 1) * currentExchangeRates.SZL;
-    
-    // Create deposit record
-    const depositData = {
-      userId: currentUser.uid,
-      userEmail: currentUser.email,
-      userName: currentUser.displayName || currentUser.email,
-      amount: amount,
-      currency: currency,
-      amountInSZL: amountInSZL,
-      proofURL: proofURL,
-      proofFileName: proofFile.name,
-      status: 'pending',
-      submittedAt: Timestamp.now(),
-      reference: `DEP_${timestamp}_${currentUser.uid.slice(-6)}`
-    };
-    
-    await addDoc(collection(db, "deposits"), depositData);
-    
-    // Update local wallet
-    let walletData = JSON.parse(localStorage.getItem('support_wallet')) || { 
-      balance: 0, 
-      deposits: [], 
-      withdrawals: [], 
-      pendingDeposits: [] 
-    };
-    
-    walletData.pendingDeposits.push({
-      id: depositData.reference,
-      amount: amount,
-      currency: currency,
-      amountInSZL: amountInSZL,
-      date: new Date().toISOString(),
-      status: 'pending'
+    // ==================== AUTH ====================
+    onAuthStateChanged(auth, (user) => {
+        currentUser = user;
+        if (user) {
+            document.getElementById('loginBtn').style.display = 'none';
+            document.getElementById('logoutBtn').style.display = 'inline-flex';
+            loadWalletData();
+        } else {
+            document.getElementById('loginBtn').style.display = 'inline-flex';
+            document.getElementById('logoutBtn').style.display = 'none';
+        }
     });
-    
-    localStorage.setItem('support_wallet', JSON.stringify(walletData));
-    
-    showToast(`✅ Deposit of ${currency} ${amount} submitted for verification!`, 'success');
-    confetti({ particleCount: 80, spread: 60 });
-    
-    // Reset form
-    document.getElementById('depositAmount').value = '';
-    document.getElementById('proofPreview').innerHTML = '';
-    document.getElementById('proofUpload').value = '';
-    updateWalletUI();
-    
-  } catch (error) {
-    console.error('Deposit error:', error);
-    showToast('Error submitting deposit: ' + error.message, 'error');
-  } finally {
-    hideSpinner();
-  }
-}
 
-// ==================== WITHDRAWAL FUNCTIONS ====================
+    function showLoginModal() {
+        window.location.href = 'account.html';
+    }
 
-async function requestWithdrawal() {
-  if (!currentUser) {
-    showToast('Please login first', 'error');
-    showLoginModal();
-    return;
-  }
-  
-  const isVerified = await verifyWalletPIN();
-  if (!isVerified) {
-    showToast('Wallet access denied.', 'error');
-    return;
-  }
-  
-  const amount = parseFloat(document.getElementById('withdrawAmount').value);
-  const walletData = JSON.parse(localStorage.getItem('support_wallet')) || { balance: 0 };
-  
-  if (!amount || amount <= 0) {
-    showToast('Please enter a valid amount', 'error');
-    return;
-  }
-  
-  if (amount > walletData.balance) {
-    showToast(`Insufficient balance. Available: E${walletData.balance.toFixed(2)}`, 'error');
-    return;
-  }
-  
-  if (amount < 100) {
-    showToast('Minimum withdrawal amount is E100', 'error');
-    return;
-  }
-  
-  showSpinner();
-  
-  try {
-    const withdrawalData = {
-      userId: currentUser.uid,
-      userEmail: currentUser.email,
-      userName: currentUser.displayName || currentUser.email,
-      amount: amount,
-      currency: 'SZL',
-      status: 'pending',
-      requestedAt: Timestamp.now(),
-      reference: `WTH_${Date.now()}_${currentUser.uid.slice(-6)}`
-    };
-    
-    await addDoc(collection(db, "withdrawals"), withdrawalData);
-    
-    walletData.withdrawals = walletData.withdrawals || [];
-    walletData.withdrawals.push({
-      id: withdrawalData.reference,
-      amount: amount,
-      date: new Date().toISOString(),
-      status: 'pending'
+    function firebaseLogout() {
+        signOut(auth).then(() => {
+            localStorage.removeItem('prayerDomeUser');
+            window.location.href = 'index.html';
+        });
+    }
+
+    // ==================== INITIALIZATION ====================
+    document.addEventListener('DOMContentLoaded', function() {
+        fetchExchangeRates();
+        renderBusinessPlans();
+        renderFuneralPlans();
+        renderEducationPlans();
+        setInterval(fetchExchangeRates, 3600000);
     });
-    localStorage.setItem('support_wallet', JSON.stringify(walletData));
-    
-    showToast(`✅ Withdrawal request of E${amount} submitted!`, 'success');
-    document.getElementById('withdrawAmount').value = '';
-    updateWalletUI();
-    
-  } catch (error) {
-    showToast('Error: ' + error.message, 'error');
-  } finally {
-    hideSpinner();
-  }
-}
 
-// ==================== WALLET UI UPDATE ====================
-
-function updateWalletUI() {
-  const walletData = JSON.parse(localStorage.getItem('support_wallet')) || { 
-    balance: 0, 
-    deposits: [], 
-    withdrawals: [], 
-    pendingDeposits: [] 
-  };
-  
-  // Calculate totals
-  const approvedDeposits = walletData.deposits.filter(d => d.status === 'approved');
-  const totalDeposits = approvedDeposits.reduce((sum, d) => sum + (d.amountInSZL || d.amount), 0);
-  const pendingTotal = walletData.pendingDeposits.reduce((sum, d) => sum + (d.amountInSZL || d.amount), 0);
-  
-  // Calculate interest earned (simple 2.5% of balance per month simulation)
-  const monthsActive = Math.floor((Date.now() - new Date(walletData.startDate || Date.now())) / (1000 * 60 * 60 * 24 * 30));
-  const interestEarned = walletData.balance * 0.025 * Math.min(monthsActive, 12);
-  
-  document.getElementById('walletBalance').innerHTML = `E${walletData.balance.toFixed(2)}<br><span style="font-size: 14px;">ZK${(walletData.balance * 18).toFixed(2)}</span>`;
-  document.getElementById('totalDeposits').innerHTML = `E${totalDeposits.toFixed(2)}`;
-  document.getElementById('pendingDeposits').innerHTML = `E${pendingTotal.toFixed(2)}`;
-  document.getElementById('interestEarned').innerHTML = `E${interestEarned.toFixed(2)}`;
-  
-  // Update transaction history
-  const historyDiv = document.getElementById('transactionHistory');
-  const allTx = [
-    ...(walletData.deposits || []).map(d => ({ ...d, type: 'deposit' })),
-    ...(walletData.withdrawals || []).map(w => ({ ...w, type: 'withdrawal' })),
-    ...(walletData.pendingDeposits || []).map(p => ({ ...p, type: 'pending' }))
-  ].sort((a, b) => new Date(b.date) - new Date(a.date));
-  
-  if (allTx.length === 0) {
-    historyDiv.innerHTML = '<p style="text-align:center; padding: 40px;">No transactions yet</p>';
-  } else {
-    historyDiv.innerHTML = allTx.slice(0, 20).map(tx => {
-      let statusClass = '';
-      let statusText = '';
-      let icon = '';
-      let amountColor = '';
-      
-      if (tx.type === 'deposit' && tx.status === 'approved') {
-        statusClass = 'status-active';
-        statusText = 'Completed';
-        icon = 'fa-arrow-down';
-        amountColor = 'var(--accent-green)';
-      } else if (tx.type === 'deposit' && tx.status === 'pending') {
-        statusClass = 'status-pending';
-        statusText = 'Pending';
-        icon = 'fa-clock';
-        amountColor = 'var(--accent-gold)';
-      } else if (tx.type === 'withdrawal') {
-        statusClass = tx.status === 'approved' ? 'status-active' : 'status-pending';
-        statusText = tx.status === 'approved' ? 'Processed' : 'Pending';
-        icon = 'fa-arrow-up';
-        amountColor = 'var(--accent-red)';
-      } else {
-        statusClass = 'status-pending';
-        statusText = 'Pending';
-        icon = 'fa-clock';
-        amountColor = 'var(--accent-gold)';
-      }
-      
-      const amount = tx.amountInSZL || tx.amount;
-      
-      return `
-        <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid var(--border-color);">
-          <div style="display: flex; align-items: center; gap: 12px;">
-            <div style="width: 35px; height: 35px; border-radius: 50%; background: ${tx.type === 'deposit' ? 'rgba(34,197,94,0.1)' : 'rgba(239,68,68,0.1)'}; display: flex; align-items: center; justify-content: center;">
-              <i class="fas ${icon}" style="color: ${amountColor}"></i>
-            </div>
-            <div>
-              <strong>${tx.type === 'deposit' ? 'Deposit' : tx.type === 'withdrawal' ? 'Withdrawal' : 'Pending Deposit'}</strong>
-              <div style="font-size: 11px; color: var(--text-secondary);">${moment(tx.date).format('MMM D, YYYY h:mm A')}</div>
-              ${tx.reference ? `<div style="font-size: 10px;">Ref: ${tx.reference}</div>` : ''}
-            </div>
-          </div>
-          <div style="text-align: right;">
-            <strong style="color: ${amountColor}">
-              ${tx.type === 'deposit' ? '+' : '-'} E${typeof amount === 'number' ? amount.toFixed(2) : amount}
-            </strong>
-            <div><span class="status-badge ${statusClass}" style="font-size: 10px;">${statusText}</span></div>
-          </div>
-        </div>
-      `;
-    }).join('');
-  }
-}
-
-// ==================== INITIALIZATION ====================
-
-// Initialize wallet on page load
-document.addEventListener('DOMContentLoaded', function() {
-  fetchExchangeRates();
-  updateWalletUI();
-  
-  // Auto-refresh rates every hour
-  setInterval(fetchExchangeRates, 3600000);
-  
-  // Check PIN status
-  if (walletPIN) {
-    document.getElementById('pinStatusText').textContent = 'PIN Active 🔒';
-  } else if (currentUser) {
-    document.getElementById('pinStatusText').textContent = 'PIN Not Set ⚠️';
-  }
-});
-
-// File preview for deposit proof
-document.getElementById('proofUpload')?.addEventListener('change', (e) => {
-  const file = e.target.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      document.getElementById('proofPreview').innerHTML = `
-        <div style="margin-top: 10px; padding: 10px; background: var(--bg-card); border-radius: 8px;">
-          <i class="fas fa-check-circle" style="color: var(--accent-green);"></i>
-          ${file.name}
-          <img src="${ev.target.result}" style="max-width: 100px; margin-top: 5px; border-radius: 8px;">
-        </div>
-      `;
-    };
-    reader.readAsDataURL(file);
-  }
-});
-
-// Make functions globally available
-window.convertCurrency = convertCurrency;
-window.swapCurrencies = swapCurrencies;
-window.setQuickAmount = setQuickAmount;
-window.submitSecureDeposit = submitSecureDeposit;
-window.requestWithdrawal = requestWithdrawal;
-window.changeWalletPIN = changeWalletPIN;
-window.verifyWalletPIN = verifyWalletPIN;
-window.updateWalletUI = updateWalletUI;
+    // Expose global functions
+    window.showSection = showSection;
+    window.joinPlan = joinPlan;
+    window.convertCurrency = convertCurrency;
+    window.swapCurrencies = swapCurrencies;
+    window.setQuickAmount = setQuickAmount;
+    window.submitSecureDeposit = submitSecureDeposit;
+    window.changeWalletPIN = changeWalletPIN;
+    window.verifyWalletPIN = verifyWalletPIN;
+    window.submitDocuments = submitDocuments;
+    window.showLoginModal = showLoginModal;
+    window.firebaseLogout = firebaseLogout;
 </script>
 </body>
 </html>
