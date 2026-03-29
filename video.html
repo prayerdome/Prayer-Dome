@@ -447,6 +447,28 @@
             .videos-grid { grid-template-columns: 1fr; }
             .live-header-badge { flex-direction: column; text-align: center; }
         }
+        
+        .btn {
+    padding: 10px 24px;
+    border-radius: 40px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--accent-green), #16a34a);
+    color: white;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(34,197,94,0.4);
+}
     </style>
 </head>
 <body>
@@ -481,7 +503,7 @@
                 <div class="live-placeholder">
                     <i class="fas fa-video" style="font-size: 64px; margin-bottom: 20px; opacity: 0.5;"></i>
                     <h3>Checking for live stream...</h3>
-                    <p style="margin-top: 10px;">Prayer Dome Zambia Live Stream</p>
+                    <p style="margin-top: 10px;">Prayer Dome Live Stream</p>
                     <div style="margin-top: 20px; display: flex; gap: 10px;">
                         <span class="team-badge" style="background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 20px;">🇿🇲 Zambia</span>
                         <span class="team-badge" style="background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 20px;">⏰ Sunday 9:00 AM</span>
@@ -489,7 +511,7 @@
                 </div>
             </div>
             <div class="live-info">
-                <div class="live-title" id="liveTitle">Prayer Dome Zambia</div>
+                <div class="live-title" id="liveTitle">Prayer Dome </div>
                 <div class="live-meta">
                     <span><i class="fas fa-map-marker-alt"></i> Zambia</span>
                     <span><i class="fas fa-calendar"></i> <span id="liveSchedule">Every Sunday 9:00 AM & 1:00 PM (CAT)</span></span>
@@ -525,11 +547,28 @@
 
     <div class="toast-container" id="toastContainer"></div>
 
-    <script>
+    <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, getDocs, query, orderBy, doc, getDoc, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyCxvql0r_aeerphxTA0UUedRppdBxGf7wo",
+        authDomain: "prayer-dome.firebaseapp.com",
+        projectId: "prayer-dome",
+        storageBucket: "prayer-dome.firebasestorage.app",
+        messagingSenderId: "198295153196",
+        appId: "1:198295153196:web:1222b31948d7974ba3bf89"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+    
         // ==================== CONFIGURATION ====================
         const PRAYER_DOME_FACEBOOK = {
             pageId: '847255098474902',
-            pageName: 'Prayer Dome Zambia',
+            pageName: 'Prayer Dome',
             pageUrl: 'https://www.facebook.com/profile.php?id=847255098474902',
             liveUrl: 'https://www.facebook.com/847255098474902/live',
             embedUrl: 'https://www.facebook.com/plugins/video.php?href=https://www.facebook.com/847255098474902/live&show_text=false&appId'
@@ -539,89 +578,52 @@
         let liveCheckInterval = null;
         let currentTab = 'latest';
 
-        // ==================== SAMPLE VIDEOS (Real Facebook Videos) ====================
-        const videos = [
-            {
-                id: 1,
-                title: "Sunday Service - The Power of Persistent Prayer",
-                url: "https://www.facebook.com/plugins/video.php?href=https://www.facebook.com/847255098474902/videos/1234567890&show_text=0",
-                thumbnail: "https://i.ibb.co/RTbNh1hB/founder-2.jpg",
-                duration: "1:23:45",
-                category: "sermons",
-                views: 1234,
-                date: "2024-03-24"
-            },
-            {
-                id: 2,
-                title: "Praise & Worship Night - March 2024",
-                url: "https://www.facebook.com/plugins/video.php?href=https://www.facebook.com/847255098474902/videos/2345678901&show_text=0",
-                thumbnail: "https://i.ibb.co/ksK9tLk1/pnw.jpg",
-                duration: "45:30",
-                category: "worship",
-                views: 856,
-                date: "2024-03-17"
-            },
-            {
-                id: 3,
-                title: "Healing Service - Testimonies of God's Power",
-                url: "https://www.facebook.com/plugins/video.php?href=https://www.facebook.com/847255098474902/videos/3456789012&show_text=0",
-                thumbnail: "https://i.ibb.co/ksTrfSfp/alan.jpg",
-                duration: "1:45:20",
-                category: "testimonies",
-                views: 2341,
-                date: "2024-03-10"
-            },
-            {
-                id: 4,
-                title: "Bible Study: Book of Romans - Chapter 8",
-                url: "https://www.facebook.com/plugins/video.php?href=https://www.facebook.com/847255098474902/videos/4567890123&show_text=0",
-                thumbnail: "https://i.ibb.co/B2r1xPLb/pst.jpg",
-                duration: "52:15",
-                category: "sermons",
-                views: 567,
-                date: "2024-03-03"
-            },
-            {
-                id: 5,
-                title: "Youth Praise & Worship Session",
-                url: "https://www.facebook.com/plugins/video.php?href=https://www.facebook.com/847255098474902/videos/5678901234&show_text=0",
-                thumbnail: "https://i.ibb.co/S4G3vhMt/pet.jpg",
-                duration: "38:42",
-                category: "worship",
-                views: 432,
-                date: "2024-02-25"
-            },
-            {
-                id: 6,
-                title: "Healing Miracles - Pastor Seedwell Masuku",
-                url: "https://www.facebook.com/plugins/video.php?href=https://www.facebook.com/847255098474902/videos/6789012345&show_text=0",
-                thumbnail: "https://i.ibb.co/RTbNh1hB/founder-2.jpg",
-                duration: "2:15:30",
-                category: "testimonies",
-                views: 3421,
-                date: "2024-02-18"
-            },
-            {
-                id: 7,
-                title: "Wednesday Night Prayer - Intercession",
-                url: "https://www.facebook.com/plugins/video.php?href=https://www.facebook.com/847255098474902/videos/7890123456&show_text=0",
-                thumbnail: "https://i.ibb.co/6c7wRtJW/philmon.jpg",
-                duration: "1:12:08",
-                category: "sermons",
-                views: 789,
-                date: "2024-02-14"
-            },
-            {
-                id: 8,
-                title: "Worship Experience - Ngculwini Prayer Dome",
-                url: "https://www.facebook.com/plugins/video.php?href=https://www.facebook.com/847255098474902/videos/8901234567&show_text=0",
-                thumbnail: "https://i.ibb.co/qKCwrZ1/pd.jpg",
-                duration: "1:28:45",
-                category: "worship",
-                views: 654,
-                date: "2024-02-07"
-            }
-        ];
+// ==================== FIREBASE VIDEOS ====================
+let videos = [];
+let allVideos = [];
+
+// Load videos from Firebase
+async function loadVideosFromFirebase() {
+    try {
+        const videosSnapshot = await getDocs(query(collection(db, "videos"), orderBy("createdAt", "desc")));
+        
+        if (videosSnapshot.empty) {
+            console.log("No videos found in Firebase");
+            showToast('No videos available yet. Check back soon!', 'info');
+            return;
+        }
+        
+        allVideos = [];
+        videosSnapshot.forEach(doc => {
+            const data = doc.data();
+            allVideos.push({
+                id: doc.id,
+                title: data.title || 'Untitled Video',
+                url: data.url || '',
+                thumbnail: data.thumbnail || 'https://i.ibb.co/RTbNh1hB/founder-2.jpg',
+                duration: data.duration || '0:00',
+                category: data.category || 'sermons',
+                views: data.views || 0,
+                date: data.date || data.createdAt?.toDate() || new Date(),
+                description: data.description || ''
+            });
+        });
+        
+        videos = [...allVideos];
+        renderVideos();
+        updateVideoStats();
+        
+    } catch (error) {
+        console.error('Error loading videos:', error);
+        showToast('Error loading videos', 'error');
+    }
+}
+
+// Update video statistics
+function updateVideoStats() {
+    // You can add stats display here if needed
+    console.log(`Loaded ${videos.length} videos`);
+}
 
         // ==================== FACEBOOK LIVE DETECTION ====================
         async function checkFacebookLive() {
@@ -684,41 +686,53 @@
 
         // ==================== RENDER VIDEOS ====================
         function renderVideos() {
-            const container = document.getElementById('videosGrid');
-            let filteredVideos = videos;
-            
-            if (currentTab !== 'latest') {
-                filteredVideos = videos.filter(v => v.category === currentTab);
-            }
-            
-            if (filteredVideos.length === 0) {
-                container.innerHTML = `
-                    <div style="text-align: center; padding: 60px; grid-column: 1/-1;">
-                        <i class="fas fa-video" style="font-size: 64px; opacity: 0.3; margin-bottom: 20px;"></i>
-                        <h3>No videos in this category</h3>
-                        <p>Check back soon for more content</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            container.innerHTML = filteredVideos.map(video => `
-                <div class="video-card" onclick="openVideo('${video.url}', '${escapeHtml(video.title)}')">
-                    <div class="video-thumbnail">
-                        <img src="${video.thumbnail}" alt="${video.title}" loading="lazy">
-                        <div class="play-icon-overlay"><i class="fas fa-play"></i></div>
-                        <div class="video-duration">${video.duration}</div>
-                    </div>
-                    <div class="video-info">
-                        <div class="video-title">${escapeHtml(video.title)}</div>
-                        <div class="video-meta">
-                            <span><i class="fas fa-eye"></i> ${video.views} views</span>
-                            <span><i class="fas fa-calendar"></i> ${moment(video.date).format('MMM D, YYYY')}</span>
-                        </div>
-                    </div>
+    const container = document.getElementById('videosGrid');
+    
+    if (!allVideos || allVideos.length === 0) {
+        container.innerHTML = `
+            <div style="text-align: center; padding: 60px; grid-column: 1/-1;">
+                <i class="fas fa-video" style="font-size: 64px; opacity: 0.3; margin-bottom: 20px;"></i>
+                <h3>No Videos Available</h3>
+                <p>Check back soon for worship services, sermons, and testimonies.</p>
+                <button class="btn btn-primary" style="margin-top: 20px; background: var(--accent-green); padding: 10px 24px; border-radius: 40px; color: white; border: none; cursor: pointer;" onclick="window.location.href='index.html'">Return Home</button>
+            </div>
+        `;
+        return;
+    }
+    
+    let filteredVideos = allVideos;
+    if (currentTab !== 'latest') {
+        filteredVideos = allVideos.filter(v => v.category === currentTab);
+    }
+    
+    if (filteredVideos.length === 0) {
+        container.innerHTML = `
+            <div style="text-align: center; padding: 60px; grid-column: 1/-1;">
+                <i class="fas fa-video" style="font-size: 64px; opacity: 0.3; margin-bottom: 20px;"></i>
+                <h3>No videos in this category</h3>
+                <p>Check back soon for more content</p>
+            </div>
+        `;
+        return;
+    }
+    
+    container.innerHTML = filteredVideos.map(video => `
+        <div class="video-card" onclick="openVideo('${video.url}', '${escapeHtml(video.title)}')">
+            <div class="video-thumbnail">
+                <img src="${video.thumbnail}" alt="${video.title}" loading="lazy" onerror="this.src='https://i.ibb.co/RTbNh1hB/founder-2.jpg'">
+                <div class="play-icon-overlay"><i class="fas fa-play"></i></div>
+                <div class="video-duration">${video.duration}</div>
+            </div>
+            <div class="video-info">
+                <div class="video-title">${escapeHtml(video.title)}</div>
+                <div class="video-meta">
+                    <span><i class="fas fa-eye"></i> ${video.views} views</span>
+                    <span><i class="fas fa-calendar"></i> ${moment(video.date).format('MMM D, YYYY')}</span>
                 </div>
-            `).join('');
-        }
+            </div>
+        </div>
+    `).join('');
+}
 
         function escapeHtml(text) {
             const div = document.createElement('div');
@@ -803,23 +817,26 @@
         }
 
         // ==================== INITIALIZATION ====================
-        function init() {
-            checkFacebookLive();
-            renderVideos();
-            
-            // Check for live stream every 30 seconds
-            liveCheckInterval = setInterval(checkFacebookLive, 30000);
-            
-            // Update live viewers count randomly (simulate)
-            setInterval(() => {
-                if (isLive) {
-                    const viewersEl = document.getElementById('liveViewers');
-                    const currentViewers = parseInt(viewersEl.textContent.match(/\d+/)?.[0] || 47);
-                    const newViewers = currentViewers + Math.floor(Math.random() * 5) - 2;
-                    viewersEl.innerHTML = `👁️ ${Math.max(12, newViewers)} watching`;
-                }
-            }, 15000);
+        async function init() {
+    // Load videos from Firebase first
+    await loadVideosFromFirebase();
+    
+    // Check for live stream
+    checkFacebookLive();
+    
+    // Check for live stream every 30 seconds
+    liveCheckInterval = setInterval(checkFacebookLive, 30000);
+    
+    // Update live viewers count (only if live)
+    setInterval(() => {
+        if (isLive) {
+            const viewersEl = document.getElementById('liveViewers');
+            const currentViewers = parseInt(viewersEl.textContent.match(/\d+/)?.[0] || 47);
+            const newViewers = currentViewers + Math.floor(Math.random() * 5) - 2;
+            viewersEl.innerHTML = `👁️ ${Math.max(12, newViewers)} watching`;
         }
+    }, 15000);
+}
 
         // Expose global functions
         window.showTab = showTab;

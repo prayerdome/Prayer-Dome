@@ -48,7 +48,6 @@
             --border-color: #334155;
         }
 
-        /* Header */
         .auth-header {
             background: linear-gradient(135deg, var(--bg-card), var(--bg-secondary));
             border-bottom: 1px solid var(--border-color);
@@ -116,14 +115,12 @@
             gap: 8px;
         }
 
-        /* Main Container */
         .main-container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 40px 20px;
         }
 
-        /* Auth Tabs */
         .auth-tabs {
             display: flex;
             justify-content: center;
@@ -149,7 +146,6 @@
             box-shadow: 0 4px 15px rgba(34,197,94,0.3);
         }
 
-        /* Auth Cards */
         .auth-card {
             background: var(--bg-card);
             border-radius: 32px;
@@ -159,6 +155,10 @@
             max-width: 550px;
             margin: 0 auto;
             animation: fadeInUp 0.5s ease;
+        }
+
+        #registerForm.auth-card {
+            max-width: 700px;
         }
 
         @keyframes fadeInUp {
@@ -172,7 +172,6 @@
             color: var(--accent-green);
         }
 
-        /* Form Styles */
         .form-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -188,10 +187,6 @@
             margin-bottom: 8px;
             font-weight: 600;
             font-size: 0.9rem;
-        }
-
-        .form-group label .required {
-            color: var(--accent-red);
         }
 
         .form-group input, .form-group select, .form-group textarea {
@@ -214,7 +209,6 @@
             grid-column: span 2;
         }
 
-        /* Profile Photo Upload */
         .profile-photo-container {
             text-align: center;
             margin-bottom: 25px;
@@ -228,6 +222,7 @@
             border: 4px solid var(--accent-green);
             cursor: pointer;
             transition: all 0.3s;
+            background: var(--bg-primary);
         }
 
         .profile-photo:hover {
@@ -245,7 +240,6 @@
             cursor: pointer;
         }
 
-        /* Checkbox Group */
         .checkbox-group {
             display: flex;
             flex-wrap: wrap;
@@ -261,7 +255,6 @@
             font-size: 0.85rem;
         }
 
-        /* Buttons */
         .btn {
             padding: 12px 28px;
             border-radius: 40px;
@@ -281,9 +274,14 @@
             width: 100%;
         }
 
-        .btn-primary:hover {
+        .btn-primary:hover:not(:disabled) {
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(34,197,94,0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
         }
 
         .btn-outline {
@@ -292,13 +290,9 @@
             color: var(--accent-green);
         }
 
-        /* Profile Card */
-        .profile-card {
-            background: var(--bg-card);
-            border-radius: 32px;
-            padding: 40px;
-            border: 1px solid var(--border-color);
-            text-align: center;
+        .btn-outline:hover {
+            background: var(--accent-green);
+            color: white;
         }
 
         .profile-stats {
@@ -314,7 +308,12 @@
             border-radius: 20px;
         }
 
-        /* Toast */
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--accent-green);
+        }
+
         .toast-container {
             position: fixed;
             top: 20px;
@@ -330,19 +329,25 @@
             border-left: 4px solid var(--accent-green);
             animation: slideIn 0.3s ease;
         }
+        .toast.error {
+            border-left-color: var(--accent-red);
+        }
+        .toast.info {
+            border-left-color: var(--accent-blue);
+        }
         @keyframes slideIn {
             from { transform: translateX(100%); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
         }
 
-        /* Modal */
+        /* Modal Styles */
         .modal {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.7);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -356,6 +361,20 @@
             padding: 32px;
             max-width: 450px;
             width: 90%;
+        }
+
+        .modal-content h3 {
+            margin-bottom: 20px;
+            color: var(--accent-green);
+        }
+
+        .modal-content input {
+            width: 100%;
+            padding: 12px 16px;
+            margin-bottom: 15px;
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            background: var(--bg-primary);
         }
 
         @media (max-width: 650px) {
@@ -383,28 +402,27 @@
     </div>
 
     <div class="main-container">
-        <!-- Auth Tabs -->
         <div class="auth-tabs">
-            <button class="auth-tab active" onclick="showAuthForm('login')">Sign In</button>
-            <button class="auth-tab" onclick="showAuthForm('register')">Create Account</button>
+            <button class="auth-tab active" id="loginTabBtn" onclick="showAuthForm('login')">Sign In</button>
+            <button class="auth-tab" id="registerTabBtn" onclick="showAuthForm('register')">Create Account</button>
         </div>
 
         <!-- Login Form -->
         <div id="loginForm" class="auth-card">
             <h2><i class="fas fa-sign-in-alt"></i> Welcome Back</h2>
-            <form onsubmit="event.preventDefault(); loginUser()">
+            <form id="loginFormElement" onsubmit="event.preventDefault(); loginUser()">
                 <div class="form-group">
                     <label>Email or Phone Number *</label>
-                    <input type="text" id="loginIdentifier" placeholder="email@example.com or +1234567890" required>
+                    <input type="text" id="loginIdentifier" placeholder="email@example.com or +1234567890" required autocomplete="username">
                 </div>
                 <div class="form-group">
                     <label>Password *</label>
-                    <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                    <input type="password" id="loginPassword" placeholder="Enter your password" required autocomplete="current-password">
                 </div>
                 <div style="text-align: right; margin-bottom: 20px;">
-                    <a href="#" onclick="forgotPassword()" style="color: var(--accent-green); font-size: 0.85rem;">Forgot Password?</a>
+                    <a href="#" onclick="showForgotPasswordModal()" style="color: var(--accent-green); font-size: 0.85rem;">Forgot Password?</a>
                 </div>
-                <button type="submit" class="btn btn-primary">Sign In <i class="fas fa-arrow-right"></i></button>
+                <button type="submit" class="btn btn-primary" id="loginBtn">Sign In <i class="fas fa-arrow-right"></i></button>
                 <div style="text-align: center; margin: 20px 0;">
                     <span style="color: var(--text-secondary);">or</span>
                 </div>
@@ -415,31 +433,30 @@
         </div>
 
         <!-- Registration Form -->
-        <div id="registerForm" class="auth-card" style="display: none; max-width: 700px;">
+        <div id="registerForm" class="auth-card" style="display: none;">
             <h2><i class="fas fa-user-plus"></i> Create Account</h2>
-            <form onsubmit="event.preventDefault(); registerUser()">
-                <!-- Profile Photo -->
+            <form id="registerFormElement" onsubmit="event.preventDefault(); registerUser()">
                 <div class="profile-photo-container">
-                    <img id="profilePhotoPreview" class="profile-photo" src="https://i.ibb.co/TB5Fx4tb/logo-0.png" onclick="openCloudinaryUpload()">
-                    <div class="photo-upload-btn" onclick="openCloudinaryUpload()"><i class="fas fa-camera"></i> Upload Photo</div>
+                    <img id="profilePhotoPreview" class="profile-photo" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 24 24' fill='none' stroke='%2322c55e' stroke-width='1'%3E%3Cpath d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'%3E%3C/path%3E%3Ccircle cx='12' cy='7' r='4'%3E%3C/circle%3E%3C/svg%3E">
+                    <div class="photo-upload-btn" onclick="openCloudinaryUpload()"><i class="fas fa-camera"></i> Upload Photo (Optional)</div>
                     <input type="hidden" id="profilePhotoUrl" value="">
                 </div>
 
                 <div class="form-grid">
                     <div class="form-group">
                         <label>Full Name *</label>
-                        <input type="text" id="regFullName" placeholder="First & Last Name" required>
+                        <input type="text" id="regFullName" placeholder="First & Last Name" required autocomplete="name">
                     </div>
                     <div class="form-group">
                         <label>Email Address *</label>
-                        <input type="email" id="regEmail" placeholder="your@email.com" required>
-                        <small style="color: var(--text-secondary);">Must be a valid email (e.g., @gmail.com, @outlook.com, etc.)</small>
+                        <input type="email" id="regEmail" placeholder="your@email.com" required autocomplete="email">
+                        <small style="color: var(--text-secondary);">Must be a valid email</small>
                     </div>
                     <div class="form-group">
                         <label>Phone Number *</label>
                         <div style="display: flex; gap: 10px;">
                             <select id="regCountryCode" style="width: 100px;"></select>
-                            <input type="tel" id="regPhone" placeholder="Phone number" style="flex: 1;" required>
+                            <input type="tel" id="regPhone" placeholder="Phone number" style="flex: 1;" required autocomplete="tel">
                         </div>
                     </div>
                     <div class="form-group">
@@ -464,14 +481,14 @@
                         <input type="text" id="regAddress" placeholder="Your address (optional)">
                     </div>
                     <div class="form-group">
-    <label>Password *</label>
-    <input type="password" id="memberPassword" placeholder="Create a password" required>
-    <small style="font-size: 11px;">Minimum 6 characters</small>
-</div>
-<div class="form-group">
-    <label>Confirm Password *</label>
-    <input type="password" id="memberConfirmPassword" placeholder="Confirm password" required>
-</div>
+                        <label>Password *</label>
+                        <input type="password" id="memberPassword" placeholder="Create a password" required autocomplete="new-password">
+                        <small style="font-size: 11px;">Minimum 6 characters</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Confirm Password *</label>
+                        <input type="password" id="memberConfirmPassword" placeholder="Confirm password" required autocomplete="new-password">
+                    </div>
                     <div class="form-group full-width">
                         <label>Security Question *</label>
                         <select id="securityQuestion" required>
@@ -514,52 +531,100 @@
                 <div style="margin: 20px 0; padding: 15px; background: var(--bg-primary); border-radius: 16px;">
                     <label style="display: flex; gap: 10px;">
                         <input type="checkbox" id="regTerms" required>
-                        <span>I agree to the <a href="#" style="color: var(--accent-green);">Terms of Service</a> and <a href="#" style="color: var(--accent-green);">Privacy Policy</a></span>
+                        <span>I agree to the Terms of Service and Privacy Policy</span>
                     </label>
                 </div>
 
-                <button type="submit" class="btn btn-primary">Create Account <i class="fas fa-user-plus"></i></button>
+                <button type="submit" class="btn btn-primary" id="registerBtn">Create Account <i class="fas fa-user-plus"></i></button>
             </form>
         </div>
 
-        <!-- Profile Section (shown after login) -->
-        <div id="profileSection" class="auth-card" style="display: none;">
-            <div class="profile-photo-container">
-                <img id="profilePhoto" class="profile-photo" src="https://i.ibb.co/TB5Fx4tb/logo-0.png" onclick="openEditPhotoModal()">
-                <div class="photo-upload-btn" onclick="openEditPhotoModal()"><i class="fas fa-camera"></i> Change Photo</div>
+        <!-- Profile Section with Edit Profile (shown after login) -->
+<div id="profileSection" class="auth-card" style="display: none; max-width: 700px;">
+    <div class="profile-photo-container">
+        <img id="profilePhoto" class="profile-photo" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 24 24' fill='none' stroke='%2322c55e' stroke-width='1'%3E%3Cpath d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'%3E%3C/path%3E%3Ccircle cx='12' cy='7' r='4'%3E%3C/circle%3E%3C/svg%3E">
+        <div class="photo-upload-btn" onclick="openCloudinaryUpload()"><i class="fas fa-camera"></i> Change Photo</div>
+    </div>
+    
+    <!-- View Mode -->
+    <div id="profileViewMode">
+        <h2 id="profileName">User Name</h2>
+        <p id="profileEmail" style="color: var(--text-secondary);"></p>
+        
+        <div class="profile-stats">
+            <div class="stat-box">
+                <div class="stat-number" id="profilePrayers">0</div>
+                <div class="stat-label">Prayers</div>
             </div>
-            <h2 id="profileName">User Name</h2>
-            <p id="profileEmail" style="color: var(--text-secondary);"></p>
-            <p id="profileMemberId" style="color: var(--accent-gold); font-size: 0.85rem; margin-top: 5px;"></p>
-            
-            <div class="profile-stats">
-                <div class="stat-box">
-                    <div class="stat-number" id="profilePrayers">0</div>
-                    <div class="stat-label">Prayers</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-number" id="profileJoined">0</div>
-                    <div class="stat-label">Days Active</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-number" id="profileQuizScore">0</div>
-                    <div class="stat-label">Quiz Score</div>
-                </div>
+            <div class="stat-box">
+                <div class="stat-number" id="profileJoined">0</div>
+                <div class="stat-label">Days Active</div>
             </div>
-
-            <div style="display: flex; gap: 12px; margin-top: 20px;">
-                <button class="btn btn-primary" style="flex: 1;" onclick="showEditProfile()"><i class="fas fa-edit"></i> Edit Profile</button>
-                <button class="btn btn-outline" style="flex: 1;" onclick="logoutUser()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+            <div class="stat-box">
+                <div class="stat-number" id="profileWallet">E0.00</div>
+                <div class="stat-label">Wallet Balance</div>
             </div>
         </div>
+
+        <div style="display: flex; gap: 12px; margin-top: 20px;">
+            <button class="btn btn-primary" style="flex: 1;" onclick="toggleEditMode()"><i class="fas fa-edit"></i> Edit Profile</button>
+            <button class="btn btn-outline" style="flex: 1;" onclick="logoutUser()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        </div>
     </div>
+    
+    <!-- Edit Mode -->
+    <div id="profileEditMode" style="display: none;">
+        <h2><i class="fas fa-user-edit"></i> Edit Profile</h2>
+        
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Full Name *</label>
+                <input type="text" id="editFullName" placeholder="Full Name">
+            </div>
+            <div class="form-group">
+                <label>Phone Number</label>
+                <input type="tel" id="editPhone" placeholder="Phone number">
+            </div>
+            <div class="form-group">
+                <label>Date of Birth</label>
+                <input type="date" id="editDob">
+            </div>
+            <div class="form-group">
+                <label>Gender</label>
+                <select id="editGender">
+                    <option value="">Select</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div class="form-group full-width">
+                <label>Address</label>
+                <input type="text" id="editAddress" placeholder="Your address">
+            </div>
+            <div class="form-group">
+                <label>Date Baptized</label>
+                <input type="text" id="editBaptismDate" placeholder="e.g., 2023">
+            </div>
+            <div class="form-group">
+                <label>Born Again Date</label>
+                <input type="text" id="editBornAgainDate" placeholder="e.g., 2022">
+            </div>
+        </div>
+        
+        <div style="display: flex; gap: 12px; margin-top: 20px;">
+            <button class="btn btn-primary" style="flex: 1;" onclick="saveProfileEdit()"><i class="fas fa-save"></i> Save Changes</button>
+            <button class="btn btn-outline" style="flex: 1;" onclick="toggleEditMode()"><i class="fas fa-times"></i> Cancel</button>
+        </div>
+    </div>
+</div>
 
     <div class="toast-container" id="toastContainer"></div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, query, where, Timestamp, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile, sendEmailVerification, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, collection, doc, setDoc, getDoc, query, where, getDocs, serverTimestamp, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCxvql0r_aeerphxTA0UUedRppdBxGf7wo",
@@ -582,6 +647,7 @@
         const countries = [
             { code: "+1", name: "United States", flag: "🇺🇸", countryCode: "US" },
             { code: "+44", name: "United Kingdom", flag: "🇬🇧", countryCode: "GB" },
+            { code: "+353", name: "Ireland", flag: "🇮🇪", countryCode: "IE" },
             { code: "+27", name: "South Africa", flag: "🇿🇦", countryCode: "ZA" },
             { code: "+260", name: "Zambia", flag: "🇿🇲", countryCode: "ZM" },
             { code: "+268", name: "Eswatini", flag: "🇸🇿", countryCode: "SZ" },
@@ -596,10 +662,7 @@
             { code: "+61", name: "Australia", flag: "🇦🇺", countryCode: "AU" },
             { code: "+49", name: "Germany", flag: "🇩🇪", countryCode: "DE" },
             { code: "+33", name: "France", flag: "🇫🇷", countryCode: "FR" },
-            { code: "+91", name: "India", flag: "🇮🇳", countryCode: "IN" },
-            { code: "+86", name: "China", flag: "🇨🇳", countryCode: "CN" },
-            { code: "+81", name: "Japan", flag: "🇯🇵", countryCode: "JP" },
-            { code: "+55", name: "Brazil", flag: "🇧🇷", countryCode: "BR" }
+            { code: "+91", name: "India", flag: "🇮🇳", countryCode: "IN" }
         ];
 
         function populateCountryDropdowns() {
@@ -617,13 +680,6 @@
         function isValidEmail(email) {
             const re = /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/;
             return re.test(email);
-        }
-
-        function validateEmailDomain(email) {
-            const validDomains = ['gmail.com', 'outlook.com', 'yahoo.com', 'hotmail.com', 'icloud.com', 'protonmail.com', 'aol.com'];
-            const domain = email.split('@')[1];
-            if (!domain) return false;
-            return true;
         }
 
         function initCloudinaryWidget(callback) {
@@ -655,277 +711,482 @@
             const widget = initCloudinaryWidget((url) => {
                 document.getElementById('profilePhotoPreview').src = url;
                 document.getElementById('profilePhotoUrl').value = url;
+                const profilePhoto = document.getElementById('profilePhoto');
+                if (profilePhoto) profilePhoto.src = url;
             });
             widget.open();
         }
 
-        async function registerUser() {
-    const fullName = document.getElementById('regFullName').value.trim();
-    const email = document.getElementById('regEmail').value.trim();
-    const countryCode = document.getElementById('regCountryCode').value;
-    const phone = document.getElementById('regPhone').value.trim();
-    const country = document.getElementById('regCountry').value;
-    const dob = document.getElementById('regDob').value;
-    const gender = document.getElementById('regGender').value;
-    const address = document.getElementById('regAddress').value;
-    const password = document.getElementById('regPassword').value;
-    const confirmPassword = document.getElementById('regConfirmPassword').value;
-    const securityQuestion = document.getElementById('securityQuestion').value;
-    const securityAnswer = document.getElementById('securityAnswer').value;
-    const terms = document.getElementById('regTerms').checked;
-    const photoUrl = document.getElementById('profilePhotoUrl').value;
-
-    if (!fullName || !email || !phone || !country || !dob || !gender || !password || !securityQuestion || !securityAnswer) {
-        showToast('Please fill all required fields', 'error');
-        return;
-    }
-
-    if (!isValidEmail(email)) {
-        showToast('Please enter a valid email address', 'error');
-        return;
-    }
-
-    if (password.length < 6) {
-        showToast('Password must be at least 6 characters', 'error');
-        return;
-    }
-
-    if (password !== confirmPassword) {
-        showToast('Passwords do not match', 'error');
-        return;
-    }
-
-    if (!terms) {
-        showToast('Please accept the Terms of Service', 'error');
-        return;
-    }
-
-    const fullPhone = `${countryCode}${phone}`;
-
-    try {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        const user = userCredential.user;
-
-        await updateProfile(user, {
-            displayName: fullName,
-            photoURL: photoUrl || 'https://i.ibb.co/TB5Fx4tb/logo-0.png'
-        });
-
-        await sendEmailVerification(user);
-
-        const interests = [];
-        document.querySelectorAll('#registerForm input[type="checkbox"][value]').forEach(cb => {
-            if (cb.checked) interests.push(cb.value);
-        });
-
-        // GENERATE MEMBERSHIP ID
-        const membersSnapshot = await getDocs(collection(db, "memberships"));
-        const memberCount = membersSnapshot.size + 1;
-        const membershipId = `PD${new Date().getFullYear()}${String(memberCount).padStart(4, '0')}`;
-
-        // SAVE TO MEMBERSHIPS COLLECTION (NOT users)
-        await setDoc(doc(db, "memberships", user.uid), {
-            userId: user.uid,
-            membershipId: membershipId,
-            fullName: fullName,
-            email: email,
-            phone: fullPhone,
-            country: country,
-            dateOfBirth: dob,
-            gender: gender,
-            address: address,
-            photoURL: photoUrl || 'https://i.ibb.co/TB5Fx4tb/logo-0.png',
-            securityQuestion: securityQuestion,
-            securityAnswer: securityAnswer,
-            referralSource: document.getElementById('regReferral').value,
-            interests: interests,
-            role: 'member',
-            emailVerified: false,
-            walletBalance: 0,
-            createdAt: serverTimestamp(),
-            lastLogin: serverTimestamp()
-        });
-
-        // CREATE WALLET RECORD
-        await setDoc(doc(db, "wallets", user.uid), {
-            userId: user.uid,
-            balance: 0,
-            currency: "SZL",
-            deposits: [],
-            withdrawals: [],
-            pendingDeposits: [],
-            createdAt: serverTimestamp(),
-            updatedAt: serverTimestamp()
-        });
-
-        // CREATE QUIZ RECORD
-        await setDoc(doc(db, "userQuiz", user.uid), {
-            userId: user.uid,
-            completedLevels: [],
-            currentLevel: 1,
-            totalScore: 0,
-            lastPlayed: serverTimestamp()
-        });
-
-        showToast(`✅ Welcome ${fullName}! Your Member ID: ${membershipId}`, 'success');
-        confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 } });
-        
-        // STORE SESSION
-        localStorage.setItem('prayerDomeUser', JSON.stringify({
-            uid: user.uid,
-            email: email,
-            name: fullName,
-            membershipId: membershipId
-        }));
-        
-        // REDIRECT TO DASHBOARD
-        setTimeout(() => {
-            window.location.href = 'user.html';
-        }, 2000);
-        
-    } catch (error) {
-        console.error('Registration error:', error);
-        if (error.code === 'auth/email-already-in-use') {
-            showToast('Email already registered. Please login instead.', 'error');
-        } else {
-            showToast(error.message, 'error');
+        function showToast(msg, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i> ${msg}`;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 3500);
         }
+
+        // ==================== REAL PASSWORD RESET ====================
+        function showForgotPasswordModal() {
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <h3><i class="fas fa-key"></i> Reset Password</h3>
+                    <p style="margin-bottom: 15px;">Enter your email address and we'll send you a password reset link.</p>
+                    <input type="email" id="resetEmail" placeholder="your@email.com" autocomplete="email">
+                    <div style="display: flex; gap: 12px; margin-top: 20px;">
+                        <button class="btn btn-primary" style="flex: 1;" id="sendResetBtn">Send Reset Link</button>
+                        <button class="btn btn-outline" style="flex: 1;" onclick="this.closest('.modal').remove()">Cancel</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            
+            document.getElementById('sendResetBtn').onclick = async () => {
+                const email = document.getElementById('resetEmail').value.trim();
+                if (!email) {
+                    showToast('Please enter your email address', 'error');
+                    return;
+                }
+                
+                if (!isValidEmail(email)) {
+                    showToast('Please enter a valid email address', 'error');
+                    return;
+                }
+                
+                const btn = document.getElementById('sendResetBtn');
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+                btn.disabled = true;
+                
+                try {
+                    await sendPasswordResetEmail(auth, email);
+                    showToast(`✅ Password reset email sent to ${email}. Check your inbox.`, 'success');
+                    modal.remove();
+                } catch (error) {
+                    console.error('Password reset error:', error);
+                    if (error.code === 'auth/user-not-found') {
+                        showToast('No account found with this email address', 'error');
+                    } else if (error.code === 'auth/invalid-email') {
+                        showToast('Invalid email address', 'error');
+                    } else {
+                        showToast('Error: ' + error.message, 'error');
+                    }
+                } finally {
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                }
+            };
+        }
+
+// ==================== EDIT PROFILE FUNCTIONS ====================
+let profileData = {};
+
+function toggleEditMode() {
+    const viewMode = document.getElementById('profileViewMode');
+    const editMode = document.getElementById('profileEditMode');
+    
+    if (viewMode.style.display !== 'none') {
+        // Switching to edit mode - load current data
+        loadProfileDataToEdit();
+        viewMode.style.display = 'none';
+        editMode.style.display = 'block';
+    } else {
+        // Switching back to view mode
+        viewMode.style.display = 'block';
+        editMode.style.display = 'none';
     }
 }
 
-        async function loginUser() {
-    const identifier = document.getElementById('loginIdentifier').value.trim();
-    const password = document.getElementById('loginPassword').value;
+async function loadProfileDataToEdit() {
+    if (!currentUser) return;
+    
+    const memberRef = doc(db, "memberships", currentUser.uid);
+    const memberSnap = await getDoc(memberRef);
+    const data = memberSnap.data() || {};
+    
+    document.getElementById('editFullName').value = data.fullName || '';
+    document.getElementById('editPhone').value = data.phone || '';
+    document.getElementById('editDob').value = data.dateOfBirth || '';
+    document.getElementById('editGender').value = data.gender || '';
+    document.getElementById('editAddress').value = data.address || '';
+    document.getElementById('editBaptismDate').value = data.baptismDate || '';
+    document.getElementById('editBornAgainDate').value = data.bornAgainDate || '';
+}
 
-    if (!identifier || !password) {
-        showToast('Please enter email/phone and password', 'error');
+async function saveProfileEdit() {
+    if (!currentUser) {
+        showToast('Please login first', 'error');
         return;
     }
-
-    let email = identifier;
     
-    // If it's a phone number, find the associated email
-    if (!email.includes('@')) {
-        try {
-            const membersSnapshot = await getDocs(collection(db, "memberships"));
-            let found = false;
-            for (const docSnap of membersSnapshot.docs) {
-                if (docSnap.data().phone === identifier) {
-                    email = docSnap.data().email;
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
-                showToast('User not found with this phone number', 'error');
+    const updateData = {
+        fullName: document.getElementById('editFullName').value,
+        phone: document.getElementById('editPhone').value,
+        dateOfBirth: document.getElementById('editDob').value,
+        gender: document.getElementById('editGender').value,
+        address: document.getElementById('editAddress').value,
+        baptismDate: document.getElementById('editBaptismDate').value,
+        bornAgainDate: document.getElementById('editBornAgainDate').value,
+        updatedAt: serverTimestamp()
+    };
+    
+    // Validate required fields
+    if (!updateData.fullName) {
+        showToast('Full name is required', 'error');
+        return;
+    }
+    
+    const saveBtn = document.querySelector('#profileEditMode .btn-primary');
+    const originalText = saveBtn.innerHTML;
+    saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+    saveBtn.disabled = true;
+    
+    try {
+        await updateDoc(doc(db, "memberships", currentUser.uid), updateData);
+        
+        // Update display name in Firebase Auth
+        await updateProfile(currentUser, {
+            displayName: updateData.fullName
+        });
+        
+        // Update localStorage
+        const storedUser = localStorage.getItem('prayerDomeUser');
+        if (storedUser) {
+            const userData = JSON.parse(storedUser);
+            userData.name = updateData.fullName;
+            localStorage.setItem('prayerDomeUser', JSON.stringify(userData));
+        }
+        
+        showToast('Profile updated successfully!', 'success');
+        confetti({ particleCount: 80, spread: 60 });
+        
+        // Refresh the profile display
+        await loadUserProfile();
+        toggleEditMode(); // Switch back to view mode
+        
+    } catch (error) {
+        console.error('Error updating profile:', error);
+        showToast('Error: ' + error.message, 'error');
+    } finally {
+        saveBtn.innerHTML = originalText;
+        saveBtn.disabled = false;
+    }
+}
+        
+        // ==================== REGISTRATION ====================
+        async function registerUser() {
+            const fullName = document.getElementById('regFullName').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const countryCode = document.getElementById('regCountryCode').value;
+            const phone = document.getElementById('regPhone').value.trim();
+            const country = document.getElementById('regCountry').value;
+            const dob = document.getElementById('regDob').value;
+            const gender = document.getElementById('regGender').value;
+            const address = document.getElementById('regAddress').value;
+            const password = document.getElementById('memberPassword').value;
+            const confirmPassword = document.getElementById('memberConfirmPassword').value;
+            const securityQuestion = document.getElementById('securityQuestion').value;
+            const securityAnswer = document.getElementById('securityAnswer').value;
+            const terms = document.getElementById('regTerms').checked;
+            const photoUrl = document.getElementById('profilePhotoUrl').value;
+
+            if (!fullName || !email || !phone || !country || !dob || !gender || !password || !securityQuestion || !securityAnswer) {
+                showToast('Please fill all required fields', 'error');
                 return;
             }
-        } catch (error) {
-            showToast('Error finding user', 'error');
-            return;
-        }
-    }
 
-    try {
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        const user = userCredential.user;
-        
-        // Update last login in memberships
-        await updateDoc(doc(db, "memberships", user.uid), {
-            lastLogin: serverTimestamp()
-        });
-        
-        // Store session
-        const memberDoc = await getDoc(doc(db, "memberships", user.uid));
-        const memberData = memberDoc.data();
-        
-        localStorage.setItem('prayerDomeUser', JSON.stringify({
-            uid: user.uid,
-            email: user.email,
-            name: memberData?.fullName || user.displayName,
-            membershipId: memberData?.membershipId
-        }));
-        
-        showToast('Login successful!', 'success');
-        window.location.href = 'user.html';
-        
-    } catch (error) {
-        console.error('Login error:', error);
-        if (error.code === 'auth/user-not-found') {
-            showToast('No account found with this email', 'error');
-        } else if (error.code === 'auth/wrong-password') {
-            showToast('Incorrect password', 'error');
-        } else {
-            showToast('Invalid email/phone or password', 'error');
-        }
-    }
-}
+            if (!isValidEmail(email)) {
+                showToast('Please enter a valid email address', 'error');
+                return;
+            }
 
-        async function signInWithGoogle() {
+            if (password.length < 6) {
+                showToast('Password must be at least 6 characters', 'error');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                showToast('Passwords do not match', 'error');
+                return;
+            }
+
+            if (!terms) {
+                showToast('Please accept the Terms of Service', 'error');
+                return;
+            }
+
+            const fullPhone = `${countryCode}${phone.replace(/\s/g, '')}`;
+            
+            const registerBtn = document.getElementById('registerBtn');
+            const originalText = registerBtn.innerHTML;
+            registerBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Account...';
+            registerBtn.disabled = true;
+
+            try {
+                // Check if email already exists in Firebase Auth via sign-in attempt
+                try {
+                    await signInWithEmailAndPassword(auth, email, 'dummy-password-check');
+                } catch (e) {
+                    if (e.code === 'auth/user-not-found') {
+                        // Email not registered, good to proceed
+                    } else if (e.code === 'auth/wrong-password') {
+                        showToast('Email already registered. Please login instead.', 'error');
+                        registerBtn.innerHTML = originalText;
+                        registerBtn.disabled = false;
+                        return;
+                    }
+                }
+
+                // Create user in Firebase Authentication
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                // Update profile
+                await updateProfile(user, {
+                    displayName: fullName,
+                    photoURL: photoUrl || ''
+                });
+
+                const interests = [];
+                document.querySelectorAll('#registerForm input[type="checkbox"][value]').forEach(cb => {
+                    if (cb.checked) interests.push(cb.value);
+                });
+
+                // Generate Membership ID - DELETE OR COMMENT OUT THIS SECTION
+// const membersSnapshot = await getDocs(collection(db, "memberships"));
+// const currentYear = new Date().getFullYear();
+// let maxNumber = 0;
+// membersSnapshot.forEach(doc => {
+//     const data = doc.data();
+//     const memberId = data.membershipId;
+//     if (memberId && memberId.startsWith(`PD${currentYear}`)) {
+//         const num = parseInt(memberId.slice(-4));
+//         if (num > maxNumber) maxNumber = num;
+//     }
+// });
+// const membershipId = `PD${currentYear}${String(maxNumber + 1).padStart(4, '0')}`;
+                
+                // Save to Firestore Memberships (without membershipId)
+await setDoc(doc(db, "memberships", user.uid), {
+    userId: user.uid,
+    fullName: fullName,
+    email: email,
+    phone: fullPhone,
+    country: country,
+    dateOfBirth: dob,
+    gender: gender,
+    address: address,
+    photoURL: photoUrl || '',
+    securityQuestion: securityQuestion,
+    securityAnswer: securityAnswer,
+    referralSource: document.getElementById('regReferral').value,
+    interests: interests,
+    role: 'member',
+    emailVerified: false,
+    createdAt: serverTimestamp(),
+    lastLogin: serverTimestamp()
+    // membershipId REMOVED
+});
+                // Create Wallet
+                await setDoc(doc(db, "wallets", user.uid), {
+                    userId: user.uid,
+                    balance: 0,
+                    currency: "SZL",
+                    deposits: [],
+                    withdrawals: [],
+                    pendingDeposits: [],
+                    createdAt: serverTimestamp()
+                });
+
+                // Create Quiz Record
+                await setDoc(doc(db, "userQuiz", user.uid), {
+                    userId: user.uid,
+                    completedLevels: [],
+                    currentLevel: 1,
+                    totalScore: 0,
+                    lastPlayed: serverTimestamp()
+                });
+
+                showToast(`✅ Welcome ${fullName}! Your account has been created.`, 'success');
+                
+                localStorage.setItem('prayerDomeUser', JSON.stringify({
+    uid: user.uid,
+    email: email,
+    name: fullName,
+    loginTime: Date.now()
+}));
+                
+                setTimeout(() => {
+                    window.location.href = 'user.html';
+                }, 2000);
+                
+            } catch (error) {
+                console.error('Registration error:', error);
+                if (error.code === 'auth/email-already-in-use') {
+                    showToast('Email already registered. Please login instead.', 'error');
+                } else if (error.code === 'auth/weak-password') {
+                    showToast('Password is too weak. Use at least 6 characters.', 'error');
+                } else if (error.code === 'auth/invalid-email') {
+                    showToast('Invalid email address', 'error');
+                } else {
+                    showToast('Registration failed: ' + error.message, 'error');
+                }
+            } finally {
+                registerBtn.innerHTML = originalText;
+                registerBtn.disabled = false;
+            }
+        }
+
+        // ==================== LOGIN (Supports Email + Phone) ====================
+        async function loginUser() {
+            const identifier = document.getElementById('loginIdentifier').value.trim();
+            const password = document.getElementById('loginPassword').value;
+
+            if (!identifier || !password) {
+                showToast('Please enter email/phone and password', 'error');
+                return;
+            }
+
+            let email = identifier;
+            
+            // Check if it's a phone number (starts with + or contains only digits)
+            if (!email.includes('@') || /^[\d\s\+]+$/.test(identifier.replace(/[\s\-\(\)]/g, ''))) {
+                let cleanPhone = identifier.replace(/[\s\-\(\)]/g, '');
+                if (!cleanPhone.startsWith('+')) {
+                    cleanPhone = '+' + cleanPhone;
+                }
+                
+                try {
+                    // Direct query to find user by phone
+                    const phoneQuery = query(
+                        collection(db, "memberships"),
+                        where("phone", "==", cleanPhone),
+                        limit(1)
+                    );
+                    const phoneSnapshot = await getDocs(phoneQuery);
+                    
+                    if (!phoneSnapshot.empty) {
+                        const userData = phoneSnapshot.docs[0].data();
+                        email = userData.email;
+                    } else {
+                        // Try alternative format (without +)
+                        const altPhone = cleanPhone.replace(/^\+/, '');
+                        const altQuery = query(
+                            collection(db, "memberships"),
+                            where("phone", "==", altPhone),
+                            limit(1)
+                        );
+                        const altSnapshot = await getDocs(altQuery);
+                        if (!altSnapshot.empty) {
+                            email = altSnapshot.docs[0].data().email;
+                        } else {
+                            showToast('No account found with this phone number', 'error');
+                            return;
+                        }
+                    }
+                } catch (error) {
+                    console.error('Phone lookup error:', error);
+                    showToast('Error finding account', 'error');
+                    return;
+                }
+            }
+
+            const loginBtn = document.getElementById('loginBtn');
+            const originalText = loginBtn.innerHTML;
+            loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing In...';
+            loginBtn.disabled = true;
+            
+            try {
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+                
+                // Update last login
+                const memberRef = doc(db, "memberships", user.uid);
+                await updateDoc(memberRef, { lastLogin: serverTimestamp() });
+                
+                const memberDoc = await getDoc(memberRef);
+                const memberData = memberDoc.data();
+                
+                localStorage.setItem('prayerDomeUser', JSON.stringify({
+    uid: user.uid,
+    email: user.email,
+    name: memberData?.fullName || user.displayName || email.split('@')[0],
+    loginTime: Date.now()
+}));
+                
+                showToast('Login successful! Redirecting...', 'success');
+                setTimeout(() => {
+                    window.location.href = 'user.html';
+                }, 1500);
+                
+            } catch (error) {
+                console.error('Login error:', error);
+                if (error.code === 'auth/invalid-credential') {
+                    showToast('Invalid email or password. Please check your credentials.', 'error');
+                } else if (error.code === 'auth/user-not-found') {
+                    showToast('No account found. Please register first.', 'error');
+                } else if (error.code === 'auth/wrong-password') {
+                    showToast('Incorrect password', 'error');
+                } else if (error.code === 'auth/invalid-email') {
+                    showToast('Invalid email format', 'error');
+                } else if (error.code === 'auth/too-many-requests') {
+                    showToast('Too many failed attempts. Please try again later.', 'error');
+                } else {
+                    showToast('Login failed: ' + error.message, 'error');
+                }
+            } finally {
+                loginBtn.innerHTML = originalText;
+                loginBtn.disabled = false;
+            }
+        }
+        
+// ==================== GOOGLE SIGN IN ====================
+async function signInWithGoogle() {
     const provider = new GoogleAuthProvider();
     try {
         const result = await signInWithPopup(auth, provider);
         const user = result.user;
         
-        // Check if membership exists
         const memberRef = doc(db, "memberships", user.uid);
         const memberSnap = await getDoc(memberRef);
         
         if (!memberSnap.exists()) {
-            // Create full membership record
-            const membersSnapshot = await getDocs(collection(db, "memberships"));
-            const memberCount = membersSnapshot.size + 1;
-            const membershipId = `PD${new Date().getFullYear()}${String(memberCount).padStart(4, '0')}`;
-            
+            // Create new member without membership ID
             await setDoc(memberRef, {
                 userId: user.uid,
-                membershipId: membershipId,
                 fullName: user.displayName || 'Google User',
                 email: user.email,
-                photoURL: user.photoURL || 'https://i.ibb.co/TB5Fx4tb/logo-0.png',
+                photoURL: user.photoURL || '',
                 role: 'member',
-                emailVerified: user.emailVerified,
                 createdAt: serverTimestamp(),
                 lastLogin: serverTimestamp()
             });
             
-            // Create wallet
             await setDoc(doc(db, "wallets", user.uid), {
                 userId: user.uid,
                 balance: 0,
                 currency: "SZL",
-                deposits: [],
-                withdrawals: [],
-                pendingDeposits: [],
                 createdAt: serverTimestamp()
-            });
-            
-            // Create quiz record
-            await setDoc(doc(db, "userQuiz", user.uid), {
-                userId: user.uid,
-                completedLevels: [],
-                currentLevel: 1,
-                totalScore: 0,
-                lastPlayed: serverTimestamp()
             });
         } else {
             await updateDoc(memberRef, { lastLogin: serverTimestamp() });
         }
         
-        // Store session
         const memberData = (await getDoc(memberRef)).data();
         localStorage.setItem('prayerDomeUser', JSON.stringify({
             uid: user.uid,
             email: user.email,
             name: memberData?.fullName || user.displayName,
-            membershipId: memberData?.membershipId,
-            photoURL: memberData?.photoURL || user.photoURL
+            loginTime: Date.now()
         }));
         
         showToast('Login successful!', 'success');
         window.location.href = 'user.html';
         
     } catch (error) {
+        console.error('Google login error:', error);
         showToast(error.message, 'error');
     }
 }
@@ -933,59 +1194,60 @@
         async function loadUserProfile() {
     if (!currentUser) return;
     
-    // Get from memberships collection
     const memberRef = doc(db, "memberships", currentUser.uid);
     const memberSnap = await getDoc(memberRef);
     const memberData = memberSnap.data() || {};
+    profileData = memberData;
     
-    document.getElementById('profilePhoto').src = currentUser.photoURL || memberData.photoURL || 'https://i.ibb.co/TB5Fx4tb/logo-0.png';
-    document.getElementById('profileName').textContent = currentUser.displayName || memberData.fullName;
+    const profilePhoto = document.getElementById('profilePhoto');
+    if (profilePhoto) {
+        // Only show photo if user uploaded one
+        if (memberData.photoURL && memberData.photoURL !== '') {
+            profilePhoto.src = memberData.photoURL;
+        } else {
+            // Show default placeholder (no image, just icon)
+            profilePhoto.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="%2322c55e" stroke-width="1"%3E%3Cpath d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"%3E%3C/path%3E%3Ccircle cx="12" cy="7" r="4"%3E%3C/circle%3E%3C/svg%3E';
+        }
+    }
+    
+    // Show name only if exists
+    const displayName = memberData.fullName || currentUser.displayName;
+    if (displayName) {
+        document.getElementById('profileName').textContent = displayName;
+    } else {
+        document.getElementById('profileName').textContent = 'User';
+    }
+    
     document.getElementById('profileEmail').textContent = currentUser.email;
     
     const joinedDate = memberData.createdAt?.toDate() || new Date();
     const daysActive = Math.floor((new Date() - joinedDate) / (1000 * 60 * 60 * 24));
-    document.getElementById('profileJoined').textContent = daysActive;
+    document.getElementById('profileJoined').textContent = daysActive || 1;
     
-    // Count user's prayers
     const prayersQuery = query(collection(db, "prayers"), where("userId", "==", currentUser.uid));
     const prayersSnap = await getDocs(prayersQuery);
     document.getElementById('profilePrayers').textContent = prayersSnap.size;
     
-    // Get quiz score
-    const quizDoc = await getDoc(doc(db, "userQuiz", currentUser.uid));
-    document.getElementById('profileQuizScore').textContent = quizDoc.exists() ? quizDoc.data().totalScore : 0;
-    
-    // Get wallet balance
     const walletDoc = await getDoc(doc(db, "wallets", currentUser.uid));
     const walletBalance = walletDoc.exists() ? walletDoc.data().balance : 0;
-    
-    // Add wallet display to profile
-    const profileStats = document.querySelector('.profile-stats');
-    if (profileStats && !document.getElementById('profileWallet')) {
-        const walletBox = document.createElement('div');
-        walletBox.className = 'stat-box';
-        walletBox.innerHTML = `
-            <div class="stat-number" id="profileWallet">E${walletBalance.toFixed(2)}</div>
-            <div class="stat-label">Wallet Balance</div>
-        `;
-        profileStats.appendChild(walletBox);
-    } else if (document.getElementById('profileWallet')) {
-        document.getElementById('profileWallet').textContent = `E${walletBalance.toFixed(2)}`;
-    }
-    
-    document.getElementById('profileMemberId').textContent = `Member ID: ${memberData.membershipId || 'Pending'}`;
+    document.getElementById('profileWallet').textContent = `E${walletBalance.toFixed(2)}`;
     
     document.getElementById('loginForm').style.display = 'none';
     document.getElementById('registerForm').style.display = 'none';
     document.getElementById('profileSection').style.display = 'block';
+    
+    // Reset to view mode
+    document.getElementById('profileViewMode').style.display = 'block';
+    document.getElementById('profileEditMode').style.display = 'none';
 }
-        
+
         function logoutUser() {
             signOut(auth);
+            localStorage.removeItem('prayerDomeUser');
             document.getElementById('profileSection').style.display = 'none';
             document.getElementById('loginForm').style.display = 'block';
             document.getElementById('registerForm').style.display = 'none';
-            showToast('Logged out', 'success');
+            showToast('Logged out successfully', 'success');
         }
 
         function showAuthForm(type) {
@@ -994,26 +1256,13 @@
                 document.getElementById('loginForm').style.display = 'block';
                 document.getElementById('registerForm').style.display = 'none';
                 document.getElementById('profileSection').style.display = 'none';
-                event.target.classList.add('active');
+                document.getElementById('loginTabBtn').classList.add('active');
             } else {
                 document.getElementById('loginForm').style.display = 'none';
                 document.getElementById('registerForm').style.display = 'block';
                 document.getElementById('profileSection').style.display = 'none';
-                event.target.classList.add('active');
+                document.getElementById('registerTabBtn').classList.add('active');
             }
-        }
-
-        function showToast(msg, type = 'success') {
-            const container = document.getElementById('toastContainer');
-            const toast = document.createElement('div');
-            toast.className = 'toast';
-            toast.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${msg}`;
-            container.appendChild(toast);
-            setTimeout(() => toast.remove(), 3500);
-        }
-
-        function forgotPassword() {
-            showToast('Password reset link sent to your email', 'info');
         }
 
         function toggleDarkMode() {
@@ -1034,14 +1283,18 @@
         });
 
         populateCountryDropdowns();
-        window.openCloudinaryUpload = openCloudinaryUpload;
-        window.registerUser = registerUser;
-        window.loginUser = loginUser;
-        window.signInWithGoogle = signInWithGoogle;
-        window.logoutUser = logoutUser;
-        window.showAuthForm = showAuthForm;
-        window.forgotPassword = forgotPassword;
-        window.toggleDarkMode = toggleDarkMode;
+        
+        // Expose functions globally
+window.registerUser = registerUser;
+window.loginUser = loginUser;
+window.signInWithGoogle = signInWithGoogle;
+window.logoutUser = logoutUser;
+window.showAuthForm = showAuthForm;
+window.showForgotPasswordModal = showForgotPasswordModal;
+window.toggleDarkMode = toggleDarkMode;
+window.openCloudinaryUpload = openCloudinaryUpload;
+window.toggleEditMode = toggleEditMode;
+window.saveProfileEdit = saveProfileEdit;
     </script>
 </body>
 </html>
